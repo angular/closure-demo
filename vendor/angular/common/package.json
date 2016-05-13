@@ -1,0 +1,13 @@
+{
+  "name": "@angular/common",
+  "version": "2.0.0-rc.2-snap",
+  "description": "",
+  "main": "index.js",
+  "jsnext:main": "esm/index.js",
+  "typings": "index.d.ts",
+  "author": "angular",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/core": "2.0.0-rc.2-snap"
+  }
+}

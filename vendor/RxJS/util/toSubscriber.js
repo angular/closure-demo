@@ -1,0 +1,21 @@
+goog.module('rxjs$util$toSubscriber');
+var Subscriber_1 = goog.require('rxjs$Subscriber');
+var rxSubscriber_1 = goog.require('rxjs$symbol$rxSubscriber');
+/**
+ * @param {?=} nextOrObserver
+ * @param {?=} error
+ * @param {?=} complete
+ * @return {?}
+ */
+function toSubscriber(nextOrObserver, error, complete) {
+    if (nextOrObserver && typeof nextOrObserver === 'object') {
+        if (nextOrObserver instanceof Subscriber_1.Subscriber) {
+            return ((nextOrObserver));
+        }
+        else if (typeof nextOrObserver[rxSubscriber_1.$$rxSubscriber] === 'function') {
+            return nextOrObserver[rxSubscriber_1.$$rxSubscriber]();
+        }
+    }
+    return new Subscriber_1.Subscriber(nextOrObserver, error, complete);
+}
+exports.toSubscriber = toSubscriber;

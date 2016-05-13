@@ -1,0 +1,1 @@
+{"version":3,"file":"testing.js","sourceRoot":"","sources":["../../../../modules/@angular/http/testing.ts"],"names":[],"mappings":";AAAA,6BAAyC,wBAAwB,CAAC;AAA1D,uDAAc;AAAC,iDAA2C","sourcesContent":["export {MockConnection,MockBackend} from './testing/mock_backend';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}
