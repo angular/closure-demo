@@ -18,7 +18,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "postinstall": "cp vendor/closure/compiler.jar node_modules/google-closure-compiler",
+    "postinstall": "cp vendor/closure/compiler.jar node_modules/google-closure-compiler && cp vendor/tsickle/* node_modules/tsickle/build/src",
     "build": "ngc && ./build_closure.sh"
   },
   "author": "Alex Eagle <alexeagle@google.com> (https://angularjs.org/)",
