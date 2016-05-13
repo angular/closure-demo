@@ -78,10 +78,10 @@ class BrowserGetTestability {
             };
             testabilities.forEach(function (testability) { testability.whenStable(decrement); });
         };
-        if (!lang_1.global.frameworkStabilizers) {
-            lang_1.global.frameworkStabilizers = collection_1.ListWrapper.createGrowableSize(0);
+        if (!lang_1.global["frameworkStabilizers"]) {
+            lang_1.global["frameworkStabilizers"] = collection_1.ListWrapper.createGrowableSize(0);
         }
-        lang_1.global.frameworkStabilizers.push(whenAllStable);
+        lang_1.global["frameworkStabilizers"].push(whenAllStable);
     }
     /**
      * @param {?} registry
