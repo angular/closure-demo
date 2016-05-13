@@ -21,10 +21,10 @@ class AnimationBuilder {
         AnimationBuilder.prototype.browserDetails;
     }
 }
-AnimationBuilder.decorators = [
+/** @nocollapse */ AnimationBuilder.decorators = [
     { type: core_1.Injectable },
 ];
-AnimationBuilder.ctorParameters = [
+/** @nocollapse */ AnimationBuilder.ctorParameters = [
     { type: browser_details_1.BrowserDetails, },
 ];
 exports.AnimationBuilder = AnimationBuilder;

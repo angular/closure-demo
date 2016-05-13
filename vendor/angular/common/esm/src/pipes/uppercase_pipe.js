@@ -16,7 +16,7 @@ class UpperCasePipe {
         return value.toUpperCase();
     }
 }
-UpperCasePipe.decorators = [
+/** @nocollapse */ UpperCasePipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'uppercase' },] },
     { type: core_1.Injectable },
 ];

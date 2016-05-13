@@ -328,10 +328,10 @@ var DomElementSchemaRegistry = (function (_super) {
         var mappedPropName = collection_1.StringMapWrapper.get(attrToPropMap, propName);
         return lang_1.isPresent(mappedPropName) ? mappedPropName : propName;
     };
-    DomElementSchemaRegistry.decorators = [
+    /** @nocollapse */ DomElementSchemaRegistry.decorators = [
         { type: core_1.Injectable },
     ];
-    DomElementSchemaRegistry.ctorParameters = [];
+    /** @nocollapse */ DomElementSchemaRegistry.ctorParameters = [];
     return DomElementSchemaRegistry;
 }(element_schema_registry_1.ElementSchemaRegistry));
 exports.DomElementSchemaRegistry = DomElementSchemaRegistry;

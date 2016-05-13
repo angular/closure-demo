@@ -34,10 +34,10 @@ var NgStyle = (function () {
     NgStyle.prototype._setStyle = function (name, val) {
         this._renderer.setElementStyle(this._ngEl.nativeElement, name, val);
     };
-    NgStyle.decorators = [
+    /** @nocollapse */ NgStyle.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngStyle]', inputs: ['rawStyle: ngStyle'] },] },
     ];
-    NgStyle.ctorParameters = [
+    /** @nocollapse */ NgStyle.ctorParameters = [
         { type: core_1.KeyValueDiffers, },
         { type: core_1.ElementRef, },
         { type: core_1.Renderer, },

@@ -114,10 +114,10 @@ class StyleCompiler {
         StyleCompiler.prototype._urlResolver;
     }
 }
-StyleCompiler.decorators = [
+/** @nocollapse */ StyleCompiler.decorators = [
     { type: core_1.Injectable },
 ];
-StyleCompiler.ctorParameters = [
+/** @nocollapse */ StyleCompiler.ctorParameters = [
     { type: url_resolver_1.UrlResolver, },
 ];
 exports.StyleCompiler = StyleCompiler;

@@ -29,9 +29,9 @@ class MockNgZone extends index_1.NgZone {
         MockNgZone.prototype._mockOnStable;
     }
 }
-MockNgZone.decorators = [
+/** @nocollapse */ MockNgZone.decorators = [
     { type: index_1.Injectable },
 ];
-MockNgZone.ctorParameters = [];
+/** @nocollapse */ MockNgZone.ctorParameters = [];
 exports.MockNgZone = MockNgZone;
 //# sourceMappingURL=ng_zone_mock.js.map

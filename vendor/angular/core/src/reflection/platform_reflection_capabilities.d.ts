@@ -1,5 +1,5 @@
-import { Type } from '../../src/facade/lang';
-import { GetterFn, SetterFn, MethodFn } from './types';
+import { Type } from "../../src/facade/lang";
+import { GetterFn, SetterFn, MethodFn } from "./types";
 export interface PlatformReflectionCapabilities {
     isReflectionEnabled(): boolean;
     factory(type: Type): Function;

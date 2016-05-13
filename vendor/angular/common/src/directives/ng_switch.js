@@ -98,7 +98,7 @@ var NgSwitch = (function () {
             collection_1.ListWrapper.remove(views, view);
         }
     };
-    NgSwitch.decorators = [
+    /** @nocollapse */ NgSwitch.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngSwitch]', inputs: ['ngSwitch'] },] },
     ];
     return NgSwitch;
@@ -120,10 +120,10 @@ var NgSwitchWhen = (function () {
         enumerable: true,
         configurable: true
     });
-    NgSwitchWhen.decorators = [
+    /** @nocollapse */ NgSwitchWhen.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngSwitchWhen]', inputs: ['ngSwitchWhen'] },] },
     ];
-    NgSwitchWhen.ctorParameters = [
+    /** @nocollapse */ NgSwitchWhen.ctorParameters = [
         { type: core_1.ViewContainerRef, },
         { type: core_1.TemplateRef, },
         { type: NgSwitch, decorators: [{ type: core_1.Host },] },
@@ -135,10 +135,10 @@ var NgSwitchDefault = (function () {
     function NgSwitchDefault(viewContainer, templateRef, sswitch) {
         sswitch._registerView(_WHEN_DEFAULT, new SwitchView(viewContainer, templateRef));
     }
-    NgSwitchDefault.decorators = [
+    /** @nocollapse */ NgSwitchDefault.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngSwitchDefault]' },] },
     ];
-    NgSwitchDefault.ctorParameters = [
+    /** @nocollapse */ NgSwitchDefault.ctorParameters = [
         { type: core_1.ViewContainerRef, },
         { type: core_1.TemplateRef, },
         { type: NgSwitch, decorators: [{ type: core_1.Host },] },

@@ -139,10 +139,10 @@ class Testability {
         Testability.prototype._ngZone;
     }
 }
-Testability.decorators = [
+/** @nocollapse */ Testability.decorators = [
     { type: decorators_1.Injectable },
 ];
-Testability.ctorParameters = [
+/** @nocollapse */ Testability.ctorParameters = [
     { type: ng_zone_1.NgZone, },
 ];
 exports.Testability = Testability;
@@ -189,10 +189,10 @@ class TestabilityRegistry {
         TestabilityRegistry.prototype._applications;
     }
 }
-TestabilityRegistry.decorators = [
+/** @nocollapse */ TestabilityRegistry.decorators = [
     { type: decorators_1.Injectable },
 ];
-TestabilityRegistry.ctorParameters = [];
+/** @nocollapse */ TestabilityRegistry.ctorParameters = [];
 exports.TestabilityRegistry = TestabilityRegistry;
 /* @ts2dart_const */
 class _NoopGetTestability {

@@ -32,7 +32,7 @@ class NgControlStatus {
         NgControlStatus.prototype._cd;
     }
 }
-NgControlStatus.decorators = [
+/** @nocollapse */ NgControlStatus.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngControl],[ngModel],[ngFormControl]',
                 host: {
@@ -45,7 +45,7 @@ NgControlStatus.decorators = [
                 }
             },] },
 ];
-NgControlStatus.ctorParameters = [
+/** @nocollapse */ NgControlStatus.ctorParameters = [
     { type: ng_control_1.NgControl, decorators: [{ type: core_1.Self },] },
 ];
 exports.NgControlStatus = NgControlStatus;

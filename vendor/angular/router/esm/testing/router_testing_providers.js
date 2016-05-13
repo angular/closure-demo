@@ -7,7 +7,7 @@ var router_url_serializer_1 = goog.require('_angular$router$src$router__url__ser
 var core_1 = goog.require('_angular$core');
 class FakeAppRootCmp {
 }
-FakeAppRootCmp.decorators = [
+/** @nocollapse */ FakeAppRootCmp.decorators = [
     { type: core_1.Component, args: [{ selector: 'fake-app-root-comp', template: `<span></span>` },] },
 ];
 /**

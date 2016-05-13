@@ -18,14 +18,14 @@ var CheckboxControlValueAccessor = (function () {
     };
     CheckboxControlValueAccessor.prototype.registerOnChange = function (fn) { this.onChange = fn; };
     CheckboxControlValueAccessor.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
-    CheckboxControlValueAccessor.decorators = [
+    /** @nocollapse */ CheckboxControlValueAccessor.decorators = [
         { type: core_1.Directive, args: [{
                     selector: 'input[type=checkbox][ngControl],input[type=checkbox][ngFormControl],input[type=checkbox][ngModel]',
                     host: { '(change)': 'onChange($event.target.checked)', '(blur)': 'onTouched()' },
                     providers: [exports.CHECKBOX_VALUE_ACCESSOR]
                 },] },
     ];
-    CheckboxControlValueAccessor.ctorParameters = [
+    /** @nocollapse */ CheckboxControlValueAccessor.ctorParameters = [
         { type: core_1.Renderer, },
         { type: core_1.ElementRef, },
     ];

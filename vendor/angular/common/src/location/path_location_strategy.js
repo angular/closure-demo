@@ -45,10 +45,10 @@ var PathLocationStrategy = (function (_super) {
     };
     PathLocationStrategy.prototype.forward = function () { this._platformLocation.forward(); };
     PathLocationStrategy.prototype.back = function () { this._platformLocation.back(); };
-    PathLocationStrategy.decorators = [
+    /** @nocollapse */ PathLocationStrategy.decorators = [
         { type: core_1.Injectable },
     ];
-    PathLocationStrategy.ctorParameters = [
+    /** @nocollapse */ PathLocationStrategy.ctorParameters = [
         { type: platform_location_1.PlatformLocation, },
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Inject, args: [location_strategy_1.APP_BASE_HREF,] },] },
     ];

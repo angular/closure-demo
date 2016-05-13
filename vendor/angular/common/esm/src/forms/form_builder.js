@@ -72,7 +72,7 @@ class FormBuilder {
         }
     }
 }
-FormBuilder.decorators = [
+/** @nocollapse */ FormBuilder.decorators = [
     { type: core_1.Injectable },
 ];
 exports.FormBuilder = FormBuilder;

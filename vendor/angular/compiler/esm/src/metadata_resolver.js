@@ -406,10 +406,10 @@ class CompileMetadataResolver {
         CompileMetadataResolver.prototype._platformPipes;
     }
 }
-CompileMetadataResolver.decorators = [
+/** @nocollapse */ CompileMetadataResolver.decorators = [
     { type: core_1.Injectable },
 ];
-CompileMetadataResolver.ctorParameters = [
+/** @nocollapse */ CompileMetadataResolver.ctorParameters = [
     { type: directive_resolver_1.DirectiveResolver, },
     { type: pipe_resolver_1.PipeResolver, },
     { type: view_resolver_1.ViewResolver, },

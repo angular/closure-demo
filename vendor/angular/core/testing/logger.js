@@ -18,10 +18,10 @@ var Log = (function () {
     };
     Log.prototype.clear = function () { this.logItems = []; };
     Log.prototype.result = function () { return this.logItems.join("; "); };
-    Log.decorators = [
+    /** @nocollapse */ Log.decorators = [
         { type: index_1.Injectable },
     ];
-    Log.ctorParameters = [];
+    /** @nocollapse */ Log.ctorParameters = [];
     return Log;
 }());
 exports.Log = Log;

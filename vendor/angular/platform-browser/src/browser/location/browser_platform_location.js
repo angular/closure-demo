@@ -56,10 +56,10 @@ var BrowserPlatformLocation = (function (_super) {
     };
     BrowserPlatformLocation.prototype.forward = function () { this._history.forward(); };
     BrowserPlatformLocation.prototype.back = function () { this._history.back(); };
-    BrowserPlatformLocation.decorators = [
+    /** @nocollapse */ BrowserPlatformLocation.decorators = [
         { type: core_1.Injectable },
     ];
-    BrowserPlatformLocation.ctorParameters = [];
+    /** @nocollapse */ BrowserPlatformLocation.ctorParameters = [];
     return BrowserPlatformLocation;
 }(common_1.PlatformLocation));
 exports.BrowserPlatformLocation = BrowserPlatformLocation;

@@ -35,7 +35,7 @@ var MockApplicationRef = (function (_super) {
         configurable: true
     });
     ;
-    MockApplicationRef.decorators = [
+    /** @nocollapse */ MockApplicationRef.decorators = [
         { type: index_1.Injectable },
     ];
     return MockApplicationRef;

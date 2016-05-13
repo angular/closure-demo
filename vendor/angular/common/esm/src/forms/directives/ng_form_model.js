@@ -131,7 +131,7 @@ class NgFormModel extends control_container_1.ControlContainer {
         NgFormModel.prototype._asyncValidators;
     }
 }
-NgFormModel.decorators = [
+/** @nocollapse */ NgFormModel.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngFormModel]',
                 bindings: [exports.formDirectiveProvider],
@@ -141,7 +141,7 @@ NgFormModel.decorators = [
                 exportAs: 'ngForm'
             },] },
 ];
-NgFormModel.ctorParameters = [
+/** @nocollapse */ NgFormModel.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_VALIDATORS,] },] },
     { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_ASYNC_VALIDATORS,] },] },
 ];

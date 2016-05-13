@@ -180,10 +180,10 @@ class PlatformRef_ extends PlatformRef {
         PlatformRef_.prototype._injector;
     }
 }
-PlatformRef_.decorators = [
+/** @nocollapse */ PlatformRef_.decorators = [
     { type: di_1.Injectable },
 ];
-PlatformRef_.ctorParameters = [
+/** @nocollapse */ PlatformRef_.ctorParameters = [
     { type: di_1.Injector, },
 ];
 exports.PlatformRef_ = PlatformRef_;
@@ -440,10 +440,10 @@ class ApplicationRef_ extends ApplicationRef {
 }
 /** @internal */
 ApplicationRef_._tickScope = profile_1.wtfCreateScope('ApplicationRef#tick()');
-ApplicationRef_.decorators = [
+/** @nocollapse */ ApplicationRef_.decorators = [
     { type: di_1.Injectable },
 ];
-ApplicationRef_.ctorParameters = [
+/** @nocollapse */ ApplicationRef_.ctorParameters = [
     { type: PlatformRef_, },
     { type: ng_zone_1.NgZone, },
     { type: di_1.Injector, },

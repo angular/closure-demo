@@ -10,7 +10,7 @@ exports.REQUIRED_VALIDATOR = {
 };
 class RequiredValidator {
 }
-RequiredValidator.decorators = [
+/** @nocollapse */ RequiredValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[required][ngControl],[required][ngFormControl],[required][ngModel]',
                 providers: [exports.REQUIRED_VALIDATOR]
@@ -46,13 +46,13 @@ class MinLengthValidator {
         MinLengthValidator.prototype._validator;
     }
 }
-MinLengthValidator.decorators = [
+/** @nocollapse */ MinLengthValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[minlength][ngControl],[minlength][ngFormControl],[minlength][ngModel]',
                 providers: [exports.MIN_LENGTH_VALIDATOR]
             },] },
 ];
-MinLengthValidator.ctorParameters = [
+/** @nocollapse */ MinLengthValidator.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Attribute, args: ["minlength",] },] },
 ];
 exports.MinLengthValidator = MinLengthValidator;
@@ -85,13 +85,13 @@ class MaxLengthValidator {
         MaxLengthValidator.prototype._validator;
     }
 }
-MaxLengthValidator.decorators = [
+/** @nocollapse */ MaxLengthValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[maxlength][ngControl],[maxlength][ngFormControl],[maxlength][ngModel]',
                 providers: [exports.MAX_LENGTH_VALIDATOR]
             },] },
 ];
-MaxLengthValidator.ctorParameters = [
+/** @nocollapse */ MaxLengthValidator.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Attribute, args: ["maxlength",] },] },
 ];
 exports.MaxLengthValidator = MaxLengthValidator;
@@ -129,13 +129,13 @@ class PatternValidator {
         PatternValidator.prototype._validator;
     }
 }
-PatternValidator.decorators = [
+/** @nocollapse */ PatternValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
                 providers: [exports.PATTERN_VALIDATOR]
             },] },
 ];
-PatternValidator.ctorParameters = [
+/** @nocollapse */ PatternValidator.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Attribute, args: ["pattern",] },] },
 ];
 exports.PatternValidator = PatternValidator;

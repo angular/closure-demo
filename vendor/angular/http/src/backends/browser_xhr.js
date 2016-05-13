@@ -4,10 +4,10 @@ var BrowserXhr = (function () {
     function BrowserXhr() {
     }
     BrowserXhr.prototype.build = function () { return (new XMLHttpRequest()); };
-    BrowserXhr.decorators = [
+    /** @nocollapse */ BrowserXhr.decorators = [
         { type: core_1.Injectable },
     ];
-    BrowserXhr.ctorParameters = [];
+    /** @nocollapse */ BrowserXhr.ctorParameters = [];
     return BrowserXhr;
 }());
 exports.BrowserXhr = BrowserXhr;

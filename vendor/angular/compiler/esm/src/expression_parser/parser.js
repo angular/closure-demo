@@ -243,10 +243,10 @@ class Parser {
         Parser.prototype._lexer;
     }
 }
-Parser.decorators = [
+/** @nocollapse */ Parser.decorators = [
     { type: core_1.Injectable },
 ];
-Parser.ctorParameters = [
+/** @nocollapse */ Parser.ctorParameters = [
     { type: lexer_1.Lexer, },
 ];
 exports.Parser = Parser;

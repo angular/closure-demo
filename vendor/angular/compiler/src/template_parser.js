@@ -111,10 +111,10 @@ var TemplateParser = (function () {
         }
         return new TemplateParseResult(result, errors);
     };
-    TemplateParser.decorators = [
+    /** @nocollapse */ TemplateParser.decorators = [
         { type: core_1.Injectable },
     ];
-    TemplateParser.ctorParameters = [
+    /** @nocollapse */ TemplateParser.ctorParameters = [
         { type: parser_1.Parser, },
         { type: element_schema_registry_1.ElementSchemaRegistry, },
         { type: html_parser_1.HtmlParser, },

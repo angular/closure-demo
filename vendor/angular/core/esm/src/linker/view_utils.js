@@ -52,10 +52,10 @@ class ViewUtils {
         ViewUtils.prototype._appId;
     }
 }
-ViewUtils.decorators = [
+/** @nocollapse */ ViewUtils.decorators = [
     { type: decorators_1.Injectable },
 ];
-ViewUtils.ctorParameters = [
+/** @nocollapse */ ViewUtils.ctorParameters = [
     { type: api_1.RootRenderer, },
     { type: undefined, decorators: [{ type: decorators_1.Inject, args: [application_tokens_1.APP_ID,] },] },
     { type: security_1.SanitizationService, },

@@ -19,7 +19,7 @@ var SlicePipe = (function () {
         return collection_1.ListWrapper.slice(value, start, end);
     };
     SlicePipe.prototype.supports = function (obj) { return lang_1.isString(obj) || lang_1.isArray(obj); };
-    SlicePipe.decorators = [
+    /** @nocollapse */ SlicePipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'slice', pure: false },] },
         { type: core_1.Injectable },
     ];

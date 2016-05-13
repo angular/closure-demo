@@ -41,10 +41,10 @@ class BrowserDetails {
         BrowserDetails.prototype.elapsedTimeIncludesDelay;
     }
 }
-BrowserDetails.decorators = [
+/** @nocollapse */ BrowserDetails.decorators = [
     { type: core_1.Injectable },
 ];
-BrowserDetails.ctorParameters = [];
+/** @nocollapse */ BrowserDetails.ctorParameters = [];
 exports.BrowserDetails = BrowserDetails;
 class RafQueue {
     /**

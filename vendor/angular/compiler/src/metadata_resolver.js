@@ -328,10 +328,10 @@ var CompileMetadataResolver = (function () {
             read: lang_1.isPresent(q.read) ? this.getTokenMetadata(q.read) : null
         });
     };
-    CompileMetadataResolver.decorators = [
+    /** @nocollapse */ CompileMetadataResolver.decorators = [
         { type: core_1.Injectable },
     ];
-    CompileMetadataResolver.ctorParameters = [
+    /** @nocollapse */ CompileMetadataResolver.ctorParameters = [
         { type: directive_resolver_1.DirectiveResolver, },
         { type: pipe_resolver_1.PipeResolver, },
         { type: view_resolver_1.ViewResolver, },

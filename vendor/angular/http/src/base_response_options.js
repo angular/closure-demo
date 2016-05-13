@@ -88,10 +88,10 @@ var BaseResponseOptions = (function (_super) {
     function BaseResponseOptions() {
         _super.call(this, { status: 200, statusText: 'Ok', type: enums_1.ResponseType.Default, headers: new headers_1.Headers() });
     }
-    BaseResponseOptions.decorators = [
+    /** @nocollapse */ BaseResponseOptions.decorators = [
         { type: core_1.Injectable },
     ];
-    BaseResponseOptions.ctorParameters = [];
+    /** @nocollapse */ BaseResponseOptions.ctorParameters = [];
     return BaseResponseOptions;
 }(ResponseOptions));
 exports.BaseResponseOptions = BaseResponseOptions;

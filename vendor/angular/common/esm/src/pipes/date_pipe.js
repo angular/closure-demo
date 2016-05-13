@@ -48,7 +48,7 @@ DatePipe._ALIASES = {
     'mediumTime': 'jms',
     'shortTime': 'jm'
 };
-DatePipe.decorators = [
+/** @nocollapse */ DatePipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'date', pure: true },] },
     { type: core_1.Injectable },
 ];

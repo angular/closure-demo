@@ -132,10 +132,10 @@ class Http {
         Http.prototype._defaultOptions;
     }
 }
-Http.decorators = [
+/** @nocollapse */ Http.decorators = [
     { type: core_1.Injectable },
 ];
-Http.ctorParameters = [
+/** @nocollapse */ Http.ctorParameters = [
     { type: interfaces_1.ConnectionBackend, },
     { type: base_request_options_1.RequestOptions, },
 ];
@@ -172,10 +172,10 @@ class Jsonp extends Http {
         return responseObservable;
     }
 }
-Jsonp.decorators = [
+/** @nocollapse */ Jsonp.decorators = [
     { type: core_1.Injectable },
 ];
-Jsonp.ctorParameters = [
+/** @nocollapse */ Jsonp.ctorParameters = [
     { type: interfaces_1.ConnectionBackend, },
     { type: base_request_options_1.RequestOptions, },
 ];

@@ -166,10 +166,10 @@ var PlatformRef_ = (function (_super) {
     };
     /** @internal */
     PlatformRef_.prototype._applicationDisposed = function (app) { collection_1.ListWrapper.remove(this._applications, app); };
-    PlatformRef_.decorators = [
+    /** @nocollapse */ PlatformRef_.decorators = [
         { type: di_1.Injectable },
     ];
-    PlatformRef_.ctorParameters = [
+    /** @nocollapse */ PlatformRef_.ctorParameters = [
         { type: di_1.Injector, },
     ];
     return PlatformRef_;
@@ -381,10 +381,10 @@ var ApplicationRef_ = (function (_super) {
     });
     /** @internal */
     ApplicationRef_._tickScope = profile_1.wtfCreateScope('ApplicationRef#tick()');
-    ApplicationRef_.decorators = [
+    /** @nocollapse */ ApplicationRef_.decorators = [
         { type: di_1.Injectable },
     ];
-    ApplicationRef_.ctorParameters = [
+    /** @nocollapse */ ApplicationRef_.ctorParameters = [
         { type: PlatformRef_, },
         { type: ng_zone_1.NgZone, },
         { type: di_1.Injector, },

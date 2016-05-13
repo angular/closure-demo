@@ -55,7 +55,7 @@ class ReplacePipe {
         return lang_1.isString(replacement) || lang_1.isFunction(replacement);
     }
 }
-ReplacePipe.decorators = [
+/** @nocollapse */ ReplacePipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'replace' },] },
     { type: core_1.Injectable },
 ];

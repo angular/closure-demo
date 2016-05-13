@@ -30,10 +30,10 @@ class DOMTestComponentRenderer extends testing_1.TestComponentRenderer {
         DOMTestComponentRenderer.prototype._doc;
     }
 }
-DOMTestComponentRenderer.decorators = [
+/** @nocollapse */ DOMTestComponentRenderer.decorators = [
     { type: core_1.Injectable },
 ];
-DOMTestComponentRenderer.ctorParameters = [
+/** @nocollapse */ DOMTestComponentRenderer.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Inject, args: [dom_tokens_1.DOCUMENT,] },] },
 ];
 exports.DOMTestComponentRenderer = DOMTestComponentRenderer;

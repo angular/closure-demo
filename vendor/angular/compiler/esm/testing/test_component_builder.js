@@ -386,10 +386,10 @@ class TestComponentBuilder {
         TestComponentBuilder.prototype._injector;
     }
 }
-TestComponentBuilder.decorators = [
+/** @nocollapse */ TestComponentBuilder.decorators = [
     { type: core_1.Injectable },
 ];
-TestComponentBuilder.ctorParameters = [
+/** @nocollapse */ TestComponentBuilder.ctorParameters = [
     { type: core_1.Injector, },
 ];
 exports.TestComponentBuilder = TestComponentBuilder;

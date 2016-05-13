@@ -16,7 +16,7 @@ class Console {
      */
     warn(message) { _warnImpl(message); }
 }
-Console.decorators = [
+/** @nocollapse */ Console.decorators = [
     { type: decorators_1.Injectable },
 ];
 exports.Console = Console;

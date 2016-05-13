@@ -98,10 +98,10 @@ var MockViewResolver = (function (_super) {
             throw new core_1.BaseException("The component " + lang_1.stringify(component) + " has already been compiled, its configuration can not be changed");
         }
     };
-    MockViewResolver.decorators = [
+    /** @nocollapse */ MockViewResolver.decorators = [
         { type: core_1.Injectable },
     ];
-    MockViewResolver.ctorParameters = [];
+    /** @nocollapse */ MockViewResolver.ctorParameters = [];
     return MockViewResolver;
 }(index_1.ViewResolver));
 exports.MockViewResolver = MockViewResolver;

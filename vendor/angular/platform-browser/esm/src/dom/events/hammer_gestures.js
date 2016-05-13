@@ -30,7 +30,7 @@ class HammerGestureConfig {
         HammerGestureConfig.prototype.overrides;
     }
 }
-HammerGestureConfig.decorators = [
+/** @nocollapse */ HammerGestureConfig.decorators = [
     { type: core_1.Injectable },
 ];
 exports.HammerGestureConfig = HammerGestureConfig;
@@ -81,10 +81,10 @@ class HammerGesturesPlugin extends hammer_common_1.HammerGesturesPluginCommon {
         HammerGesturesPlugin.prototype._config;
     }
 }
-HammerGesturesPlugin.decorators = [
+/** @nocollapse */ HammerGesturesPlugin.decorators = [
     { type: core_1.Injectable },
 ];
-HammerGesturesPlugin.ctorParameters = [
+/** @nocollapse */ HammerGesturesPlugin.ctorParameters = [
     { type: HammerGestureConfig, decorators: [{ type: core_1.Inject, args: [exports.HAMMER_GESTURE_CONFIG,] },] },
 ];
 exports.HammerGesturesPlugin = HammerGesturesPlugin;

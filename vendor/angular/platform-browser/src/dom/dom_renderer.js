@@ -42,10 +42,10 @@ var DomRootRenderer_ = (function (_super) {
     function DomRootRenderer_(_document, _eventManager, sharedStylesHost, animate) {
         _super.call(this, _document, _eventManager, sharedStylesHost, animate);
     }
-    DomRootRenderer_.decorators = [
+    /** @nocollapse */ DomRootRenderer_.decorators = [
         { type: core_1.Injectable },
     ];
-    DomRootRenderer_.ctorParameters = [
+    /** @nocollapse */ DomRootRenderer_.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Inject, args: [dom_tokens_1.DOCUMENT,] },] },
         { type: event_manager_1.EventManager, },
         { type: shared_styles_host_1.DomSharedStylesHost, },

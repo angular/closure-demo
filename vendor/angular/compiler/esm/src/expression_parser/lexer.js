@@ -32,7 +32,7 @@ class Lexer {
         return tokens;
     }
 }
-Lexer.decorators = [
+/** @nocollapse */ Lexer.decorators = [
     { type: core_1.Injectable },
 ];
 exports.Lexer = Lexer;

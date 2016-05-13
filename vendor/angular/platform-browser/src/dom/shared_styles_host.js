@@ -29,10 +29,10 @@ var SharedStylesHost = (function () {
     };
     SharedStylesHost.prototype.onStylesAdded = function (additions) { };
     SharedStylesHost.prototype.getAllStyles = function () { return this._styles; };
-    SharedStylesHost.decorators = [
+    /** @nocollapse */ SharedStylesHost.decorators = [
         { type: core_1.Injectable },
     ];
-    SharedStylesHost.ctorParameters = [];
+    /** @nocollapse */ SharedStylesHost.ctorParameters = [];
     return SharedStylesHost;
 }());
 exports.SharedStylesHost = SharedStylesHost;
@@ -59,10 +59,10 @@ var DomSharedStylesHost = (function (_super) {
         var _this = this;
         this._hostNodes.forEach(function (hostNode) { _this._addStylesToHost(additions, hostNode); });
     };
-    DomSharedStylesHost.decorators = [
+    /** @nocollapse */ DomSharedStylesHost.decorators = [
         { type: core_1.Injectable },
     ];
-    DomSharedStylesHost.ctorParameters = [
+    /** @nocollapse */ DomSharedStylesHost.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Inject, args: [dom_tokens_1.DOCUMENT,] },] },
     ];
     return DomSharedStylesHost;

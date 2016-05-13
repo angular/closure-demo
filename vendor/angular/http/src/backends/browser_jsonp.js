@@ -37,7 +37,7 @@ var BrowserJsonp = (function () {
             node.parentNode.removeChild((node));
         }
     };
-    BrowserJsonp.decorators = [
+    /** @nocollapse */ BrowserJsonp.decorators = [
         { type: core_1.Injectable },
     ];
     return BrowserJsonp;

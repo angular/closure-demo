@@ -157,10 +157,10 @@ class NgFor {
         NgFor.prototype._cdr;
     }
 }
-NgFor.decorators = [
+/** @nocollapse */ NgFor.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngFor][ngForOf]', inputs: ['ngForTrackBy', 'ngForOf', 'ngForTemplate'] },] },
 ];
-NgFor.ctorParameters = [
+/** @nocollapse */ NgFor.ctorParameters = [
     { type: core_1.ViewContainerRef, },
     { type: core_1.TemplateRef, },
     { type: core_1.IterableDiffers, },

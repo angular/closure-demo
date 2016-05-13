@@ -337,9 +337,9 @@ class DomElementSchemaRegistry extends element_schema_registry_1.ElementSchemaRe
         DomElementSchemaRegistry.prototype.schema;
     }
 }
-DomElementSchemaRegistry.decorators = [
+/** @nocollapse */ DomElementSchemaRegistry.decorators = [
     { type: core_1.Injectable },
 ];
-DomElementSchemaRegistry.ctorParameters = [];
+/** @nocollapse */ DomElementSchemaRegistry.ctorParameters = [];
 exports.DomElementSchemaRegistry = DomElementSchemaRegistry;
 //# sourceMappingURL=dom_element_schema_registry.js.map

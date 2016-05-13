@@ -11,7 +11,7 @@ exports.REQUIRED_VALIDATOR = {
 var RequiredValidator = (function () {
     function RequiredValidator() {
     }
-    RequiredValidator.decorators = [
+    /** @nocollapse */ RequiredValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[required][ngControl],[required][ngFormControl],[required][ngModel]',
                     providers: [exports.REQUIRED_VALIDATOR]
@@ -37,13 +37,13 @@ var MinLengthValidator = (function () {
         this._validator = validators_1.Validators.minLength(lang_1.NumberWrapper.parseInt(minLength, 10));
     }
     MinLengthValidator.prototype.validate = function (c) { return this._validator(c); };
-    MinLengthValidator.decorators = [
+    /** @nocollapse */ MinLengthValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[minlength][ngControl],[minlength][ngFormControl],[minlength][ngModel]',
                     providers: [exports.MIN_LENGTH_VALIDATOR]
                 },] },
     ];
-    MinLengthValidator.ctorParameters = [
+    /** @nocollapse */ MinLengthValidator.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ["minlength",] },] },
     ];
     return MinLengthValidator;
@@ -66,13 +66,13 @@ var MaxLengthValidator = (function () {
         this._validator = validators_1.Validators.maxLength(lang_1.NumberWrapper.parseInt(maxLength, 10));
     }
     MaxLengthValidator.prototype.validate = function (c) { return this._validator(c); };
-    MaxLengthValidator.decorators = [
+    /** @nocollapse */ MaxLengthValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[maxlength][ngControl],[maxlength][ngFormControl],[maxlength][ngModel]',
                     providers: [exports.MAX_LENGTH_VALIDATOR]
                 },] },
     ];
-    MaxLengthValidator.ctorParameters = [
+    /** @nocollapse */ MaxLengthValidator.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ["maxlength",] },] },
     ];
     return MaxLengthValidator;
@@ -100,13 +100,13 @@ var PatternValidator = (function () {
         this._validator = validators_1.Validators.pattern(pattern);
     }
     PatternValidator.prototype.validate = function (c) { return this._validator(c); };
-    PatternValidator.decorators = [
+    /** @nocollapse */ PatternValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
                     providers: [exports.PATTERN_VALIDATOR]
                 },] },
     ];
-    PatternValidator.ctorParameters = [
+    /** @nocollapse */ PatternValidator.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ["pattern",] },] },
     ];
     return PatternValidator;

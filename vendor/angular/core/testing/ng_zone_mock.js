@@ -21,10 +21,10 @@ var MockNgZone = (function (_super) {
     MockNgZone.prototype.run = function (fn) { return fn(); };
     MockNgZone.prototype.runOutsideAngular = function (fn) { return fn(); };
     MockNgZone.prototype.simulateZoneExit = function () { async_1.ObservableWrapper.callNext(this.onStable, null); };
-    MockNgZone.decorators = [
+    /** @nocollapse */ MockNgZone.decorators = [
         { type: index_1.Injectable },
     ];
-    MockNgZone.ctorParameters = [];
+    /** @nocollapse */ MockNgZone.ctorParameters = [];
     return MockNgZone;
 }(index_1.NgZone));
 exports.MockNgZone = MockNgZone;

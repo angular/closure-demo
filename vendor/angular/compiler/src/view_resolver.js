@@ -89,10 +89,10 @@ var ViewResolver = (function () {
     ViewResolver.prototype._throwMixingViewAndComponent = function (propertyName, component) {
         throw new exceptions_1.BaseException("Component '" + lang_1.stringify(component) + "' cannot have both '" + propertyName + "' and '@View' set at the same time\"");
     };
-    ViewResolver.decorators = [
+    /** @nocollapse */ ViewResolver.decorators = [
         { type: core_1.Injectable },
     ];
-    ViewResolver.ctorParameters = [
+    /** @nocollapse */ ViewResolver.ctorParameters = [
         { type: core_private_1.ReflectorReader, },
     ];
     return ViewResolver;

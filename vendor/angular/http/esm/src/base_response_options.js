@@ -85,9 +85,9 @@ class BaseResponseOptions extends ResponseOptions {
         super({ status: 200, statusText: 'Ok', type: enums_1.ResponseType.Default, headers: new headers_1.Headers() });
     }
 }
-BaseResponseOptions.decorators = [
+/** @nocollapse */ BaseResponseOptions.decorators = [
     { type: core_1.Injectable },
 ];
-BaseResponseOptions.ctorParameters = [];
+/** @nocollapse */ BaseResponseOptions.ctorParameters = [];
 exports.BaseResponseOptions = BaseResponseOptions;
 //# sourceMappingURL=base_response_options.js.map

@@ -91,7 +91,7 @@ var NgFormModel = (function (_super) {
             throw new exceptions_1.BaseException("ngFormModel expects a form. Please pass one in. Example: <form [ngFormModel]=\"myCoolForm\">");
         }
     };
-    NgFormModel.decorators = [
+    /** @nocollapse */ NgFormModel.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngFormModel]',
                     bindings: [exports.formDirectiveProvider],
@@ -101,7 +101,7 @@ var NgFormModel = (function (_super) {
                     exportAs: 'ngForm'
                 },] },
     ];
-    NgFormModel.ctorParameters = [
+    /** @nocollapse */ NgFormModel.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_VALIDATORS,] },] },
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_ASYNC_VALIDATORS,] },] },
     ];

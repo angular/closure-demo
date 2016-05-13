@@ -23,13 +23,13 @@ class NgTemplateOutlet {
         NgTemplateOutlet.prototype._viewContainerRef;
     }
 }
-NgTemplateOutlet.decorators = [
+/** @nocollapse */ NgTemplateOutlet.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngTemplateOutlet]' },] },
 ];
-NgTemplateOutlet.ctorParameters = [
+/** @nocollapse */ NgTemplateOutlet.ctorParameters = [
     { type: core_1.ViewContainerRef, },
 ];
-NgTemplateOutlet.propDecorators = {
+/** @nocollapse */ NgTemplateOutlet.propDecorators = {
     'ngTemplateOutlet': [{ type: core_1.Input },],
 };
 exports.NgTemplateOutlet = NgTemplateOutlet;

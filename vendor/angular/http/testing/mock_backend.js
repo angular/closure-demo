@@ -108,10 +108,10 @@ var MockBackend = (function () {
         this.connections.next(connection);
         return connection;
     };
-    MockBackend.decorators = [
+    /** @nocollapse */ MockBackend.decorators = [
         { type: core_1.Injectable },
     ];
-    MockBackend.ctorParameters = [];
+    /** @nocollapse */ MockBackend.ctorParameters = [];
     return MockBackend;
 }());
 exports.MockBackend = MockBackend;

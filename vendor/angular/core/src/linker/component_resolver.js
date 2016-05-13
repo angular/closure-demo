@@ -40,7 +40,7 @@ var ReflectorComponentResolver = (function (_super) {
         return async_1.PromiseWrapper.resolve(componentFactory);
     };
     ReflectorComponentResolver.prototype.clearCache = function () { };
-    ReflectorComponentResolver.decorators = [
+    /** @nocollapse */ ReflectorComponentResolver.decorators = [
         { type: decorators_1.Injectable },
     ];
     return ReflectorComponentResolver;

@@ -55,10 +55,10 @@ var UrlResolver = (function () {
         }
         return resolvedUrl;
     };
-    UrlResolver.decorators = [
+    /** @nocollapse */ UrlResolver.decorators = [
         { type: core_1.Injectable },
     ];
-    UrlResolver.ctorParameters = [
+    /** @nocollapse */ UrlResolver.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Inject, args: [core_1.PACKAGE_ROOT_URL,] },] },
     ];
     return UrlResolver;

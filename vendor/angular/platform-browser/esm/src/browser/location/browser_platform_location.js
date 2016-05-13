@@ -74,9 +74,9 @@ class BrowserPlatformLocation extends common_1.PlatformLocation {
         BrowserPlatformLocation.prototype._history;
     }
 }
-BrowserPlatformLocation.decorators = [
+/** @nocollapse */ BrowserPlatformLocation.decorators = [
     { type: core_1.Injectable },
 ];
-BrowserPlatformLocation.ctorParameters = [];
+/** @nocollapse */ BrowserPlatformLocation.ctorParameters = [];
 exports.BrowserPlatformLocation = BrowserPlatformLocation;
 //# sourceMappingURL=browser_platform_location.js.map

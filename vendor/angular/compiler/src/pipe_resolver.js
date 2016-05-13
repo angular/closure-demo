@@ -28,10 +28,10 @@ var PipeResolver = (function () {
         }
         throw new exceptions_1.BaseException("No Pipe decorator found on " + lang_1.stringify(type));
     };
-    PipeResolver.decorators = [
+    /** @nocollapse */ PipeResolver.decorators = [
         { type: core_1.Injectable },
     ];
-    PipeResolver.ctorParameters = [
+    /** @nocollapse */ PipeResolver.ctorParameters = [
         { type: core_private_1.ReflectorReader, },
     ];
     return PipeResolver;

@@ -101,10 +101,10 @@ class MockLocationStrategy extends index_1.LocationStrategy {
         MockLocationStrategy.prototype._subject;
     }
 }
-MockLocationStrategy.decorators = [
+/** @nocollapse */ MockLocationStrategy.decorators = [
     { type: core_1.Injectable },
 ];
-MockLocationStrategy.ctorParameters = [];
+/** @nocollapse */ MockLocationStrategy.ctorParameters = [];
 exports.MockLocationStrategy = MockLocationStrategy;
 class _MockPopStateEvent {
     /**

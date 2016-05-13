@@ -154,10 +154,10 @@ var Parser = (function () {
         }
         return errLocation.length;
     };
-    Parser.decorators = [
+    /** @nocollapse */ Parser.decorators = [
         { type: core_1.Injectable },
     ];
-    Parser.ctorParameters = [
+    /** @nocollapse */ Parser.ctorParameters = [
         { type: lexer_1.Lexer, },
     ];
     return Parser;

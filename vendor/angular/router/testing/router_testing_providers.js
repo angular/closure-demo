@@ -8,7 +8,7 @@ var core_1 = require('@angular/core');
 var FakeAppRootCmp = (function () {
     function FakeAppRootCmp() {
     }
-    FakeAppRootCmp.decorators = [
+    /** @nocollapse */ FakeAppRootCmp.decorators = [
         { type: core_1.Component, args: [{ selector: 'fake-app-root-comp', template: "<span></span>" },] },
     ];
     return FakeAppRootCmp;

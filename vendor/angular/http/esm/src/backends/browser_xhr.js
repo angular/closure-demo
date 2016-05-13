@@ -10,9 +10,9 @@ class BrowserXhr {
      */
     build() { return ((new XMLHttpRequest())); }
 }
-BrowserXhr.decorators = [
+/** @nocollapse */ BrowserXhr.decorators = [
     { type: core_1.Injectable },
 ];
-BrowserXhr.ctorParameters = [];
+/** @nocollapse */ BrowserXhr.ctorParameters = [];
 exports.BrowserXhr = BrowserXhr;
 //# sourceMappingURL=browser_xhr.js.map

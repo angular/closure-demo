@@ -60,10 +60,10 @@ class EventManager {
         EventManager.prototype._zone;
     }
 }
-EventManager.decorators = [
+/** @nocollapse */ EventManager.decorators = [
     { type: core_1.Injectable },
 ];
-EventManager.ctorParameters = [
+/** @nocollapse */ EventManager.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Inject, args: [exports.EVENT_MANAGER_PLUGINS,] },] },
     { type: core_1.NgZone, },
 ];

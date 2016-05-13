@@ -45,10 +45,10 @@ class SharedStylesHost {
         SharedStylesHost.prototype._stylesSet;
     }
 }
-SharedStylesHost.decorators = [
+/** @nocollapse */ SharedStylesHost.decorators = [
     { type: core_1.Injectable },
 ];
-SharedStylesHost.ctorParameters = [];
+/** @nocollapse */ SharedStylesHost.ctorParameters = [];
 exports.SharedStylesHost = SharedStylesHost;
 class DomSharedStylesHost extends SharedStylesHost {
     /**
@@ -96,10 +96,10 @@ class DomSharedStylesHost extends SharedStylesHost {
         DomSharedStylesHost.prototype._hostNodes;
     }
 }
-DomSharedStylesHost.decorators = [
+/** @nocollapse */ DomSharedStylesHost.decorators = [
     { type: core_1.Injectable },
 ];
-DomSharedStylesHost.ctorParameters = [
+/** @nocollapse */ DomSharedStylesHost.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Inject, args: [dom_tokens_1.DOCUMENT,] },] },
 ];
 exports.DomSharedStylesHost = DomSharedStylesHost;

@@ -74,7 +74,7 @@ class NgModel extends ng_control_1.NgControl {
         NgModel.prototype._asyncValidators;
     }
 }
-NgModel.decorators = [
+/** @nocollapse */ NgModel.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngModel]:not([ngControl]):not([ngFormControl])',
                 bindings: [exports.formControlBinding],
@@ -83,7 +83,7 @@ NgModel.decorators = [
                 exportAs: 'ngForm'
             },] },
 ];
-NgModel.ctorParameters = [
+/** @nocollapse */ NgModel.ctorParameters = [
     { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_VALIDATORS,] },] },
     { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_ASYNC_VALIDATORS,] },] },
     { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [control_value_accessor_1.NG_VALUE_ACCESSOR,] },] },

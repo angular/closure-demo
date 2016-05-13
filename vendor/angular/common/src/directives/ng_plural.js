@@ -15,10 +15,10 @@ var NgPluralCase = (function () {
         this.value = value;
         this._view = new ng_switch_1.SwitchView(viewContainer, template);
     }
-    NgPluralCase.decorators = [
+    /** @nocollapse */ NgPluralCase.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngPluralCase]' },] },
     ];
-    NgPluralCase.ctorParameters = [
+    /** @nocollapse */ NgPluralCase.ctorParameters = [
         { type: undefined, decorators: [{ type: core_1.Attribute, args: ['ngPluralCase',] },] },
         { type: core_1.TemplateRef, },
         { type: core_1.ViewContainerRef, },
@@ -81,13 +81,13 @@ var NgPlural = (function () {
     };
     /** @internal */
     NgPlural.prototype._stripValue = function (value) { return lang_1.NumberWrapper.parseInt(value.substring(1), 10); };
-    NgPlural.decorators = [
+    /** @nocollapse */ NgPlural.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngPlural]' },] },
     ];
-    NgPlural.ctorParameters = [
+    /** @nocollapse */ NgPlural.ctorParameters = [
         { type: NgLocalization, },
     ];
-    NgPlural.propDecorators = {
+    /** @nocollapse */ NgPlural.propDecorators = {
         'cases': [{ type: core_1.ContentChildren, args: [NgPluralCase,] },],
         'ngPlural': [{ type: core_1.Input },],
     };

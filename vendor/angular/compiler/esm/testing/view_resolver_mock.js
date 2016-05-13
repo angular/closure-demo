@@ -113,10 +113,10 @@ class MockViewResolver extends index_1.ViewResolver {
         MockViewResolver.prototype._directiveOverrides;
     }
 }
-MockViewResolver.decorators = [
+/** @nocollapse */ MockViewResolver.decorators = [
     { type: core_1.Injectable },
 ];
-MockViewResolver.ctorParameters = [];
+/** @nocollapse */ MockViewResolver.ctorParameters = [];
 exports.MockViewResolver = MockViewResolver;
 /**
  * @param {?} tree

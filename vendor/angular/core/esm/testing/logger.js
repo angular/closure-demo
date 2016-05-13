@@ -33,9 +33,9 @@ class Log {
         Log.prototype.logItems;
     }
 }
-Log.decorators = [
+/** @nocollapse */ Log.decorators = [
     { type: index_1.Injectable },
 ];
-Log.ctorParameters = [];
+/** @nocollapse */ Log.ctorParameters = [];
 exports.Log = Log;
 //# sourceMappingURL=logger.js.map

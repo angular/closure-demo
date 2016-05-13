@@ -21,10 +21,10 @@ var NgIf = (function () {
         enumerable: true,
         configurable: true
     });
-    NgIf.decorators = [
+    /** @nocollapse */ NgIf.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngIf]', inputs: ['ngIf'] },] },
     ];
-    NgIf.ctorParameters = [
+    /** @nocollapse */ NgIf.ctorParameters = [
         { type: core_1.ViewContainerRef, },
         { type: core_1.TemplateRef, },
     ];

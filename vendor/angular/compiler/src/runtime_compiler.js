@@ -142,10 +142,10 @@ var RuntimeCompiler = (function () {
         }
         return cssTextPromise;
     };
-    RuntimeCompiler.decorators = [
+    /** @nocollapse */ RuntimeCompiler.decorators = [
         { type: core_1.Injectable },
     ];
-    RuntimeCompiler.ctorParameters = [
+    /** @nocollapse */ RuntimeCompiler.ctorParameters = [
         { type: metadata_resolver_1.CompileMetadataResolver, },
         { type: directive_normalizer_1.DirectiveNormalizer, },
         { type: template_parser_1.TemplateParser, },

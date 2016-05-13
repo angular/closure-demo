@@ -113,10 +113,10 @@ class ViewResolver {
         ViewResolver.prototype._cache;
     }
 }
-ViewResolver.decorators = [
+/** @nocollapse */ ViewResolver.decorators = [
     { type: core_1.Injectable },
 ];
-ViewResolver.ctorParameters = [
+/** @nocollapse */ ViewResolver.ctorParameters = [
     { type: core_private_1.ReflectorReader, },
 ];
 exports.ViewResolver = ViewResolver;

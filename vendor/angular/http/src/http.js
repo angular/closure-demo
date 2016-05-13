@@ -93,10 +93,10 @@ var Http = (function () {
     Http.prototype.head = function (url, options) {
         return httpRequest(this._backend, new static_request_1.Request(mergeOptions(this._defaultOptions, options, enums_1.RequestMethod.Head, url)));
     };
-    Http.decorators = [
+    /** @nocollapse */ Http.decorators = [
         { type: core_1.Injectable },
     ];
-    Http.ctorParameters = [
+    /** @nocollapse */ Http.ctorParameters = [
         { type: interfaces_1.ConnectionBackend, },
         { type: base_request_options_1.RequestOptions, },
     ];
@@ -131,10 +131,10 @@ var Jsonp = (function (_super) {
         }
         return responseObservable;
     };
-    Jsonp.decorators = [
+    /** @nocollapse */ Jsonp.decorators = [
         { type: core_1.Injectable },
     ];
-    Jsonp.ctorParameters = [
+    /** @nocollapse */ Jsonp.ctorParameters = [
         { type: interfaces_1.ConnectionBackend, },
         { type: base_request_options_1.RequestOptions, },
     ];

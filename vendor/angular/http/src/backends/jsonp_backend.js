@@ -127,10 +127,10 @@ var JSONPBackend_ = (function (_super) {
     JSONPBackend_.prototype.createConnection = function (request) {
         return new JSONPConnection_(request, this._browserJSONP, this._baseResponseOptions);
     };
-    JSONPBackend_.decorators = [
+    /** @nocollapse */ JSONPBackend_.decorators = [
         { type: core_1.Injectable },
     ];
-    JSONPBackend_.ctorParameters = [
+    /** @nocollapse */ JSONPBackend_.ctorParameters = [
         { type: browser_jsonp_1.BrowserJsonp, },
         { type: base_response_options_1.ResponseOptions, },
     ];

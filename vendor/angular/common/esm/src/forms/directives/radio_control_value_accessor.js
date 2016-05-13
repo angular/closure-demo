@@ -50,7 +50,7 @@ class RadioControlRegistry {
         RadioControlRegistry.prototype._accessors;
     }
 }
-RadioControlRegistry.decorators = [
+/** @nocollapse */ RadioControlRegistry.decorators = [
     { type: core_1.Injectable },
 ];
 exports.RadioControlRegistry = RadioControlRegistry;
@@ -156,20 +156,20 @@ class RadioControlValueAccessor {
         RadioControlValueAccessor.prototype._injector;
     }
 }
-RadioControlValueAccessor.decorators = [
+/** @nocollapse */ RadioControlValueAccessor.decorators = [
     { type: core_1.Directive, args: [{
                 selector: 'input[type=radio][ngControl],input[type=radio][ngFormControl],input[type=radio][ngModel]',
                 host: { '(change)': 'onChange()', '(blur)': 'onTouched()' },
                 providers: [exports.RADIO_VALUE_ACCESSOR]
             },] },
 ];
-RadioControlValueAccessor.ctorParameters = [
+/** @nocollapse */ RadioControlValueAccessor.ctorParameters = [
     { type: core_1.Renderer, },
     { type: core_1.ElementRef, },
     { type: RadioControlRegistry, },
     { type: core_1.Injector, },
 ];
-RadioControlValueAccessor.propDecorators = {
+/** @nocollapse */ RadioControlValueAccessor.propDecorators = {
     'name': [{ type: core_1.Input },],
 };
 exports.RadioControlValueAccessor = RadioControlValueAccessor;

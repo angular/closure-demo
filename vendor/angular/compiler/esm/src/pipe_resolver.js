@@ -42,10 +42,10 @@ class PipeResolver {
         PipeResolver.prototype._reflector;
     }
 }
-PipeResolver.decorators = [
+/** @nocollapse */ PipeResolver.decorators = [
     { type: core_1.Injectable },
 ];
-PipeResolver.ctorParameters = [
+/** @nocollapse */ PipeResolver.ctorParameters = [
     { type: core_private_1.ReflectorReader, },
 ];
 exports.PipeResolver = PipeResolver;

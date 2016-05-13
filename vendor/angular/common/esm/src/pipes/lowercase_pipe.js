@@ -16,7 +16,7 @@ class LowerCasePipe {
         return value.toLowerCase();
     }
 }
-LowerCasePipe.decorators = [
+/** @nocollapse */ LowerCasePipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'lowercase' },] },
     { type: core_1.Injectable },
 ];

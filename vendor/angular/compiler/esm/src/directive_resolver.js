@@ -152,10 +152,10 @@ class DirectiveResolver {
         DirectiveResolver.prototype._reflector;
     }
 }
-DirectiveResolver.decorators = [
+/** @nocollapse */ DirectiveResolver.decorators = [
     { type: core_1.Injectable },
 ];
-DirectiveResolver.ctorParameters = [
+/** @nocollapse */ DirectiveResolver.ctorParameters = [
     { type: core_private_1.ReflectorReader, },
 ];
 exports.DirectiveResolver = DirectiveResolver;

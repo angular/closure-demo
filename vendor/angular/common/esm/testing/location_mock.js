@@ -128,7 +128,7 @@ class SpyLocation {
         SpyLocation.prototype.platformStrategy;
     }
 }
-SpyLocation.decorators = [
+/** @nocollapse */ SpyLocation.decorators = [
     { type: core_1.Injectable },
 ];
 exports.SpyLocation = SpyLocation;

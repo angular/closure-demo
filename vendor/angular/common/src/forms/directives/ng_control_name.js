@@ -68,7 +68,7 @@ var NgControlName = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    NgControlName.decorators = [
+    /** @nocollapse */ NgControlName.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngControl]',
                     bindings: [exports.controlNameBinding],
@@ -77,7 +77,7 @@ var NgControlName = (function (_super) {
                     exportAs: 'ngForm'
                 },] },
     ];
-    NgControlName.ctorParameters = [
+    /** @nocollapse */ NgControlName.ctorParameters = [
         { type: control_container_1.ControlContainer, decorators: [{ type: core_1.Host }, { type: core_1.SkipSelf },] },
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_VALIDATORS,] },] },
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Self }, { type: core_1.Inject, args: [validators_1.NG_ASYNC_VALIDATORS,] },] },

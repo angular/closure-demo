@@ -57,10 +57,10 @@ class DynamicComponentLoader_ extends DynamicComponentLoader {
         DynamicComponentLoader_.prototype._compiler;
     }
 }
-DynamicComponentLoader_.decorators = [
+/** @nocollapse */ DynamicComponentLoader_.decorators = [
     { type: decorators_1.Injectable },
 ];
-DynamicComponentLoader_.ctorParameters = [
+/** @nocollapse */ DynamicComponentLoader_.ctorParameters = [
     { type: component_resolver_1.ComponentResolver, },
 ];
 exports.DynamicComponentLoader_ = DynamicComponentLoader_;

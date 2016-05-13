@@ -15,10 +15,10 @@ var AnimationBuilder = (function () {
      * @returns {CssAnimationBuilder}
      */
     AnimationBuilder.prototype.css = function () { return new css_animation_builder_1.CssAnimationBuilder(this.browserDetails); };
-    AnimationBuilder.decorators = [
+    /** @nocollapse */ AnimationBuilder.decorators = [
         { type: core_1.Injectable },
     ];
-    AnimationBuilder.ctorParameters = [
+    /** @nocollapse */ AnimationBuilder.ctorParameters = [
         { type: browser_details_1.BrowserDetails, },
     ];
     return AnimationBuilder;

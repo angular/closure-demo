@@ -55,10 +55,10 @@ var HashLocationStrategy = (function (_super) {
     };
     HashLocationStrategy.prototype.forward = function () { this._platformLocation.forward(); };
     HashLocationStrategy.prototype.back = function () { this._platformLocation.back(); };
-    HashLocationStrategy.decorators = [
+    /** @nocollapse */ HashLocationStrategy.decorators = [
         { type: core_1.Injectable },
     ];
-    HashLocationStrategy.ctorParameters = [
+    /** @nocollapse */ HashLocationStrategy.ctorParameters = [
         { type: platform_location_1.PlatformLocation, },
         { type: undefined, decorators: [{ type: core_1.Optional }, { type: core_1.Inject, args: [location_strategy_1.APP_BASE_HREF,] },] },
     ];

@@ -24,7 +24,7 @@ var HammerGestureConfig = (function () {
         }
         return mc;
     };
-    HammerGestureConfig.decorators = [
+    /** @nocollapse */ HammerGestureConfig.decorators = [
         { type: core_1.Injectable },
     ];
     return HammerGestureConfig;
@@ -57,10 +57,10 @@ var HammerGesturesPlugin = (function (_super) {
         });
     };
     HammerGesturesPlugin.prototype.isCustomEvent = function (eventName) { return this._config.events.indexOf(eventName) > -1; };
-    HammerGesturesPlugin.decorators = [
+    /** @nocollapse */ HammerGesturesPlugin.decorators = [
         { type: core_1.Injectable },
     ];
-    HammerGesturesPlugin.ctorParameters = [
+    /** @nocollapse */ HammerGesturesPlugin.ctorParameters = [
         { type: HammerGestureConfig, decorators: [{ type: core_1.Inject, args: [exports.HAMMER_GESTURE_CONFIG,] },] },
     ];
     return HammerGesturesPlugin;
