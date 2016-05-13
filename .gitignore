@@ -1,4 +1,3 @@
 node_modules
 built
-gen
-
+**/*.ngfactory.ts

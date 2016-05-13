@@ -1,6 +1,5 @@
 {
     "angularCompilerOptions": {
-        "genDir": "gen",
         "googleClosureOutput": true
     },
     "compilerOptions": {
@@ -11,11 +10,7 @@
         "sourceMap": false,
         "experimentalDecorators": true,
         "outDir": "built",
-        "declaration": true,
-        "rootDirs": [
-            "src",
-            "gen"
-        ]
+        "declaration": true
     },
     "exclude": [
         "node_modules",
