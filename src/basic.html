@@ -1,2 +1,2 @@
 <div>{{ctxProp}}</div>
-<form><input type="button" [(ngModel)]="ctxProp"/></form>
+<input type="text" [value]="ctxProp" (input)="ctxProp = $event.target.value"/>

@@ -15,6 +15,7 @@
     "exclude": [
         "vendor",
         "node_modules",
-        "built"
+        "built",
+        "dist"
     ]
 }
