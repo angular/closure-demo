@@ -53,5 +53,7 @@ var exceptions_1 = require("./src/facade/exceptions");
 exports.ExceptionHandler = exceptions_1.ExceptionHandler;
 exports.WrappedException = exceptions_1.WrappedException;
 exports.BaseException = exceptions_1.BaseException;
-__export(require('./private_export'));
+var private_export_1 = require('./private_export');
+exports.__core_private__ = private_export_1.__core_private__;
+exports.__core_private_types__ = private_export_1.__core_private_types__;
 //# sourceMappingURL=index.js.map

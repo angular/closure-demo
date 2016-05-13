@@ -1,16 +1,16 @@
 export declare class BrowserDetection {
     private _overrideUa;
-    private readonly _ua;
+    private _ua;
     static setup(): void;
     constructor(ua: string);
-    readonly isFirefox: boolean;
-    readonly isAndroid: boolean;
-    readonly isEdge: boolean;
-    readonly isIE: boolean;
-    readonly isWebkit: boolean;
-    readonly isIOS7: boolean;
-    readonly isSlow: boolean;
-    readonly supportsIntlApi: boolean;
+    isFirefox: boolean;
+    isAndroid: boolean;
+    isEdge: boolean;
+    isIE: boolean;
+    isWebkit: boolean;
+    isIOS7: boolean;
+    isSlow: boolean;
+    supportsIntlApi: boolean;
 }
 export declare function dispatchEvent(element: any, eventType: any): void;
 export declare function el(html: string): HTMLElement;

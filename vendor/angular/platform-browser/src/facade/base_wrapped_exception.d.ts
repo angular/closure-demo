@@ -5,10 +5,10 @@
  */
 export declare class BaseWrappedException extends Error {
     constructor(message: string);
-    readonly wrapperMessage: string;
-    readonly wrapperStack: any;
-    readonly originalException: any;
-    readonly originalStack: any;
-    readonly context: any;
-    readonly message: string;
+    wrapperMessage: string;
+    wrapperStack: any;
+    originalException: any;
+    originalStack: any;
+    context: any;
+    message: string;
 }

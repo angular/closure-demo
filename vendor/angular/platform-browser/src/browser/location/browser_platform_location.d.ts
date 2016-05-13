@@ -11,13 +11,13 @@ export declare class BrowserPlatformLocation extends PlatformLocation {
     /** @internal */
     _init(): void;
     /** @internal */
-    readonly location: Location;
+    location: Location;
     getBaseHrefFromDOM(): string;
     onPopState(fn: UrlChangeListener): void;
     onHashChange(fn: UrlChangeListener): void;
     pathname: string;
-    readonly search: string;
-    readonly hash: string;
+    search: string;
+    hash: string;
     pushState(state: any, title: string, url: string): void;
     replaceState(state: any, title: string, url: string): void;
     forward(): void;

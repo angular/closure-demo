@@ -122,7 +122,7 @@ class ReflectionCapabilities {
         }
         // The array has to be filled with `undefined` because holes would be skipped by `some`
         let /** @type {?} */ parameters = new Array(((typeOrFunc.length)));
-        parameters.fill(undefined);
+        parameters.fill(undefined); // FIXME??
         return parameters;
     }
     /**

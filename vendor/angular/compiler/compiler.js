@@ -38,5 +38,6 @@ exports.CompileTemplateMetadata = compiler_1.CompileTemplateMetadata;
 exports.CompileDirectiveMetadata = compiler_1.CompileDirectiveMetadata;
 exports.CompilePipeMetadata = compiler_1.CompilePipeMetadata;
 __export(require('./src/template_ast'));
-__export(require('./private_export'));
+var private_export_1 = require('./private_export');
+exports.__compiler_private__ = private_export_1.__compiler_private__;
 //# sourceMappingURL=compiler.js.map

@@ -1,7 +1,4 @@
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
 var core_1 = require('@angular/core');
 var lang_1 = require('./facade/lang');
 var browser_common_1 = require('./browser_common');
@@ -22,7 +19,8 @@ exports.enableDebugTools = browser_common_2.enableDebugTools;
 exports.disableDebugTools = browser_common_2.disableDebugTools;
 exports.HAMMER_GESTURE_CONFIG = browser_common_2.HAMMER_GESTURE_CONFIG;
 exports.HammerGestureConfig = browser_common_2.HammerGestureConfig;
-__export(require('../private_export'));
+var private_export_1 = require('../private_export');
+exports.__platform_browser_private__ = private_export_1.__platform_browser_private__;
 var dom_tokens_1 = require('./dom/dom_tokens');
 exports.DOCUMENT = dom_tokens_1.DOCUMENT;
 var dom_sanitization_service_1 = require('./security/dom_sanitization_service');

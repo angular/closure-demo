@@ -18,7 +18,7 @@ export declare class Animation {
     completed: boolean;
     private _stringPrefix;
     /** total amount of time that the animation should take including delay */
-    readonly totalTime: number;
+    totalTime: number;
     /**
      * Stores the start time and starts the animation
      * @param element

@@ -101,7 +101,7 @@ export declare class NumberWrapper {
     static parseIntAutoRadix(text: string): number;
     static parseInt(text: string, radix: number): number;
     static parseFloat(text: string): number;
-    static readonly NaN: number;
+    static NaN: number;
     static isNaN(value: any): boolean;
     static isInteger(value: any): boolean;
 }

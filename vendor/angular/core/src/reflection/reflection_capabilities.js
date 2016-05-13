@@ -133,7 +133,7 @@ var ReflectionCapabilities = (function () {
         }
         // The array has to be filled with `undefined` because holes would be skipped by `some`
         var parameters = new Array(typeOrFunc.length);
-        parameters.fill(undefined);
+        parameters.fill(undefined); // FIXME??
         return parameters;
     };
     ReflectionCapabilities.prototype.annotations = function (typeOrFunc) {

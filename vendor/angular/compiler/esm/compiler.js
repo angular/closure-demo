@@ -51,4 +51,6 @@ exports.ProviderAstType = template_ast_1.ProviderAstType;
 exports.NgContentAst = template_ast_1.NgContentAst;
 exports.PropertyBindingType = template_ast_1.PropertyBindingType;
 exports.templateVisitAll = template_ast_1.templateVisitAll;
+var private_export_1 = goog.require('_angular$compiler$private__export');
+exports.__compiler_private__ = private_export_1.__compiler_private__;
 //# sourceMappingURL=compiler.js.map

@@ -6,6 +6,7 @@ var path = require('path');
 var ts = require('typescript');
 var tsc_1 = require('./tsc');
 var compiler_host_1 = require('./compiler_host');
+var codegen_1 = require('./codegen');
 var DEBUG = false;
 function debug(msg) {
     var o = [];
@@ -33,7 +34,7 @@ function main(project, basePath) {
         tsc_1.check(errors);
         var doCodegen = ngOptions_1.skipTemplateCodegen ?
             Promise.resolve(null) :
-            null;
+            codegen_1.CodeGenerator.create(ngOptions_1, program_1, parsed_1.options, host_1).codegen();
         return doCodegen.then(function () {
             tsc_1.tsc.typeCheck(host_1, program_1);
             // Emit *.js with Decorators lowered to Annotations, and also *.js.map

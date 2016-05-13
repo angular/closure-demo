@@ -169,4 +169,7 @@
     exports.ExceptionHandler = exceptions_1.ExceptionHandler;
     exports.WrappedException = exceptions_1.WrappedException;
     exports.BaseException = exceptions_1.BaseException;
+    var private_export_1 = goog.require('_angular$core$private__export');
+    exports.__core_private__ = private_export_1.__core_private__;
+    exports.__core_private_types__ = private_export_1.__core_private_types__;
 }));

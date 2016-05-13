@@ -22,4 +22,4 @@ export { wtfCreateScope, wtfLeave, wtfStartTimeRange, wtfEndTimeRange, WtfScopeF
 export { Type, enableProdMode } from "./src/facade/lang";
 export { EventEmitter } from "./src/facade/async";
 export { ExceptionHandler, WrappedException, BaseException } from "./src/facade/exceptions";
-export * from './private_export';
+export { __core_private__, __core_private_types__ } from './private_export';
