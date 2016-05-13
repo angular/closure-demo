@@ -17,13 +17,13 @@ var NgTemplateOutlet = (function () {
         enumerable: true,
         configurable: true
     });
-    /** @nocollapse */ NgTemplateOutlet.decorators = [
+    NgTemplateOutlet.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngTemplateOutlet]' },] },
     ];
     /** @nocollapse */ NgTemplateOutlet.ctorParameters = [
         { type: core_1.ViewContainerRef, },
     ];
-    /** @nocollapse */ NgTemplateOutlet.propDecorators = {
+    NgTemplateOutlet.propDecorators = {
         'ngTemplateOutlet': [{ type: core_1.Input },],
     };
     return NgTemplateOutlet;

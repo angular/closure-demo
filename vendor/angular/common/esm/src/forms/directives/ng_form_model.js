@@ -131,7 +131,7 @@ class NgFormModel extends control_container_1.ControlContainer {
         NgFormModel.prototype._asyncValidators;
     }
 }
-/** @nocollapse */ NgFormModel.decorators = [
+NgFormModel.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngFormModel]',
                 bindings: [exports.formDirectiveProvider],

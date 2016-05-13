@@ -48,14 +48,14 @@ var RouterLink = (function () {
             this.isActive = false;
         }
     };
-    /** @nocollapse */ RouterLink.decorators = [
+    RouterLink.decorators = [
         { type: core_1.Directive, args: [{ selector: '[routerLink]' },] },
     ];
     /** @nocollapse */ RouterLink.ctorParameters = [
         { type: segments_1.RouteSegment, },
         { type: router_1.Router, },
     ];
-    /** @nocollapse */ RouterLink.propDecorators = {
+    RouterLink.propDecorators = {
         'target': [{ type: core_1.Input },],
         'href': [{ type: core_1.HostBinding },],
         'isActive': [{ type: core_1.HostBinding, args: ['class.router-link-active',] },],

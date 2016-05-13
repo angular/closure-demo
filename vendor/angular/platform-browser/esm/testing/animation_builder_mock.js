@@ -15,7 +15,7 @@ class MockAnimationBuilder extends animation_builder_1.AnimationBuilder {
      */
     css() { return new MockCssAnimationBuilder(); }
 }
-/** @nocollapse */ MockAnimationBuilder.decorators = [
+MockAnimationBuilder.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ MockAnimationBuilder.ctorParameters = [];

@@ -15,7 +15,7 @@ var MockAnimationBuilder = (function (_super) {
         _super.call(this, null);
     }
     MockAnimationBuilder.prototype.css = function () { return new MockCssAnimationBuilder(); };
-    /** @nocollapse */ MockAnimationBuilder.decorators = [
+    MockAnimationBuilder.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ MockAnimationBuilder.ctorParameters = [];

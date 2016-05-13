@@ -60,7 +60,7 @@ class EventManager {
         EventManager.prototype._zone;
     }
 }
-/** @nocollapse */ EventManager.decorators = [
+EventManager.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ EventManager.ctorParameters = [

@@ -10,7 +10,7 @@ var Console = (function () {
     Console.prototype.log = function (message) { lang_1.print(message); };
     // Note: for reporting errors use `DOM.logError()` as it is platform specific
     Console.prototype.warn = function (message) { _warnImpl(message); };
-    /** @nocollapse */ Console.decorators = [
+    Console.decorators = [
         { type: decorators_1.Injectable },
     ];
     return Console;

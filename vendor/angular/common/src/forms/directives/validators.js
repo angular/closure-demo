@@ -11,7 +11,7 @@ exports.REQUIRED_VALIDATOR = {
 var RequiredValidator = (function () {
     function RequiredValidator() {
     }
-    /** @nocollapse */ RequiredValidator.decorators = [
+    RequiredValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[required][ngControl],[required][ngFormControl],[required][ngModel]',
                     providers: [exports.REQUIRED_VALIDATOR]
@@ -37,7 +37,7 @@ var MinLengthValidator = (function () {
         this._validator = validators_1.Validators.minLength(lang_1.NumberWrapper.parseInt(minLength, 10));
     }
     MinLengthValidator.prototype.validate = function (c) { return this._validator(c); };
-    /** @nocollapse */ MinLengthValidator.decorators = [
+    MinLengthValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[minlength][ngControl],[minlength][ngFormControl],[minlength][ngModel]',
                     providers: [exports.MIN_LENGTH_VALIDATOR]
@@ -66,7 +66,7 @@ var MaxLengthValidator = (function () {
         this._validator = validators_1.Validators.maxLength(lang_1.NumberWrapper.parseInt(maxLength, 10));
     }
     MaxLengthValidator.prototype.validate = function (c) { return this._validator(c); };
-    /** @nocollapse */ MaxLengthValidator.decorators = [
+    MaxLengthValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[maxlength][ngControl],[maxlength][ngFormControl],[maxlength][ngModel]',
                     providers: [exports.MAX_LENGTH_VALIDATOR]
@@ -100,7 +100,7 @@ var PatternValidator = (function () {
         this._validator = validators_1.Validators.pattern(pattern);
     }
     PatternValidator.prototype.validate = function (c) { return this._validator(c); };
-    /** @nocollapse */ PatternValidator.decorators = [
+    PatternValidator.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
                     providers: [exports.PATTERN_VALIDATOR]

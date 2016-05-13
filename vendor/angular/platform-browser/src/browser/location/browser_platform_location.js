@@ -56,7 +56,7 @@ var BrowserPlatformLocation = (function (_super) {
     };
     BrowserPlatformLocation.prototype.forward = function () { this._history.forward(); };
     BrowserPlatformLocation.prototype.back = function () { this._history.back(); };
-    /** @nocollapse */ BrowserPlatformLocation.decorators = [
+    BrowserPlatformLocation.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ BrowserPlatformLocation.ctorParameters = [];

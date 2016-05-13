@@ -52,7 +52,7 @@ class NgControlGroup extends control_container_1.ControlContainer {
         NgControlGroup.prototype._asyncValidators;
     }
 }
-/** @nocollapse */ NgControlGroup.decorators = [
+NgControlGroup.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngControlGroup]',
                 providers: [exports.controlGroupProvider],

@@ -154,7 +154,7 @@ class TemplateParser {
         TemplateParser.prototype.transforms;
     }
 }
-/** @nocollapse */ TemplateParser.decorators = [
+TemplateParser.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ TemplateParser.ctorParameters = [

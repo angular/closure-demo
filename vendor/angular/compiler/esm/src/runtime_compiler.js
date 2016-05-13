@@ -210,7 +210,7 @@ class RuntimeCompiler {
         RuntimeCompiler.prototype._genConfig;
     }
 }
-/** @nocollapse */ RuntimeCompiler.decorators = [
+RuntimeCompiler.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ RuntimeCompiler.ctorParameters = [

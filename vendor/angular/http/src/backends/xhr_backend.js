@@ -89,7 +89,7 @@ var XHRBackend = (function () {
     XHRBackend.prototype.createConnection = function (request) {
         return new XHRConnection(request, this._browserXHR, this._baseResponseOptions);
     };
-    /** @nocollapse */ XHRBackend.decorators = [
+    XHRBackend.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ XHRBackend.ctorParameters = [

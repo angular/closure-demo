@@ -113,7 +113,7 @@ class ViewResolver {
         ViewResolver.prototype._cache;
     }
 }
-/** @nocollapse */ ViewResolver.decorators = [
+ViewResolver.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ ViewResolver.ctorParameters = [

@@ -110,7 +110,7 @@ var NgClass = (function () {
             }
         }
     };
-    /** @nocollapse */ NgClass.decorators = [
+    NgClass.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngClass]', inputs: ['rawClass: ngClass', 'initialClasses: class'] },] },
     ];
     /** @nocollapse */ NgClass.ctorParameters = [

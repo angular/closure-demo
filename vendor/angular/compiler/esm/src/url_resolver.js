@@ -64,7 +64,7 @@ class UrlResolver {
         UrlResolver.prototype._packagePrefix;
     }
 }
-/** @nocollapse */ UrlResolver.decorators = [
+UrlResolver.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ UrlResolver.ctorParameters = [

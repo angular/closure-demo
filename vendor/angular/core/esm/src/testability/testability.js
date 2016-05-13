@@ -139,7 +139,7 @@ class Testability {
         Testability.prototype._ngZone;
     }
 }
-/** @nocollapse */ Testability.decorators = [
+Testability.decorators = [
     { type: decorators_1.Injectable },
 ];
 /** @nocollapse */ Testability.ctorParameters = [
@@ -189,7 +189,7 @@ class TestabilityRegistry {
         TestabilityRegistry.prototype._applications;
     }
 }
-/** @nocollapse */ TestabilityRegistry.decorators = [
+TestabilityRegistry.decorators = [
     { type: decorators_1.Injectable },
 ];
 /** @nocollapse */ TestabilityRegistry.ctorParameters = [];

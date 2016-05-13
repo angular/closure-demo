@@ -72,7 +72,7 @@ class NgFormControl extends ng_control_1.NgControl {
         NgFormControl.prototype._asyncValidators;
     }
 }
-/** @nocollapse */ NgFormControl.decorators = [
+NgFormControl.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngFormControl]',
                 bindings: [exports.formControlBinding],

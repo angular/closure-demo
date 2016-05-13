@@ -92,7 +92,7 @@ class MockDirectiveResolver extends directive_resolver_1.DirectiveResolver {
         MockDirectiveResolver.prototype.viewProviderOverrides;
     }
 }
-/** @nocollapse */ MockDirectiveResolver.decorators = [
+MockDirectiveResolver.decorators = [
     { type: core_1.Injectable },
 ];
 exports.MockDirectiveResolver = MockDirectiveResolver;

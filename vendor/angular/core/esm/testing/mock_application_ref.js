@@ -40,7 +40,7 @@ class MockApplicationRef extends index_1.ApplicationRef {
     get componentTypes() { return null; }
     ;
 }
-/** @nocollapse */ MockApplicationRef.decorators = [
+MockApplicationRef.decorators = [
     { type: index_1.Injectable },
 ];
 exports.MockApplicationRef = MockApplicationRef;

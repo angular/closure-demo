@@ -33,7 +33,7 @@ class Log {
         Log.prototype.logItems;
     }
 }
-/** @nocollapse */ Log.decorators = [
+Log.decorators = [
     { type: index_1.Injectable },
 ];
 /** @nocollapse */ Log.ctorParameters = [];

@@ -142,7 +142,7 @@ var ClassRewriter = (function (_super) {
             this.emit('];\n');
         }
         if (this.ctorParameters) {
-            this.emit("static ctorParameters: {type: Function, decorators?: DecoratorInvocation[]}[] = [\n");
+            this.emit("/** @nocollapse */ static ctorParameters: {type: Function, decorators?: DecoratorInvocation[]}[] = [\n");
             for (var _b = 0, _c = this.ctorParameters; _b < _c.length; _b++) {
                 var param = _c[_b];
                 if (!param) {

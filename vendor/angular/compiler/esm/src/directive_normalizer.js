@@ -116,7 +116,7 @@ class DirectiveNormalizer {
         DirectiveNormalizer.prototype._htmlParser;
     }
 }
-/** @nocollapse */ DirectiveNormalizer.decorators = [
+DirectiveNormalizer.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ DirectiveNormalizer.ctorParameters = [

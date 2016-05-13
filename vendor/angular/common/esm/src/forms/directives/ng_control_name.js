@@ -77,7 +77,7 @@ class NgControlName extends ng_control_1.NgControl {
         NgControlName.prototype._asyncValidators;
     }
 }
-/** @nocollapse */ NgControlName.decorators = [
+NgControlName.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngControl]',
                 bindings: [exports.controlNameBinding],

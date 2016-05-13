@@ -36,7 +36,7 @@ var DatePipe = (function () {
         'mediumTime': 'jms',
         'shortTime': 'jm'
     };
-    /** @nocollapse */ DatePipe.decorators = [
+    DatePipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'date', pure: true },] },
         { type: core_1.Injectable },
     ];

@@ -50,7 +50,7 @@ class RouterOutlet {
         RouterOutlet.prototype._location;
     }
 }
-/** @nocollapse */ RouterOutlet.decorators = [
+RouterOutlet.decorators = [
     { type: core_1.Directive, args: [{ selector: 'router-outlet' },] },
 ];
 /** @nocollapse */ RouterOutlet.ctorParameters = [

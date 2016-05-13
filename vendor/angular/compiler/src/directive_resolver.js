@@ -123,7 +123,7 @@ var DirectiveResolver = (function () {
             });
         }
     };
-    /** @nocollapse */ DirectiveResolver.decorators = [
+    DirectiveResolver.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ DirectiveResolver.ctorParameters = [

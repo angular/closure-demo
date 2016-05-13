@@ -152,7 +152,7 @@ class DirectiveResolver {
         DirectiveResolver.prototype._reflector;
     }
 }
-/** @nocollapse */ DirectiveResolver.decorators = [
+DirectiveResolver.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ DirectiveResolver.ctorParameters = [

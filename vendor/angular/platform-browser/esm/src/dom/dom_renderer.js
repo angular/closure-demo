@@ -64,7 +64,7 @@ class DomRootRenderer_ extends DomRootRenderer {
         super(_document, _eventManager, sharedStylesHost, animate);
     }
 }
-/** @nocollapse */ DomRootRenderer_.decorators = [
+DomRootRenderer_.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ DomRootRenderer_.ctorParameters = [

@@ -108,7 +108,7 @@ class SelectControlValueAccessor {
         SelectControlValueAccessor.prototype._elementRef;
     }
 }
-/** @nocollapse */ SelectControlValueAccessor.decorators = [
+SelectControlValueAccessor.decorators = [
     { type: core_1.Directive, args: [{
                 selector: 'select[ngControl],select[ngFormControl],select[ngModel]',
                 host: { '(change)': 'onChange($event.target.value)', '(blur)': 'onTouched()' },
@@ -173,7 +173,7 @@ class NgSelectOption {
         NgSelectOption.prototype._select;
     }
 }
-/** @nocollapse */ NgSelectOption.decorators = [
+NgSelectOption.decorators = [
     { type: core_1.Directive, args: [{ selector: 'option' },] },
 ];
 /** @nocollapse */ NgSelectOption.ctorParameters = [
@@ -181,7 +181,7 @@ class NgSelectOption {
     { type: core_1.Renderer, },
     { type: SelectControlValueAccessor, decorators: [{ type: core_1.Optional }, { type: core_1.Host },] },
 ];
-/** @nocollapse */ NgSelectOption.propDecorators = {
+NgSelectOption.propDecorators = {
     'ngValue': [{ type: core_1.Input, args: ['ngValue',] },],
     'value': [{ type: core_1.Input, args: ['value',] },],
 };

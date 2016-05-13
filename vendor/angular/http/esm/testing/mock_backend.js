@@ -117,7 +117,7 @@ class MockBackend {
         MockBackend.prototype.pendingConnections;
     }
 }
-/** @nocollapse */ MockBackend.decorators = [
+MockBackend.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ MockBackend.ctorParameters = [];

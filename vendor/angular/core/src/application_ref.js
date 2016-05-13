@@ -166,7 +166,7 @@ var PlatformRef_ = (function (_super) {
     };
     /** @internal */
     PlatformRef_.prototype._applicationDisposed = function (app) { collection_1.ListWrapper.remove(this._applications, app); };
-    /** @nocollapse */ PlatformRef_.decorators = [
+    PlatformRef_.decorators = [
         { type: di_1.Injectable },
     ];
     /** @nocollapse */ PlatformRef_.ctorParameters = [
@@ -381,7 +381,7 @@ var ApplicationRef_ = (function (_super) {
     });
     /** @internal */
     ApplicationRef_._tickScope = profile_1.wtfCreateScope('ApplicationRef#tick()');
-    /** @nocollapse */ ApplicationRef_.decorators = [
+    ApplicationRef_.decorators = [
         { type: di_1.Injectable },
     ];
     /** @nocollapse */ ApplicationRef_.ctorParameters = [

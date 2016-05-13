@@ -34,7 +34,7 @@ var NgStyle = (function () {
     NgStyle.prototype._setStyle = function (name, val) {
         this._renderer.setElementStyle(this._ngEl.nativeElement, name, val);
     };
-    /** @nocollapse */ NgStyle.decorators = [
+    NgStyle.decorators = [
         { type: core_1.Directive, args: [{ selector: '[ngStyle]', inputs: ['rawStyle: ngStyle'] },] },
     ];
     /** @nocollapse */ NgStyle.ctorParameters = [

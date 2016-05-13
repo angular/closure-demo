@@ -132,7 +132,7 @@ class Http {
         Http.prototype._defaultOptions;
     }
 }
-/** @nocollapse */ Http.decorators = [
+Http.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ Http.ctorParameters = [
@@ -172,7 +172,7 @@ class Jsonp extends Http {
         return responseObservable;
     }
 }
-/** @nocollapse */ Jsonp.decorators = [
+Jsonp.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ Jsonp.ctorParameters = [

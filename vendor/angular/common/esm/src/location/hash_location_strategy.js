@@ -94,7 +94,7 @@ class HashLocationStrategy extends location_strategy_1.LocationStrategy {
         HashLocationStrategy.prototype._platformLocation;
     }
 }
-/** @nocollapse */ HashLocationStrategy.decorators = [
+HashLocationStrategy.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ HashLocationStrategy.ctorParameters = [

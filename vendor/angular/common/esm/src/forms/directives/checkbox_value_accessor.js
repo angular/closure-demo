@@ -45,7 +45,7 @@ class CheckboxControlValueAccessor {
         CheckboxControlValueAccessor.prototype._elementRef;
     }
 }
-/** @nocollapse */ CheckboxControlValueAccessor.decorators = [
+CheckboxControlValueAccessor.decorators = [
     { type: core_1.Directive, args: [{
                 selector: 'input[type=checkbox][ngControl],input[type=checkbox][ngFormControl],input[type=checkbox][ngModel]',
                 host: { '(change)': 'onChange($event.target.checked)', '(blur)': 'onTouched()' },

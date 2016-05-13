@@ -59,7 +59,7 @@ var StyleCompiler = (function () {
     StyleCompiler.prototype._shimIfNeeded = function (style, shim) {
         return shim ? this._shadowCss.shimCssText(style, CONTENT_ATTR, HOST_ATTR) : style;
     };
-    /** @nocollapse */ StyleCompiler.decorators = [
+    StyleCompiler.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ StyleCompiler.ctorParameters = [

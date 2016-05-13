@@ -62,7 +62,7 @@ var NgFormControl = (function (_super) {
     NgFormControl.prototype._isControlChanged = function (changes) {
         return collection_1.StringMapWrapper.contains(changes, "form");
     };
-    /** @nocollapse */ NgFormControl.decorators = [
+    NgFormControl.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngFormControl]',
                     bindings: [exports.formControlBinding],

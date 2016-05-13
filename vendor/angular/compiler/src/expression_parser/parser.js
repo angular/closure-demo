@@ -154,7 +154,7 @@ var Parser = (function () {
         }
         return errLocation.length;
     };
-    /** @nocollapse */ Parser.decorators = [
+    Parser.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ Parser.ctorParameters = [

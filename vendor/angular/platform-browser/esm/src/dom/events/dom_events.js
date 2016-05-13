@@ -32,7 +32,7 @@ class DomEventsPlugin extends event_manager_1.EventManagerPlugin {
         return this.manager.getZone().runOutsideAngular(() => dom_adapter_1.getDOM().onAndCancel(element, eventName, outsideHandler));
     }
 }
-/** @nocollapse */ DomEventsPlugin.decorators = [
+DomEventsPlugin.decorators = [
     { type: core_1.Injectable },
 ];
 exports.DomEventsPlugin = DomEventsPlugin;

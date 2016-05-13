@@ -30,7 +30,7 @@ var Lexer = (function () {
         }
         return tokens;
     };
-    /** @nocollapse */ Lexer.decorators = [
+    Lexer.decorators = [
         { type: core_1.Injectable },
     ];
     return Lexer;

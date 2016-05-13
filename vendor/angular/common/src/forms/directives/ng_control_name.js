@@ -68,7 +68,7 @@ var NgControlName = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    /** @nocollapse */ NgControlName.decorators = [
+    NgControlName.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngControl]',
                     bindings: [exports.controlNameBinding],

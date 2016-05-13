@@ -16,7 +16,7 @@ var I18nPluralPipe = (function () {
         valueStr = lang_1.isPresent(value) ? value.toString() : '';
         return lang_1.StringWrapper.replaceAll(pluralMap[key], interpolationExp, valueStr);
     };
-    /** @nocollapse */ I18nPluralPipe.decorators = [
+    I18nPluralPipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'i18nPlural', pure: true },] },
         { type: core_1.Injectable },
     ];

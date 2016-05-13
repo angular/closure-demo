@@ -26,7 +26,7 @@ var DomEventsPlugin = (function (_super) {
         var outsideHandler = function (event) { return zone.runGuarded(function () { return handler(event); }); };
         return this.manager.getZone().runOutsideAngular(function () { return dom_adapter_1.getDOM().onAndCancel(element, eventName, outsideHandler); });
     };
-    /** @nocollapse */ DomEventsPlugin.decorators = [
+    DomEventsPlugin.decorators = [
         { type: core_1.Injectable },
     ];
     return DomEventsPlugin;

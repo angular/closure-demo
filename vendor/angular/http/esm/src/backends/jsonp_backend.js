@@ -159,7 +159,7 @@ class JSONPBackend_ extends JSONPBackend {
         JSONPBackend_.prototype._baseResponseOptions;
     }
 }
-/** @nocollapse */ JSONPBackend_.decorators = [
+JSONPBackend_.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ JSONPBackend_.ctorParameters = [

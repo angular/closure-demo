@@ -12,7 +12,7 @@ var I18nSelectPipe = (function () {
         }
         return collection_1.StringMapWrapper.contains(mapping, value) ? mapping[value] : mapping['other'];
     };
-    /** @nocollapse */ I18nSelectPipe.decorators = [
+    I18nSelectPipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'i18nSelect', pure: true },] },
         { type: core_1.Injectable },
     ];

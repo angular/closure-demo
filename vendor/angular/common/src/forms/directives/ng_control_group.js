@@ -57,7 +57,7 @@ var NgControlGroup = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    /** @nocollapse */ NgControlGroup.decorators = [
+    NgControlGroup.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngControlGroup]',
                     providers: [exports.controlGroupProvider],

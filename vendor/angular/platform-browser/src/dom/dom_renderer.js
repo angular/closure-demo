@@ -42,7 +42,7 @@ var DomRootRenderer_ = (function (_super) {
     function DomRootRenderer_(_document, _eventManager, sharedStylesHost, animate) {
         _super.call(this, _document, _eventManager, sharedStylesHost, animate);
     }
-    /** @nocollapse */ DomRootRenderer_.decorators = [
+    DomRootRenderer_.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ DomRootRenderer_.ctorParameters = [

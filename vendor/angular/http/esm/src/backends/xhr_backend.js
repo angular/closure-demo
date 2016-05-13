@@ -116,7 +116,7 @@ class XHRBackend {
         XHRBackend.prototype._baseResponseOptions;
     }
 }
-/** @nocollapse */ XHRBackend.decorators = [
+XHRBackend.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ XHRBackend.ctorParameters = [

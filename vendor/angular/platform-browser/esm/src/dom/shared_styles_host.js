@@ -45,7 +45,7 @@ class SharedStylesHost {
         SharedStylesHost.prototype._stylesSet;
     }
 }
-/** @nocollapse */ SharedStylesHost.decorators = [
+SharedStylesHost.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ SharedStylesHost.ctorParameters = [];
@@ -96,7 +96,7 @@ class DomSharedStylesHost extends SharedStylesHost {
         DomSharedStylesHost.prototype._hostNodes;
     }
 }
-/** @nocollapse */ DomSharedStylesHost.decorators = [
+DomSharedStylesHost.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ DomSharedStylesHost.ctorParameters = [

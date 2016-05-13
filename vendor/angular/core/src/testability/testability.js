@@ -86,7 +86,7 @@ var Testability = (function () {
         // TODO(juliemr): implement.
         return [];
     };
-    /** @nocollapse */ Testability.decorators = [
+    Testability.decorators = [
         { type: decorators_1.Injectable },
     ];
     /** @nocollapse */ Testability.ctorParameters = [
@@ -111,7 +111,7 @@ var TestabilityRegistry = (function () {
         if (findInAncestors === void 0) { findInAncestors = true; }
         return _testabilityGetter.findTestabilityInTree(this, elem, findInAncestors);
     };
-    /** @nocollapse */ TestabilityRegistry.decorators = [
+    TestabilityRegistry.decorators = [
         { type: decorators_1.Injectable },
     ];
     /** @nocollapse */ TestabilityRegistry.ctorParameters = [];

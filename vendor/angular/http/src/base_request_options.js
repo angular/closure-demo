@@ -90,7 +90,7 @@ var BaseRequestOptions = (function (_super) {
     function BaseRequestOptions() {
         _super.call(this, { method: enums_1.RequestMethod.Get, headers: new headers_1.Headers() });
     }
-    /** @nocollapse */ BaseRequestOptions.decorators = [
+    BaseRequestOptions.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ BaseRequestOptions.ctorParameters = [];

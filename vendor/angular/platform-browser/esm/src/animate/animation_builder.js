@@ -21,7 +21,7 @@ class AnimationBuilder {
         AnimationBuilder.prototype.browserDetails;
     }
 }
-/** @nocollapse */ AnimationBuilder.decorators = [
+AnimationBuilder.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ AnimationBuilder.ctorParameters = [

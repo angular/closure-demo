@@ -84,7 +84,7 @@ class PathLocationStrategy extends location_strategy_1.LocationStrategy {
         PathLocationStrategy.prototype._platformLocation;
     }
 }
-/** @nocollapse */ PathLocationStrategy.decorators = [
+PathLocationStrategy.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ PathLocationStrategy.ctorParameters = [

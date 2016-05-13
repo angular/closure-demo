@@ -47,7 +47,7 @@ var NumberPipe = (function () {
             currencyAsSymbol: currencyAsSymbol
         });
     };
-    /** @nocollapse */ NumberPipe.decorators = [
+    NumberPipe.decorators = [
         { type: core_1.Injectable },
     ];
     return NumberPipe;
@@ -62,7 +62,7 @@ var DecimalPipe = (function (_super) {
         if (digits === void 0) { digits = null; }
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Decimal, digits);
     };
-    /** @nocollapse */ DecimalPipe.decorators = [
+    DecimalPipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'number' },] },
         { type: core_1.Injectable },
     ];
@@ -78,7 +78,7 @@ var PercentPipe = (function (_super) {
         if (digits === void 0) { digits = null; }
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Percent, digits);
     };
-    /** @nocollapse */ PercentPipe.decorators = [
+    PercentPipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'percent' },] },
         { type: core_1.Injectable },
     ];
@@ -96,7 +96,7 @@ var CurrencyPipe = (function (_super) {
         if (digits === void 0) { digits = null; }
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Currency, digits, currencyCode, symbolDisplay);
     };
-    /** @nocollapse */ CurrencyPipe.decorators = [
+    CurrencyPipe.decorators = [
         { type: core_1.Pipe, args: [{ name: 'currency' },] },
         { type: core_1.Injectable },
     ];

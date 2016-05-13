@@ -93,7 +93,7 @@ var DomSanitizationServiceImpl = (function (_super) {
     DomSanitizationServiceImpl.prototype.bypassSecurityTrustResourceUrl = function (value) {
         return new SafeResourceUrlImpl(value);
     };
-    /** @nocollapse */ DomSanitizationServiceImpl.decorators = [
+    DomSanitizationServiceImpl.decorators = [
         { type: core_1.Injectable },
     ];
     return DomSanitizationServiceImpl;

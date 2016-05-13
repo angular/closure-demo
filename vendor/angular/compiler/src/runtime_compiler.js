@@ -142,7 +142,7 @@ var RuntimeCompiler = (function () {
         }
         return cssTextPromise;
     };
-    /** @nocollapse */ RuntimeCompiler.decorators = [
+    RuntimeCompiler.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ RuntimeCompiler.ctorParameters = [

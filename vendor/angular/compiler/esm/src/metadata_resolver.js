@@ -406,7 +406,7 @@ class CompileMetadataResolver {
         CompileMetadataResolver.prototype._platformPipes;
     }
 }
-/** @nocollapse */ CompileMetadataResolver.decorators = [
+CompileMetadataResolver.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ CompileMetadataResolver.ctorParameters = [

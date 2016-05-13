@@ -328,7 +328,7 @@ var CompileMetadataResolver = (function () {
             read: lang_1.isPresent(q.read) ? this.getTokenMetadata(q.read) : null
         });
     };
-    /** @nocollapse */ CompileMetadataResolver.decorators = [
+    CompileMetadataResolver.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ CompileMetadataResolver.ctorParameters = [

@@ -40,7 +40,7 @@ class ReflectorComponentResolver extends ComponentResolver {
      */
     clearCache() { }
 }
-/** @nocollapse */ ReflectorComponentResolver.decorators = [
+ReflectorComponentResolver.decorators = [
     { type: decorators_1.Injectable },
 ];
 exports.ReflectorComponentResolver = ReflectorComponentResolver;

@@ -56,7 +56,7 @@ class ViewCompiler {
         ViewCompiler.prototype._genConfig;
     }
 }
-/** @nocollapse */ ViewCompiler.decorators = [
+ViewCompiler.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ ViewCompiler.ctorParameters = [

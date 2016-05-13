@@ -121,7 +121,7 @@ class NgForm extends control_container_1.ControlContainer {
         NgForm.prototype.ngSubmit;
     }
 }
-/** @nocollapse */ NgForm.decorators = [
+NgForm.decorators = [
     { type: core_1.Directive, args: [{
                 selector: 'form:not([ngNoForm]):not([ngFormModel]),ngForm,[ngForm]',
                 bindings: [exports.formDirectiveProvider],

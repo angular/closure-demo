@@ -48,7 +48,7 @@ var NgControlStatus = (function () {
         enumerable: true,
         configurable: true
     });
-    /** @nocollapse */ NgControlStatus.decorators = [
+    NgControlStatus.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngControl],[ngModel],[ngFormControl]',
                     host: {

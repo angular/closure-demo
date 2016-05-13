@@ -64,7 +64,7 @@ class BrowserJsonp {
         }
     }
 }
-/** @nocollapse */ BrowserJsonp.decorators = [
+BrowserJsonp.decorators = [
     { type: core_1.Injectable },
 ];
 exports.BrowserJsonp = BrowserJsonp;

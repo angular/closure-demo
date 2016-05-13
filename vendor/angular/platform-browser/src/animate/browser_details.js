@@ -30,7 +30,7 @@ var BrowserDetails = (function () {
         var queue = new RafQueue(callback, frames);
         return function () { return queue.cancel(); };
     };
-    /** @nocollapse */ BrowserDetails.decorators = [
+    BrowserDetails.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ BrowserDetails.ctorParameters = [];

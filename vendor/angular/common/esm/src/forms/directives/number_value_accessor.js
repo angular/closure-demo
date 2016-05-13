@@ -48,7 +48,7 @@ class NumberValueAccessor {
         NumberValueAccessor.prototype._elementRef;
     }
 }
-/** @nocollapse */ NumberValueAccessor.decorators = [
+NumberValueAccessor.decorators = [
     { type: core_1.Directive, args: [{
                 selector: 'input[type=number][ngControl],input[type=number][ngFormControl],input[type=number][ngModel]',
                 host: {

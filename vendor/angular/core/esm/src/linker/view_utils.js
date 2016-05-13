@@ -52,7 +52,7 @@ class ViewUtils {
         ViewUtils.prototype._appId;
     }
 }
-/** @nocollapse */ ViewUtils.decorators = [
+ViewUtils.decorators = [
     { type: decorators_1.Injectable },
 ];
 /** @nocollapse */ ViewUtils.ctorParameters = [

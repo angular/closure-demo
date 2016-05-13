@@ -18,7 +18,7 @@ var Log = (function () {
     };
     Log.prototype.clear = function () { this.logItems = []; };
     Log.prototype.result = function () { return this.logItems.join("; "); };
-    /** @nocollapse */ Log.decorators = [
+    Log.decorators = [
         { type: index_1.Injectable },
     ];
     /** @nocollapse */ Log.ctorParameters = [];

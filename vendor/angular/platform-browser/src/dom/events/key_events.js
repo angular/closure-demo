@@ -95,7 +95,7 @@ var KeyEventsPlugin = (function (_super) {
                 return keyName;
         }
     };
-    /** @nocollapse */ KeyEventsPlugin.decorators = [
+    KeyEventsPlugin.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ KeyEventsPlugin.ctorParameters = [];

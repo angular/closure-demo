@@ -55,7 +55,7 @@ var UrlResolver = (function () {
         }
         return resolvedUrl;
     };
-    /** @nocollapse */ UrlResolver.decorators = [
+    UrlResolver.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ UrlResolver.ctorParameters = [

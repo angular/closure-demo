@@ -25,7 +25,7 @@ class NgPluralCase {
         NgPluralCase.prototype.value;
     }
 }
-/** @nocollapse */ NgPluralCase.decorators = [
+NgPluralCase.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngPluralCase]' },] },
 ];
 /** @nocollapse */ NgPluralCase.ctorParameters = [
@@ -129,13 +129,13 @@ class NgPlural {
         NgPlural.prototype._localization;
     }
 }
-/** @nocollapse */ NgPlural.decorators = [
+NgPlural.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngPlural]' },] },
 ];
 /** @nocollapse */ NgPlural.ctorParameters = [
     { type: NgLocalization, },
 ];
-/** @nocollapse */ NgPlural.propDecorators = {
+NgPlural.propDecorators = {
     'cases': [{ type: core_1.ContentChildren, args: [NgPluralCase,] },],
     'ngPlural': [{ type: core_1.Input },],
 };

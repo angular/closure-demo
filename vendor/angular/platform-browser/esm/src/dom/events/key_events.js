@@ -121,7 +121,7 @@ class KeyEventsPlugin extends event_manager_1.EventManagerPlugin {
         }
     }
 }
-/** @nocollapse */ KeyEventsPlugin.decorators = [
+KeyEventsPlugin.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ KeyEventsPlugin.ctorParameters = [];

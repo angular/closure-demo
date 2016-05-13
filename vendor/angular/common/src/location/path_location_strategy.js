@@ -45,7 +45,7 @@ var PathLocationStrategy = (function (_super) {
     };
     PathLocationStrategy.prototype.forward = function () { this._platformLocation.forward(); };
     PathLocationStrategy.prototype.back = function () { this._platformLocation.back(); };
-    /** @nocollapse */ PathLocationStrategy.decorators = [
+    PathLocationStrategy.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ PathLocationStrategy.ctorParameters = [

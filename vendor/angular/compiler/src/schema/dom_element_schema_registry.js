@@ -328,7 +328,7 @@ var DomElementSchemaRegistry = (function (_super) {
         var mappedPropName = collection_1.StringMapWrapper.get(attrToPropMap, propName);
         return lang_1.isPresent(mappedPropName) ? mappedPropName : propName;
     };
-    /** @nocollapse */ DomElementSchemaRegistry.decorators = [
+    DomElementSchemaRegistry.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ DomElementSchemaRegistry.ctorParameters = [];

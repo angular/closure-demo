@@ -47,7 +47,7 @@ class NumberPipe {
         });
     }
 }
-/** @nocollapse */ NumberPipe.decorators = [
+NumberPipe.decorators = [
     { type: core_1.Injectable },
 ];
 exports.NumberPipe = NumberPipe;
@@ -61,7 +61,7 @@ class DecimalPipe extends NumberPipe {
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Decimal, digits);
     }
 }
-/** @nocollapse */ DecimalPipe.decorators = [
+DecimalPipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'number' },] },
     { type: core_1.Injectable },
 ];
@@ -76,7 +76,7 @@ class PercentPipe extends NumberPipe {
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Percent, digits);
     }
 }
-/** @nocollapse */ PercentPipe.decorators = [
+PercentPipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'percent' },] },
     { type: core_1.Injectable },
 ];
@@ -93,7 +93,7 @@ class CurrencyPipe extends NumberPipe {
         return NumberPipe._format(value, intl_1.NumberFormatStyle.Currency, digits, currencyCode, symbolDisplay);
     }
 }
-/** @nocollapse */ CurrencyPipe.decorators = [
+CurrencyPipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'currency' },] },
     { type: core_1.Injectable },
 ];

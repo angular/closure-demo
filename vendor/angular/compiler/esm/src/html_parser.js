@@ -62,7 +62,7 @@ class HtmlParser {
             .concat(treeAndErrors.errors));
     }
 }
-/** @nocollapse */ HtmlParser.decorators = [
+HtmlParser.decorators = [
     { type: core_1.Injectable },
 ];
 exports.HtmlParser = HtmlParser;

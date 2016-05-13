@@ -32,7 +32,7 @@ class NgControlStatus {
         NgControlStatus.prototype._cd;
     }
 }
-/** @nocollapse */ NgControlStatus.decorators = [
+NgControlStatus.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[ngControl],[ngModel],[ngFormControl]',
                 host: {

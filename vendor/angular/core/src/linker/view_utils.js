@@ -27,7 +27,7 @@ var ViewUtils = (function () {
     ViewUtils.prototype.renderComponent = function (renderComponentType) {
         return this._renderer.renderComponent(renderComponentType);
     };
-    /** @nocollapse */ ViewUtils.decorators = [
+    ViewUtils.decorators = [
         { type: decorators_1.Injectable },
     ];
     /** @nocollapse */ ViewUtils.ctorParameters = [

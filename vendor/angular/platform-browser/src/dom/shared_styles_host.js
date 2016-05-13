@@ -29,7 +29,7 @@ var SharedStylesHost = (function () {
     };
     SharedStylesHost.prototype.onStylesAdded = function (additions) { };
     SharedStylesHost.prototype.getAllStyles = function () { return this._styles; };
-    /** @nocollapse */ SharedStylesHost.decorators = [
+    SharedStylesHost.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ SharedStylesHost.ctorParameters = [];
@@ -59,7 +59,7 @@ var DomSharedStylesHost = (function (_super) {
         var _this = this;
         this._hostNodes.forEach(function (hostNode) { _this._addStylesToHost(additions, hostNode); });
     };
-    /** @nocollapse */ DomSharedStylesHost.decorators = [
+    DomSharedStylesHost.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ DomSharedStylesHost.ctorParameters = [

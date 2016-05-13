@@ -15,7 +15,7 @@ var AnimationBuilder = (function () {
      * @returns {CssAnimationBuilder}
      */
     AnimationBuilder.prototype.css = function () { return new css_animation_builder_1.CssAnimationBuilder(this.browserDetails); };
-    /** @nocollapse */ AnimationBuilder.decorators = [
+    AnimationBuilder.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ AnimationBuilder.ctorParameters = [

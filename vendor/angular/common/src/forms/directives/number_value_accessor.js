@@ -21,7 +21,7 @@ var NumberValueAccessor = (function () {
         this.onChange = function (value) { fn(value == '' ? null : lang_1.NumberWrapper.parseFloat(value)); };
     };
     NumberValueAccessor.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
-    /** @nocollapse */ NumberValueAccessor.decorators = [
+    NumberValueAccessor.decorators = [
         { type: core_1.Directive, args: [{
                     selector: 'input[type=number][ngControl],input[type=number][ngFormControl],input[type=number][ngModel]',
                     host: {

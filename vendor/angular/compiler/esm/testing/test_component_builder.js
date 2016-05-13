@@ -386,7 +386,7 @@ class TestComponentBuilder {
         TestComponentBuilder.prototype._injector;
     }
 }
-/** @nocollapse */ TestComponentBuilder.decorators = [
+TestComponentBuilder.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ TestComponentBuilder.ctorParameters = [

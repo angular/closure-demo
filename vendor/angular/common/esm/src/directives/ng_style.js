@@ -61,7 +61,7 @@ class NgStyle {
         NgStyle.prototype._renderer;
     }
 }
-/** @nocollapse */ NgStyle.decorators = [
+NgStyle.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngStyle]', inputs: ['rawStyle: ngStyle'] },] },
 ];
 /** @nocollapse */ NgStyle.ctorParameters = [

@@ -64,7 +64,7 @@ var NgModel = (function (_super) {
         this.viewModel = newValue;
         async_1.ObservableWrapper.callEmit(this.update, newValue);
     };
-    /** @nocollapse */ NgModel.decorators = [
+    NgModel.decorators = [
         { type: core_1.Directive, args: [{
                     selector: '[ngModel]:not([ngControl]):not([ngFormControl])',
                     bindings: [exports.formControlBinding],

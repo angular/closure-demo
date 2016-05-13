@@ -30,7 +30,7 @@ class NgIf {
         NgIf.prototype._templateRef;
     }
 }
-/** @nocollapse */ NgIf.decorators = [
+NgIf.decorators = [
     { type: core_1.Directive, args: [{ selector: '[ngIf]', inputs: ['ngIf'] },] },
 ];
 /** @nocollapse */ NgIf.ctorParameters = [

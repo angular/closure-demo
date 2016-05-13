@@ -88,7 +88,7 @@ var DirectiveNormalizer = (function () {
             ngContentSelectors: visitor.ngContentSelectors
         });
     };
-    /** @nocollapse */ DirectiveNormalizer.decorators = [
+    DirectiveNormalizer.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ DirectiveNormalizer.ctorParameters = [

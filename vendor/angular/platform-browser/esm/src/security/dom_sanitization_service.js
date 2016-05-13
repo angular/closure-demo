@@ -112,7 +112,7 @@ class DomSanitizationServiceImpl extends DomSanitizationService {
         return new SafeResourceUrlImpl(value);
     }
 }
-/** @nocollapse */ DomSanitizationServiceImpl.decorators = [
+DomSanitizationServiceImpl.decorators = [
     { type: core_1.Injectable },
 ];
 exports.DomSanitizationServiceImpl = DomSanitizationServiceImpl;

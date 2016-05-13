@@ -65,7 +65,7 @@ var FormBuilder = (function () {
             return this.control(controlConfig);
         }
     };
-    /** @nocollapse */ FormBuilder.decorators = [
+    FormBuilder.decorators = [
         { type: core_1.Injectable },
     ];
     return FormBuilder;

@@ -136,7 +136,7 @@ class Location {
         Location.prototype.platformStrategy;
     }
 }
-/** @nocollapse */ Location.decorators = [
+Location.decorators = [
     { type: core_1.Injectable },
 ];
 /** @nocollapse */ Location.ctorParameters = [

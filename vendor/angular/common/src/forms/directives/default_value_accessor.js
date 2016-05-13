@@ -21,7 +21,7 @@ var DefaultValueAccessor = (function () {
     };
     DefaultValueAccessor.prototype.registerOnChange = function (fn) { this.onChange = fn; };
     DefaultValueAccessor.prototype.registerOnTouched = function (fn) { this.onTouched = fn; };
-    /** @nocollapse */ DefaultValueAccessor.decorators = [
+    DefaultValueAccessor.decorators = [
         { type: core_1.Directive, args: [{
                     selector: 'input:not([type=checkbox])[ngControl],textarea[ngControl],input:not([type=checkbox])[ngFormControl],textarea[ngFormControl],input:not([type=checkbox])[ngModel],textarea[ngModel],[ngDefaultControl]',
                     // TODO: vsavkin replace the above selector with the one below it once

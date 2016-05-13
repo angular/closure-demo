@@ -55,7 +55,7 @@ var SelectControlValueAccessor = (function () {
         var value = this._optionMap.get(_extractId(valueString));
         return lang_1.isPresent(value) ? value : valueString;
     };
-    /** @nocollapse */ SelectControlValueAccessor.decorators = [
+    SelectControlValueAccessor.decorators = [
         { type: core_1.Directive, args: [{
                     selector: 'select[ngControl],select[ngFormControl],select[ngModel]',
                     host: { '(change)': 'onChange($event.target.value)', '(blur)': 'onTouched()' },
@@ -107,7 +107,7 @@ var NgSelectOption = (function () {
             this._select.writeValue(this._select.value);
         }
     };
-    /** @nocollapse */ NgSelectOption.decorators = [
+    NgSelectOption.decorators = [
         { type: core_1.Directive, args: [{ selector: 'option' },] },
     ];
     /** @nocollapse */ NgSelectOption.ctorParameters = [
@@ -115,7 +115,7 @@ var NgSelectOption = (function () {
         { type: core_1.Renderer, },
         { type: SelectControlValueAccessor, decorators: [{ type: core_1.Optional }, { type: core_1.Host },] },
     ];
-    /** @nocollapse */ NgSelectOption.propDecorators = {
+    NgSelectOption.propDecorators = {
         'ngValue': [{ type: core_1.Input, args: ['ngValue',] },],
         'value': [{ type: core_1.Input, args: ['value',] },],
     };

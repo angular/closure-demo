@@ -10,7 +10,7 @@ exports.REQUIRED_VALIDATOR = {
 };
 class RequiredValidator {
 }
-/** @nocollapse */ RequiredValidator.decorators = [
+RequiredValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[required][ngControl],[required][ngFormControl],[required][ngModel]',
                 providers: [exports.REQUIRED_VALIDATOR]
@@ -46,7 +46,7 @@ class MinLengthValidator {
         MinLengthValidator.prototype._validator;
     }
 }
-/** @nocollapse */ MinLengthValidator.decorators = [
+MinLengthValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[minlength][ngControl],[minlength][ngFormControl],[minlength][ngModel]',
                 providers: [exports.MIN_LENGTH_VALIDATOR]
@@ -85,7 +85,7 @@ class MaxLengthValidator {
         MaxLengthValidator.prototype._validator;
     }
 }
-/** @nocollapse */ MaxLengthValidator.decorators = [
+MaxLengthValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[maxlength][ngControl],[maxlength][ngFormControl],[maxlength][ngModel]',
                 providers: [exports.MAX_LENGTH_VALIDATOR]
@@ -129,7 +129,7 @@ class PatternValidator {
         PatternValidator.prototype._validator;
     }
 }
-/** @nocollapse */ PatternValidator.decorators = [
+PatternValidator.decorators = [
     { type: core_1.Directive, args: [{
                 selector: '[pattern][ngControl],[pattern][ngFormControl],[pattern][ngModel]',
                 providers: [exports.PATTERN_VALIDATOR]

@@ -8,7 +8,7 @@ class JsonPipe {
      */
     transform(value) { return lang_1.Json.stringify(value); }
 }
-/** @nocollapse */ JsonPipe.decorators = [
+JsonPipe.decorators = [
     { type: core_1.Pipe, args: [{ name: 'json', pure: false },] },
     { type: core_1.Injectable },
 ];

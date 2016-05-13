@@ -180,7 +180,7 @@ class PlatformRef_ extends PlatformRef {
         PlatformRef_.prototype._injector;
     }
 }
-/** @nocollapse */ PlatformRef_.decorators = [
+PlatformRef_.decorators = [
     { type: di_1.Injectable },
 ];
 /** @nocollapse */ PlatformRef_.ctorParameters = [
@@ -440,7 +440,7 @@ class ApplicationRef_ extends ApplicationRef {
 }
 /** @internal */
 ApplicationRef_._tickScope = profile_1.wtfCreateScope('ApplicationRef#tick()');
-/** @nocollapse */ ApplicationRef_.decorators = [
+ApplicationRef_.decorators = [
     { type: di_1.Injectable },
 ];
 /** @nocollapse */ ApplicationRef_.ctorParameters = [

@@ -24,7 +24,7 @@ var HammerGestureConfig = (function () {
         }
         return mc;
     };
-    /** @nocollapse */ HammerGestureConfig.decorators = [
+    HammerGestureConfig.decorators = [
         { type: core_1.Injectable },
     ];
     return HammerGestureConfig;
@@ -57,7 +57,7 @@ var HammerGesturesPlugin = (function (_super) {
         });
     };
     HammerGesturesPlugin.prototype.isCustomEvent = function (eventName) { return this._config.events.indexOf(eventName) > -1; };
-    /** @nocollapse */ HammerGesturesPlugin.decorators = [
+    HammerGesturesPlugin.decorators = [
         { type: core_1.Injectable },
     ];
     /** @nocollapse */ HammerGesturesPlugin.ctorParameters = [
