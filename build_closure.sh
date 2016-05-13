@@ -7,6 +7,7 @@ OPTS=(
   "--variable_renaming_report=dist/variable_renaming_report"
   "--property_renaming_report=dist/property_renaming_report"
   "built/*.js"
+  "vendor/zone_externs.js"
   $(find node_modules/@angular/{core,common,compiler,platform-browser}/esm -name *.js)
   $(find node_modules/rxjs-es -name *.js)
 )
