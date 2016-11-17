@@ -1,41 +1,86 @@
-"use strict";
-var core_1 = require('@angular/core');
-var compile_element_1 = require('./compile_element');
-var compile_view_1 = require('./compile_view');
-var view_builder_1 = require('./view_builder');
-var view_binder_1 = require('./view_binder');
-var config_1 = require('../config');
-var ViewCompileResult = (function () {
-    function ViewCompileResult(statements, viewFactoryVar, dependencies) {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Injectable } from '@angular/core';
+import { CompilerConfig } from '../config';
+import { ElementSchemaRegistry } from '../schema/element_schema_registry';
+import { CompileElement } from './compile_element';
+import { CompileView } from './compile_view';
+import { bindView } from './view_binder';
+import { buildView, finishView } from './view_builder';
+export { ComponentFactoryDependency, DirectiveWrapperDependency, ViewClassDependency } from './deps';
+export var ViewCompileResult = (function () {
+    /**
+     * @param {?} statements
+     * @param {?} viewClassVar
+     * @param {?} dependencies
+     */
+    function ViewCompileResult(statements, viewClassVar, dependencies) {
         this.statements = statements;
-        this.viewFactoryVar = viewFactoryVar;
+        this.viewClassVar = viewClassVar;
         this.dependencies = dependencies;
     }
+    ViewCompileResult._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ViewCompileResult.prototype.statements;
+        /** @type {?} */
+        ViewCompileResult.prototype.viewClassVar;
+        /** @type {?} */
+        ViewCompileResult.prototype.dependencies;
+    };
     return ViewCompileResult;
 }());
-exports.ViewCompileResult = ViewCompileResult;
-var ViewCompiler = (function () {
-    function ViewCompiler(_genConfig) {
+export var ViewCompiler = (function () {
+    /**
+     * @param {?} _genConfig
+     * @param {?} _schemaRegistry
+     */
+    function ViewCompiler(_genConfig, _schemaRegistry) {
         this._genConfig = _genConfig;
+        this._schemaRegistry = _schemaRegistry;
     }
-    ViewCompiler.prototype.compileComponent = function (component, template, styles, pipes) {
-        var statements = [];
-        var dependencies = [];
-        var view = new compile_view_1.CompileView(component, this._genConfig, pipes, styles, 0, compile_element_1.CompileElement.createNull(), []);
-        view_builder_1.buildView(view, template, dependencies);
+    /**
+     * @param {?} component
+     * @param {?} template
+     * @param {?} styles
+     * @param {?} pipes
+     * @param {?} compiledAnimations
+     * @return {?}
+     */
+    ViewCompiler.prototype.compileComponent = function (component, template, styles, pipes, compiledAnimations) {
+        var /** @type {?} */ dependencies = [];
+        var /** @type {?} */ view = new CompileView(component, this._genConfig, pipes, styles, compiledAnimations, 0, CompileElement.createNull(), []);
+        var /** @type {?} */ statements = [];
+        buildView(view, template, dependencies);
         // Need to separate binding from creation to be able to refer to
         // variables that have been declared after usage.
-        view_binder_1.bindView(view, template);
-        view_builder_1.finishView(view, statements);
-        return new ViewCompileResult(statements, view.viewFactory.name, dependencies);
+        bindView(view, template, this._schemaRegistry);
+        finishView(view, statements);
+        return new ViewCompileResult(statements, view.classExpr.name, dependencies);
+    };
+    ViewCompiler._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ViewCompiler.decorators;
+        /** @nocollapse
+        @type {?} */
+        ViewCompiler.ctorParameters;
+        /** @type {?} */
+        ViewCompiler.prototype._genConfig;
+        /** @type {?} */
+        ViewCompiler.prototype._schemaRegistry;
     };
     ViewCompiler.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
-    /** @nocollapse */ ViewCompiler.ctorParameters = [
-        { type: config_1.CompilerConfig, },
+    /** @nocollapse */
+    ViewCompiler.ctorParameters = [
+        { type: CompilerConfig, },
+        { type: ElementSchemaRegistry, },
     ];
     return ViewCompiler;
 }());
-exports.ViewCompiler = ViewCompiler;
 //# sourceMappingURL=view_compiler.js.map

@@ -1,90 +1,124 @@
-"use strict";
-var lang_1 = require('../../src/facade/lang');
-var exceptions_1 = require('../../src/facade/exceptions');
-var o = require('../output/output_ast');
-var identifiers_1 = require('../identifiers');
-function getPropertyInView(property, callingView, definedView) {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+import { createDiTokenExpression } from '../compiler_util/identifier_util';
+import { isPresent } from '../facade/lang';
+import * as o from '../output/output_ast';
+import { ViewType } from '../private_import_core';
+/**
+ * @param {?} property
+ * @param {?} callingView
+ * @param {?} definedView
+ * @return {?}
+ */
+export function getPropertyInView(property, callingView, definedView) {
     if (callingView === definedView) {
         return property;
     }
     else {
-        var viewProp = o.THIS_EXPR;
-        var currView = callingView;
-        while (currView !== definedView && lang_1.isPresent(currView.declarationElement.view)) {
+        var /** @type {?} */ viewProp = o.THIS_EXPR;
+        var /** @type {?} */ currView = callingView;
+        while (currView !== definedView && isPresent(currView.declarationElement.view)) {
             currView = currView.declarationElement.view;
-            viewProp = viewProp.prop('parent');
+            viewProp = viewProp.prop('parentView');
         }
         if (currView !== definedView) {
-            throw new exceptions_1.BaseException("Internal error: Could not calculate a property in a parent view: " + property);
+            throw new Error("Internal error: Could not calculate a property in a parent view: " + property);
         }
-        if (property instanceof o.ReadPropExpr) {
-            var readPropExpr_1 = property;
-            // Note: Don't cast for members of the AppView base class...
-            if (definedView.fields.some(function (field) { return field.name == readPropExpr_1.name; }) ||
-                definedView.getters.some(function (field) { return field.name == readPropExpr_1.name; })) {
-                viewProp = viewProp.cast(definedView.classType);
-            }
-        }
-        return o.replaceVarInExpression(o.THIS_EXPR.name, viewProp, property);
+        return property.visitExpression(new _ReplaceViewTransformer(viewProp, definedView), null);
     }
 }
-exports.getPropertyInView = getPropertyInView;
-function injectFromViewParentInjector(token, optional) {
-    var args = [createDiTokenExpression(token)];
+var _ReplaceViewTransformer = (function (_super) {
+    __extends(_ReplaceViewTransformer, _super);
+    /**
+     * @param {?} _viewExpr
+     * @param {?} _view
+     */
+    function _ReplaceViewTransformer(_viewExpr, _view) {
+        _super.call(this);
+        this._viewExpr = _viewExpr;
+        this._view = _view;
+    }
+    /**
+     * @param {?} expr
+     * @return {?}
+     */
+    _ReplaceViewTransformer.prototype._isThis = function (expr) {
+        return expr instanceof o.ReadVarExpr && expr.builtin === o.BuiltinVar.This;
+    };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    _ReplaceViewTransformer.prototype.visitReadVarExpr = function (ast, context) {
+        return this._isThis(ast) ? this._viewExpr : ast;
+    };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    _ReplaceViewTransformer.prototype.visitReadPropExpr = function (ast, context) {
+        if (this._isThis(ast.receiver)) {
+            // Note: Don't cast for members of the AppView base class...
+            if (this._view.fields.some(function (field) { return field.name == ast.name; }) ||
+                this._view.getters.some(function (field) { return field.name == ast.name; })) {
+                return this._viewExpr.cast(this._view.classType).prop(ast.name);
+            }
+        }
+        return _super.prototype.visitReadPropExpr.call(this, ast, context);
+    };
+    _ReplaceViewTransformer._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        _ReplaceViewTransformer.prototype._viewExpr;
+        /** @type {?} */
+        _ReplaceViewTransformer.prototype._view;
+    };
+    return _ReplaceViewTransformer;
+}(o.ExpressionTransformer));
+/**
+ * @param {?} view
+ * @param {?} token
+ * @param {?} optional
+ * @return {?}
+ */
+export function injectFromViewParentInjector(view, token, optional) {
+    var /** @type {?} */ viewExpr;
+    if (view.viewType === ViewType.HOST) {
+        viewExpr = o.THIS_EXPR;
+    }
+    else {
+        viewExpr = o.THIS_EXPR.prop('parentView');
+    }
+    var /** @type {?} */ args = [createDiTokenExpression(token), o.THIS_EXPR.prop('parentIndex')];
     if (optional) {
         args.push(o.NULL_EXPR);
     }
-    return o.THIS_EXPR.prop('parentInjector').callMethod('get', args);
+    return viewExpr.callMethod('injectorGet', args);
 }
-exports.injectFromViewParentInjector = injectFromViewParentInjector;
-function getViewFactoryName(component, embeddedTemplateIndex) {
-    return "viewFactory_" + component.type.name + embeddedTemplateIndex;
+/**
+ * @param {?} component
+ * @param {?} embeddedTemplateIndex
+ * @return {?}
+ */
+export function getViewClassName(component, embeddedTemplateIndex) {
+    return "View_" + component.type.name + embeddedTemplateIndex;
 }
-exports.getViewFactoryName = getViewFactoryName;
-function createDiTokenExpression(token) {
-    if (lang_1.isPresent(token.value)) {
-        return o.literal(token.value);
-    }
-    else if (token.identifierIsInstance) {
-        return o.importExpr(token.identifier)
-            .instantiate([], o.importType(token.identifier, [], [o.TypeModifier.Const]));
-    }
-    else {
-        return o.importExpr(token.identifier);
-    }
+/**
+ * @param {?} elementIndex
+ * @return {?}
+ */
+export function getHandleEventMethodName(elementIndex) {
+    return "handleEvent_" + elementIndex;
 }
-exports.createDiTokenExpression = createDiTokenExpression;
-function createFlatArray(expressions) {
-    var lastNonArrayExpressions = [];
-    var result = o.literalArr([]);
-    for (var i = 0; i < expressions.length; i++) {
-        var expr = expressions[i];
-        if (expr.type instanceof o.ArrayType) {
-            if (lastNonArrayExpressions.length > 0) {
-                result =
-                    result.callMethod(o.BuiltinMethod.ConcatArray, [o.literalArr(lastNonArrayExpressions)]);
-                lastNonArrayExpressions = [];
-            }
-            result = result.callMethod(o.BuiltinMethod.ConcatArray, [expr]);
-        }
-        else {
-            lastNonArrayExpressions.push(expr);
-        }
-    }
-    if (lastNonArrayExpressions.length > 0) {
-        result =
-            result.callMethod(o.BuiltinMethod.ConcatArray, [o.literalArr(lastNonArrayExpressions)]);
-    }
-    return result;
-}
-exports.createFlatArray = createFlatArray;
-function createPureProxy(fn, argCount, pureProxyProp, view) {
-    view.fields.push(new o.ClassField(pureProxyProp.name, null));
-    var pureProxyId = argCount < identifiers_1.Identifiers.pureProxies.length ? identifiers_1.Identifiers.pureProxies[argCount] : null;
-    if (lang_1.isBlank(pureProxyId)) {
-        throw new exceptions_1.BaseException("Unsupported number of argument for pure functions: " + argCount);
-    }
-    view.createMethod.addStmt(o.THIS_EXPR.prop(pureProxyProp.name).set(o.importExpr(pureProxyId).callFn([fn])).toStmt());
-}
-exports.createPureProxy = createPureProxy;
 //# sourceMappingURL=util.js.map

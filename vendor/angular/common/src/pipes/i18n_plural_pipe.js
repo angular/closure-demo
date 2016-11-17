@@ -1,26 +1,69 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../../src/facade/lang');
-var invalid_pipe_argument_exception_1 = require('./invalid_pipe_argument_exception');
-var interpolationExp = lang_1.RegExpWrapper.create('#');
-var I18nPluralPipe = (function () {
-    function I18nPluralPipe() {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Pipe } from '@angular/core';
+import { isBlank } from '../facade/lang';
+import { NgLocalization, getPluralCategory } from '../localization';
+import { InvalidPipeArgumentError } from './invalid_pipe_argument_error';
+var /** @type {?} */ _INTERPOLATION_REGEXP = /#/g;
+/**
+ * @ngModule CommonModule
+ * @whatItDoes Maps a value to a string that pluralizes the value according to locale rules.
+ * @howToUse `expression | i18nPlural:mapping`
+ * @description
+ *
+ *  Where:
+ *  - `expression` is a number.
+ *  - `mapping` is an object that mimics the ICU format, see
+ *    http://userguide.icu-project.org/formatparse/messages
+ *
+ *  ## Example
+ *
+ * {@example common/pipes/ts/i18n_pipe.ts region='I18nPluralPipeComponent'}
+ *
+ * @experimental
+ */
+export var I18nPluralPipe = (function () {
+    /**
+     * @param {?} _localization
+     */
+    function I18nPluralPipe(_localization) {
+        this._localization = _localization;
     }
+    /**
+     * @param {?} value
+     * @param {?} pluralMap
+     * @return {?}
+     */
     I18nPluralPipe.prototype.transform = function (value, pluralMap) {
-        var key;
-        var valueStr;
-        if (!lang_1.isStringMap(pluralMap)) {
-            throw new invalid_pipe_argument_exception_1.InvalidPipeArgumentException(I18nPluralPipe, pluralMap);
+        if (isBlank(value))
+            return '';
+        if (typeof pluralMap !== 'object' || pluralMap === null) {
+            throw new InvalidPipeArgumentError(I18nPluralPipe, pluralMap);
         }
-        key = value === 0 || value === 1 ? "=" + value : 'other';
-        valueStr = lang_1.isPresent(value) ? value.toString() : '';
-        return lang_1.StringWrapper.replaceAll(pluralMap[key], interpolationExp, valueStr);
+        var /** @type {?} */ key = getPluralCategory(value, Object.keys(pluralMap), this._localization);
+        return pluralMap[key].replace(_INTERPOLATION_REGEXP, value.toString());
+    };
+    I18nPluralPipe._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        I18nPluralPipe.decorators;
+        /** @nocollapse
+        @type {?} */
+        I18nPluralPipe.ctorParameters;
+        /** @type {?} */
+        I18nPluralPipe.prototype._localization;
     };
     I18nPluralPipe.decorators = [
-        { type: core_1.Pipe, args: [{ name: 'i18nPlural', pure: true },] },
-        { type: core_1.Injectable },
+        { type: Pipe, args: [{ name: 'i18nPlural', pure: true },] },
+    ];
+    /** @nocollapse */
+    I18nPluralPipe.ctorParameters = [
+        { type: NgLocalization, },
     ];
     return I18nPluralPipe;
 }());
-exports.I18nPluralPipe = I18nPluralPipe;
 //# sourceMappingURL=i18n_plural_pipe.js.map

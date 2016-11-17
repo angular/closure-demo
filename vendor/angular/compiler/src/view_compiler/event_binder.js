@@ -1,134 +1,131 @@
-"use strict";
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var constants_1 = require('./constants');
-var o = require('../output/output_ast');
-var compile_method_1 = require('./compile_method');
-var expression_converter_1 = require('./expression_converter');
-var compile_binding_1 = require('./compile_binding');
-var CompileEventListener = (function () {
-    function CompileEventListener(compileElement, eventTarget, eventName, listenerIndex) {
-        this.compileElement = compileElement;
-        this.eventTarget = eventTarget;
-        this.eventName = eventName;
-        this._hasComponentHostListener = false;
-        this._actionResultExprs = [];
-        this._method = new compile_method_1.CompileMethod(compileElement.view);
-        this._methodName =
-            "_handle_" + santitizeEventName(eventName) + "_" + compileElement.nodeIndex + "_" + listenerIndex;
-        this._eventParam =
-            new o.FnParam(constants_1.EventHandlerVars.event.name, o.importType(this.compileElement.view.genConfig.renderTypes.renderEvent));
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { EventHandlerVars, convertActionBinding } from '../compiler_util/expression_converter';
+import { createInlineArray } from '../compiler_util/identifier_util';
+import { DirectiveWrapperExpressions } from '../directive_wrapper_compiler';
+import { Identifiers, resolveIdentifier } from '../identifiers';
+import * as o from '../output/output_ast';
+import { CompileMethod } from './compile_method';
+import { getHandleEventMethodName } from './util';
+/**
+ * @param {?} boundEvents
+ * @param {?} directives
+ * @param {?} compileElement
+ * @param {?} bindToRenderer
+ * @return {?}
+ */
+export function bindOutputs(boundEvents, directives, compileElement, bindToRenderer) {
+    var /** @type {?} */ usedEvents = collectEvents(boundEvents, directives);
+    if (!usedEvents.size) {
+        return false;
     }
-    CompileEventListener.getOrCreate = function (compileElement, eventTarget, eventName, targetEventListeners) {
-        var listener = targetEventListeners.find(function (listener) { return listener.eventTarget == eventTarget &&
-            listener.eventName == eventName; });
-        if (lang_1.isBlank(listener)) {
-            listener = new CompileEventListener(compileElement, eventTarget, eventName, targetEventListeners.length);
-            targetEventListeners.push(listener);
-        }
-        return listener;
-    };
-    CompileEventListener.prototype.addAction = function (hostEvent, directive, directiveInstance) {
-        if (lang_1.isPresent(directive) && directive.isComponent) {
-            this._hasComponentHostListener = true;
-        }
-        this._method.resetDebugInfo(this.compileElement.nodeIndex, hostEvent);
-        var context = lang_1.isPresent(directiveInstance) ? directiveInstance :
-            this.compileElement.view.componentContext;
-        var actionStmts = expression_converter_1.convertCdStatementToIr(this.compileElement.view, context, hostEvent.handler);
-        var lastIndex = actionStmts.length - 1;
-        if (lastIndex >= 0) {
-            var lastStatement = actionStmts[lastIndex];
-            var returnExpr = convertStmtIntoExpression(lastStatement);
-            var preventDefaultVar = o.variable("pd_" + this._actionResultExprs.length);
-            this._actionResultExprs.push(preventDefaultVar);
-            if (lang_1.isPresent(returnExpr)) {
-                // Note: We need to cast the result of the method call to dynamic,
-                // as it might be a void method!
-                actionStmts[lastIndex] =
-                    preventDefaultVar.set(returnExpr.cast(o.DYNAMIC_TYPE).notIdentical(o.literal(false)))
-                        .toDeclStmt(null, [o.StmtModifier.Final]);
-            }
-        }
-        this._method.addStmts(actionStmts);
-    };
-    CompileEventListener.prototype.finishMethod = function () {
-        var markPathToRootStart = this._hasComponentHostListener ?
-            this.compileElement.appElement.prop('componentView') :
-            o.THIS_EXPR;
-        var resultExpr = o.literal(true);
-        this._actionResultExprs.forEach(function (expr) { resultExpr = resultExpr.and(expr); });
-        var stmts = [markPathToRootStart.callMethod('markPathToRootAsCheckOnce', []).toStmt()]
-            .concat(this._method.finish())
-            .concat([new o.ReturnStatement(resultExpr)]);
-        // private is fine here as no child view will reference the event handler...
-        this.compileElement.view.eventHandlerMethods.push(new o.ClassMethod(this._methodName, [this._eventParam], stmts, o.BOOL_TYPE, [o.StmtModifier.Private]));
-    };
-    CompileEventListener.prototype.listenToRenderer = function () {
-        var listenExpr;
-        var eventListener = o.THIS_EXPR.callMethod('eventHandler', [o.THIS_EXPR.prop(this._methodName).callMethod(o.BuiltinMethod.bind, [o.THIS_EXPR])]);
-        if (lang_1.isPresent(this.eventTarget)) {
-            listenExpr = constants_1.ViewProperties.renderer.callMethod('listenGlobal', [o.literal(this.eventTarget), o.literal(this.eventName), eventListener]);
-        }
-        else {
-            listenExpr = constants_1.ViewProperties.renderer.callMethod('listen', [this.compileElement.renderNode, o.literal(this.eventName), eventListener]);
-        }
-        var disposable = o.variable("disposable_" + this.compileElement.view.disposables.length);
-        this.compileElement.view.disposables.push(disposable);
-        // private is fine here as no child view will reference the event handler...
-        this.compileElement.view.createMethod.addStmt(disposable.set(listenExpr).toDeclStmt(o.FUNCTION_TYPE, [o.StmtModifier.Private]));
-    };
-    CompileEventListener.prototype.listenToDirective = function (directiveInstance, observablePropName) {
-        var subscription = o.variable("subscription_" + this.compileElement.view.subscriptions.length);
-        this.compileElement.view.subscriptions.push(subscription);
-        var eventListener = o.THIS_EXPR.callMethod('eventHandler', [o.THIS_EXPR.prop(this._methodName).callMethod(o.BuiltinMethod.bind, [o.THIS_EXPR])]);
-        this.compileElement.view.createMethod.addStmt(subscription.set(directiveInstance.prop(observablePropName)
-            .callMethod(o.BuiltinMethod.SubscribeObservable, [eventListener]))
-            .toDeclStmt(null, [o.StmtModifier.Final]));
-    };
-    return CompileEventListener;
-}());
-exports.CompileEventListener = CompileEventListener;
-function collectEventListeners(hostEvents, dirs, compileElement) {
-    var eventListeners = [];
-    hostEvents.forEach(function (hostEvent) {
-        compileElement.view.bindings.push(new compile_binding_1.CompileBinding(compileElement, hostEvent));
-        var listener = CompileEventListener.getOrCreate(compileElement, hostEvent.target, hostEvent.name, eventListeners);
-        listener.addAction(hostEvent, null, null);
-    });
-    collection_1.ListWrapper.forEachWithIndex(dirs, function (directiveAst, i) {
-        var directiveInstance = compileElement.directiveInstances[i];
-        directiveAst.hostEvents.forEach(function (hostEvent) {
-            compileElement.view.bindings.push(new compile_binding_1.CompileBinding(compileElement, hostEvent));
-            var listener = CompileEventListener.getOrCreate(compileElement, hostEvent.target, hostEvent.name, eventListeners);
-            listener.addAction(hostEvent, directiveAst.directive, directiveInstance);
-        });
-    });
-    eventListeners.forEach(function (listener) { return listener.finishMethod(); });
-    return eventListeners;
+    if (bindToRenderer) {
+        subscribeToRenderEvents(usedEvents, compileElement);
+    }
+    subscribeToDirectiveEvents(usedEvents, directives, compileElement);
+    generateHandleEventMethod(boundEvents, directives, compileElement);
+    return true;
 }
-exports.collectEventListeners = collectEventListeners;
-function bindDirectiveOutputs(directiveAst, directiveInstance, eventListeners) {
-    collection_1.StringMapWrapper.forEach(directiveAst.directive.outputs, function (eventName, observablePropName) {
-        eventListeners.filter(function (listener) { return listener.eventName == eventName; })
-            .forEach(function (listener) { listener.listenToDirective(directiveInstance, observablePropName); });
+/**
+ * @param {?} boundEvents
+ * @param {?} directives
+ * @return {?}
+ */
+function collectEvents(boundEvents, directives) {
+    var /** @type {?} */ usedEvents = new Map();
+    boundEvents.forEach(function (event) { usedEvents.set(event.fullName, event); });
+    directives.forEach(function (dirAst) {
+        dirAst.hostEvents.forEach(function (event) { usedEvents.set(event.fullName, event); });
+    });
+    return usedEvents;
+}
+/**
+ * @param {?} usedEvents
+ * @param {?} compileElement
+ * @return {?}
+ */
+function subscribeToRenderEvents(usedEvents, compileElement) {
+    var /** @type {?} */ eventAndTargetExprs = [];
+    usedEvents.forEach(function (event) {
+        if (!event.phase) {
+            eventAndTargetExprs.push(o.literal(event.name), o.literal(event.target));
+        }
+    });
+    if (eventAndTargetExprs.length) {
+        var /** @type {?} */ disposableVar = o.variable("disposable_" + compileElement.view.disposables.length);
+        compileElement.view.disposables.push(disposableVar);
+        compileElement.view.createMethod.addStmt(disposableVar
+            .set(o.importExpr(resolveIdentifier(Identifiers.subscribeToRenderElement)).callFn([
+            o.THIS_EXPR, compileElement.renderNode, createInlineArray(eventAndTargetExprs),
+            handleEventExpr(compileElement)
+        ]))
+            .toDeclStmt(o.FUNCTION_TYPE, [o.StmtModifier.Private]));
+    }
+}
+/**
+ * @param {?} usedEvents
+ * @param {?} directives
+ * @param {?} compileElement
+ * @return {?}
+ */
+function subscribeToDirectiveEvents(usedEvents, directives, compileElement) {
+    var /** @type {?} */ usedEventNames = Array.from(usedEvents.keys());
+    directives.forEach(function (dirAst) {
+        var /** @type {?} */ dirWrapper = compileElement.directiveWrapperInstance.get(dirAst.directive.type.reference);
+        compileElement.view.createMethod.addStmts(DirectiveWrapperExpressions.subscribe(dirAst.directive, dirAst.hostProperties, usedEventNames, dirWrapper, o.THIS_EXPR, handleEventExpr(compileElement)));
     });
 }
-exports.bindDirectiveOutputs = bindDirectiveOutputs;
-function bindRenderOutputs(eventListeners) {
-    eventListeners.forEach(function (listener) { return listener.listenToRenderer(); });
+/**
+ * @param {?} boundEvents
+ * @param {?} directives
+ * @param {?} compileElement
+ * @return {?}
+ */
+function generateHandleEventMethod(boundEvents, directives, compileElement) {
+    var /** @type {?} */ hasComponentHostListener = directives.some(function (dirAst) { return dirAst.hostEvents.some(function (event) { return dirAst.directive.isComponent; }); });
+    var /** @type {?} */ markPathToRootStart = hasComponentHostListener ? compileElement.compViewExpr : o.THIS_EXPR;
+    var /** @type {?} */ handleEventStmts = new CompileMethod(compileElement.view);
+    handleEventStmts.resetDebugInfo(compileElement.nodeIndex, compileElement.sourceAst);
+    handleEventStmts.push(markPathToRootStart.callMethod('markPathToRootAsCheckOnce', []).toStmt());
+    var /** @type {?} */ eventNameVar = o.variable('eventName');
+    var /** @type {?} */ resultVar = o.variable('result');
+    handleEventStmts.push(resultVar.set(o.literal(true)).toDeclStmt(o.BOOL_TYPE));
+    directives.forEach(function (dirAst, dirIdx) {
+        var /** @type {?} */ dirWrapper = compileElement.directiveWrapperInstance.get(dirAst.directive.type.reference);
+        if (dirAst.hostEvents.length > 0) {
+            handleEventStmts.push(resultVar
+                .set(DirectiveWrapperExpressions
+                .handleEvent(dirAst.hostEvents, dirWrapper, eventNameVar, EventHandlerVars.event)
+                .and(resultVar))
+                .toStmt());
+        }
+    });
+    boundEvents.forEach(function (renderEvent, renderEventIdx) {
+        var /** @type {?} */ evalResult = convertActionBinding(compileElement.view, compileElement.view, compileElement.view.componentContext, renderEvent.handler, "sub_" + renderEventIdx);
+        var /** @type {?} */ trueStmts = evalResult.stmts;
+        if (evalResult.preventDefault) {
+            trueStmts.push(resultVar.set(evalResult.preventDefault.and(resultVar)).toStmt());
+        }
+        // TODO(tbosch): convert this into a `switch` once our OutputAst supports it.
+        handleEventStmts.push(new o.IfStmt(eventNameVar.equals(o.literal(renderEvent.fullName)), trueStmts));
+    });
+    handleEventStmts.push(new o.ReturnStatement(resultVar));
+    compileElement.view.methods.push(new o.ClassMethod(getHandleEventMethodName(compileElement.nodeIndex), [
+        new o.FnParam(eventNameVar.name, o.STRING_TYPE),
+        new o.FnParam(EventHandlerVars.event.name, o.DYNAMIC_TYPE)
+    ], handleEventStmts.finish(), o.BOOL_TYPE));
 }
-exports.bindRenderOutputs = bindRenderOutputs;
-function convertStmtIntoExpression(stmt) {
-    if (stmt instanceof o.ExpressionStatement) {
-        return stmt.expr;
-    }
-    else if (stmt instanceof o.ReturnStatement) {
-        return stmt.value;
-    }
-    return null;
-}
-function santitizeEventName(name) {
-    return lang_1.StringWrapper.replaceAll(name, /[^a-zA-Z_]/g, '_');
+/**
+ * @param {?} compileElement
+ * @return {?}
+ */
+function handleEventExpr(compileElement) {
+    var /** @type {?} */ handleEventMethodName = getHandleEventMethodName(compileElement.nodeIndex);
+    return o.THIS_EXPR.callMethod('eventHandler', [o.THIS_EXPR.prop(handleEventMethodName)]);
 }
 //# sourceMappingURL=event_binder.js.map

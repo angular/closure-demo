@@ -1,32 +1,13 @@
-export { PromiseWrapper, PromiseCompleter } from './promise';
-import { Observable } from 'rxjs/Observable';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { Subject } from 'rxjs/Subject';
 export { Observable } from 'rxjs/Observable';
 export { Subject } from 'rxjs/Subject';
-export declare class TimerWrapper {
-    static setTimeout(fn: (...args: any[]) => void, millis: number): number;
-    static clearTimeout(id: number): void;
-    static setInterval(fn: (...args: any[]) => void, millis: number): number;
-    static clearInterval(id: number): void;
-}
-export declare class ObservableWrapper {
-    static subscribe<T>(emitter: any, onNext: (value: T) => void, onError?: (exception: any) => void, onComplete?: () => void): Object;
-    static isObservable(obs: any): boolean;
-    /**
-     * Returns whether `obs` has any subscribers listening to events.
-     */
-    static hasSubscribers(obs: EventEmitter<any>): boolean;
-    static dispose(subscription: any): void;
-    /**
-     * @deprecated - use callEmit() instead
-     */
-    static callNext(emitter: EventEmitter<any>, value: any): void;
-    static callEmit(emitter: EventEmitter<any>, value: any): void;
-    static callError(emitter: EventEmitter<any>, error: any): void;
-    static callComplete(emitter: EventEmitter<any>): void;
-    static fromPromise(promise: Promise<any>): Observable<any>;
-    static toPromise(obj: Observable<any>): Promise<any>;
-}
 /**
  * Use by directives and components to emit custom Events.
  *
@@ -61,23 +42,26 @@ export declare class ObservableWrapper {
  * }
  * ```
  *
- * Use Rx.Observable but provides an adapter to make it work as specified here:
+ * The events payload can be accessed by the parameter `$event` on the components output event
+ * handler:
+ *
+ * ```
+ * <zippy (open)="onOpen($event)" (close)="onClose($event)"></zippy>
+ * ```
+ *
+ * Uses Rx.Observable but provides an adapter to make it work as specified here:
  * https://github.com/jhusain/observable-spec
  *
  * Once a reference implementation of the spec is available, switch to it.
+ * @stable
  */
 export declare class EventEmitter<T> extends Subject<T> {
-    /** @internal */
-    _isAsync: boolean;
+    __isAsync: boolean;
     /**
      * Creates an instance of [EventEmitter], which depending on [isAsync],
      * delivers events synchronously or asynchronously.
      */
     constructor(isAsync?: boolean);
-    emit(value: T): void;
-    /**
-     * @deprecated - use .emit(value) instead
-     */
-    next(value: any): void;
+    emit(value?: T): void;
     subscribe(generatorOrNext?: any, error?: any, complete?: any): any;
 }

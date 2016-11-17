@@ -1,20 +1,31 @@
-"use strict";
-var lang_1 = require('../../../src/facade/lang');
-var exceptions_1 = require('../../../src/facade/exceptions');
-var collection_1 = require('../../../src/facade/collection');
-var di_1 = require('../../di');
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Optional, SkipSelf } from '../../di';
+import { getTypeNameForDebugging, isPresent } from '../../facade/lang';
 /**
  * A repository of different iterable diffing strategies used by NgFor, NgClass, and others.
- * @ts2dart_const
+ * @stable
  */
-var IterableDiffers = (function () {
-    /*@ts2dart_const*/
+export var IterableDiffers = (function () {
+    /**
+     * @param {?} factories
+     */
     function IterableDiffers(factories) {
         this.factories = factories;
     }
+    /**
+     * @param {?} factories
+     * @param {?=} parent
+     * @return {?}
+     */
     IterableDiffers.create = function (factories, parent) {
-        if (lang_1.isPresent(parent)) {
-            var copied = collection_1.ListWrapper.clone(parent.factories);
+        if (isPresent(parent)) {
+            var /** @type {?} */ copied = parent.factories.slice();
             factories = factories.concat(copied);
             return new IterableDiffers(factories);
         }
@@ -23,49 +34,43 @@ var IterableDiffers = (function () {
         }
     };
     /**
-     * Takes an array of {@link IterableDifferFactory} and returns a provider used to extend the
-     * inherited {@link IterableDiffers} instance with the provided factories and return a new
-     * {@link IterableDiffers} instance.
-     *
-     * The following example shows how to extend an existing list of factories,
-           * which will only be applied to the injector for this component and its children.
-           * This step is all that's required to make a new {@link IterableDiffer} available.
-     *
-     * ### Example
-     *
-     * ```
-     * @Component({
-     *   viewProviders: [
-     *     IterableDiffers.extend([new ImmutableListDiffer()])
-     *   ]
-     * })
-     * ```
+     *  Takes an array of {@link IterableDifferFactory} and returns a provider used to extend the inherited {@link IterableDiffers} instance with the provided factories and return a new {@link IterableDiffers} instance. * The following example shows how to extend an existing list of factories, which will only be applied to the injector for this component and its children. This step is all that's required to make a new {@link IterableDiffer} available. * ### Example * ``` viewProviders: [ IterableDiffers.extend([new ImmutableListDiffer()]) ] }) ```
+     * @param {?} factories
+     * @return {?}
      */
     IterableDiffers.extend = function (factories) {
-        return new di_1.Provider(IterableDiffers, {
+        return {
+            provide: IterableDiffers,
             useFactory: function (parent) {
-                if (lang_1.isBlank(parent)) {
+                if (!parent) {
                     // Typically would occur when calling IterableDiffers.extend inside of dependencies passed
                     // to
                     // bootstrap(), which would override default pipes instead of extending them.
-                    throw new exceptions_1.BaseException('Cannot extend IterableDiffers without a parent injector');
+                    throw new Error('Cannot extend IterableDiffers without a parent injector');
                 }
                 return IterableDiffers.create(factories, parent);
             },
             // Dependency technically isn't optional, but we can provide a better error message this way.
-            deps: [[IterableDiffers, new di_1.SkipSelfMetadata(), new di_1.OptionalMetadata()]]
-        });
+            deps: [[IterableDiffers, new SkipSelf(), new Optional()]]
+        };
     };
+    /**
+     * @param {?} iterable
+     * @return {?}
+     */
     IterableDiffers.prototype.find = function (iterable) {
-        var factory = this.factories.find(function (f) { return f.supports(iterable); });
-        if (lang_1.isPresent(factory)) {
+        var /** @type {?} */ factory = this.factories.find(function (f) { return f.supports(iterable); });
+        if (isPresent(factory)) {
             return factory;
         }
         else {
-            throw new exceptions_1.BaseException("Cannot find a differ supporting object '" + iterable + "' of type '" + lang_1.getTypeNameForDebugging(iterable) + "'");
+            throw new Error("Cannot find a differ supporting object '" + iterable + "' of type '" + getTypeNameForDebugging(iterable) + "'");
         }
+    };
+    IterableDiffers._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        IterableDiffers.prototype.factories;
     };
     return IterableDiffers;
 }());
-exports.IterableDiffers = IterableDiffers;
 //# sourceMappingURL=iterable_differs.js.map

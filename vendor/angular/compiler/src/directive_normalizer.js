@@ -1,104 +1,227 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../src/facade/lang');
-var exceptions_1 = require('../src/facade/exceptions');
-var async_1 = require('../src/facade/async');
-var compile_metadata_1 = require('./compile_metadata');
-var xhr_1 = require('./xhr');
-var url_resolver_1 = require('./url_resolver');
-var style_url_resolver_1 = require('./style_url_resolver');
-var html_ast_1 = require('./html_ast');
-var html_parser_1 = require('./html_parser');
-var template_preparser_1 = require('./template_preparser');
-var DirectiveNormalizer = (function () {
-    function DirectiveNormalizer(_xhr, _urlResolver, _htmlParser) {
-        this._xhr = _xhr;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Injectable, ViewEncapsulation } from '@angular/core';
+import { CompileStylesheetMetadata, CompileTemplateMetadata } from './compile_metadata';
+import { CompilerConfig } from './config';
+import { isBlank, isPresent, stringify } from './facade/lang';
+import * as html from './ml_parser/ast';
+import { HtmlParser } from './ml_parser/html_parser';
+import { InterpolationConfig } from './ml_parser/interpolation_config';
+import { ResourceLoader } from './resource_loader';
+import { extractStyleUrls, isStyleUrlResolvable } from './style_url_resolver';
+import { PreparsedElementType, preparseElement } from './template_parser/template_preparser';
+import { UrlResolver } from './url_resolver';
+import { SyncAsyncResult } from './util';
+export var DirectiveNormalizer = (function () {
+    /**
+     * @param {?} _resourceLoader
+     * @param {?} _urlResolver
+     * @param {?} _htmlParser
+     * @param {?} _config
+     */
+    function DirectiveNormalizer(_resourceLoader, _urlResolver, _htmlParser, _config) {
+        this._resourceLoader = _resourceLoader;
         this._urlResolver = _urlResolver;
         this._htmlParser = _htmlParser;
+        this._config = _config;
+        this._resourceLoaderCache = new Map();
     }
-    DirectiveNormalizer.prototype.normalizeDirective = function (directive) {
-        if (!directive.isComponent) {
-            // For non components there is nothing to be normalized yet.
-            return async_1.PromiseWrapper.resolve(directive);
-        }
-        return this.normalizeTemplate(directive.type, directive.template)
-            .then(function (normalizedTemplate) { return new compile_metadata_1.CompileDirectiveMetadata({
-            type: directive.type,
-            isComponent: directive.isComponent,
-            selector: directive.selector,
-            exportAs: directive.exportAs,
-            changeDetection: directive.changeDetection,
-            inputs: directive.inputs,
-            outputs: directive.outputs,
-            hostListeners: directive.hostListeners,
-            hostProperties: directive.hostProperties,
-            hostAttributes: directive.hostAttributes,
-            lifecycleHooks: directive.lifecycleHooks,
-            providers: directive.providers,
-            viewProviders: directive.viewProviders,
-            queries: directive.queries,
-            viewQueries: directive.viewQueries,
-            template: normalizedTemplate
-        }); });
-    };
-    DirectiveNormalizer.prototype.normalizeTemplate = function (directiveType, template) {
+    /**
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.clearCache = function () { this._resourceLoaderCache.clear(); };
+    /**
+     * @param {?} normalizedDirective
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.clearCacheFor = function (normalizedDirective) {
         var _this = this;
-        if (lang_1.isPresent(template.template)) {
-            return async_1.PromiseWrapper.resolve(this.normalizeLoadedTemplate(directiveType, template, template.template, directiveType.moduleUrl));
+        if (!normalizedDirective.isComponent) {
+            return;
         }
-        else if (lang_1.isPresent(template.templateUrl)) {
-            var sourceAbsUrl = this._urlResolver.resolve(directiveType.moduleUrl, template.templateUrl);
-            return this._xhr.get(sourceAbsUrl)
-                .then(function (templateContent) { return _this.normalizeLoadedTemplate(directiveType, template, templateContent, sourceAbsUrl); });
+        this._resourceLoaderCache.delete(normalizedDirective.template.templateUrl);
+        normalizedDirective.template.externalStylesheets.forEach(function (stylesheet) { _this._resourceLoaderCache.delete(stylesheet.moduleUrl); });
+    };
+    /**
+     * @param {?} url
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype._fetch = function (url) {
+        var /** @type {?} */ result = this._resourceLoaderCache.get(url);
+        if (!result) {
+            result = this._resourceLoader.get(url);
+            this._resourceLoaderCache.set(url, result);
+        }
+        return result;
+    };
+    /**
+     * @param {?} prenormData
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeTemplate = function (prenormData) {
+        var _this = this;
+        var /** @type {?} */ normalizedTemplateSync = null;
+        var /** @type {?} */ normalizedTemplateAsync;
+        if (isPresent(prenormData.template)) {
+            normalizedTemplateSync = this.normalizeTemplateSync(prenormData);
+            normalizedTemplateAsync = Promise.resolve(normalizedTemplateSync);
+        }
+        else if (prenormData.templateUrl) {
+            normalizedTemplateAsync = this.normalizeTemplateAsync(prenormData);
         }
         else {
-            throw new exceptions_1.BaseException("No template specified for component " + directiveType.name);
+            throw new Error("No template specified for component " + stringify(prenormData.componentType));
+        }
+        if (normalizedTemplateSync && normalizedTemplateSync.styleUrls.length === 0) {
+            // sync case
+            return new SyncAsyncResult(normalizedTemplateSync);
+        }
+        else {
+            // async case
+            return new SyncAsyncResult(null, normalizedTemplateAsync.then(function (normalizedTemplate) { return _this.normalizeExternalStylesheets(normalizedTemplate); }));
         }
     };
-    DirectiveNormalizer.prototype.normalizeLoadedTemplate = function (directiveType, templateMeta, template, templateAbsUrl) {
+    /**
+     * @param {?} prenomData
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeTemplateSync = function (prenomData) {
+        return this.normalizeLoadedTemplate(prenomData, prenomData.template, prenomData.moduleUrl);
+    };
+    /**
+     * @param {?} prenomData
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeTemplateAsync = function (prenomData) {
         var _this = this;
-        var rootNodesAndErrors = this._htmlParser.parse(template, directiveType.name);
+        var /** @type {?} */ templateUrl = this._urlResolver.resolve(prenomData.moduleUrl, prenomData.templateUrl);
+        return this._fetch(templateUrl)
+            .then(function (value) { return _this.normalizeLoadedTemplate(prenomData, value, templateUrl); });
+    };
+    /**
+     * @param {?} prenomData
+     * @param {?} template
+     * @param {?} templateAbsUrl
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeLoadedTemplate = function (prenomData, template, templateAbsUrl) {
+        var /** @type {?} */ interpolationConfig = InterpolationConfig.fromArray(prenomData.interpolation);
+        var /** @type {?} */ rootNodesAndErrors = this._htmlParser.parse(template, stringify(prenomData.componentType), false, interpolationConfig);
         if (rootNodesAndErrors.errors.length > 0) {
-            var errorString = rootNodesAndErrors.errors.join('\n');
-            throw new exceptions_1.BaseException("Template parse errors:\n" + errorString);
+            var /** @type {?} */ errorString = rootNodesAndErrors.errors.join('\n');
+            throw new Error("Template parse errors:\n" + errorString);
         }
-        var visitor = new TemplatePreparseVisitor();
-        html_ast_1.htmlVisitAll(visitor, rootNodesAndErrors.rootNodes);
-        var allStyles = templateMeta.styles.concat(visitor.styles);
-        var allStyleAbsUrls = visitor.styleUrls.filter(style_url_resolver_1.isStyleUrlResolvable)
-            .map(function (url) { return _this._urlResolver.resolve(templateAbsUrl, url); })
-            .concat(templateMeta.styleUrls.filter(style_url_resolver_1.isStyleUrlResolvable)
-            .map(function (url) { return _this._urlResolver.resolve(directiveType.moduleUrl, url); }));
-        var allResolvedStyles = allStyles.map(function (style) {
-            var styleWithImports = style_url_resolver_1.extractStyleUrls(_this._urlResolver, templateAbsUrl, style);
-            styleWithImports.styleUrls.forEach(function (styleUrl) { return allStyleAbsUrls.push(styleUrl); });
-            return styleWithImports.style;
-        });
-        var encapsulation = templateMeta.encapsulation;
-        if (encapsulation === core_1.ViewEncapsulation.Emulated && allResolvedStyles.length === 0 &&
-            allStyleAbsUrls.length === 0) {
-            encapsulation = core_1.ViewEncapsulation.None;
+        var /** @type {?} */ templateMetadataStyles = this.normalizeStylesheet(new CompileStylesheetMetadata({
+            styles: prenomData.styles,
+            styleUrls: prenomData.styleUrls,
+            moduleUrl: prenomData.moduleUrl
+        }));
+        var /** @type {?} */ visitor = new TemplatePreparseVisitor();
+        html.visitAll(visitor, rootNodesAndErrors.rootNodes);
+        var /** @type {?} */ templateStyles = this.normalizeStylesheet(new CompileStylesheetMetadata({ styles: visitor.styles, styleUrls: visitor.styleUrls, moduleUrl: templateAbsUrl }));
+        var /** @type {?} */ encapsulation = prenomData.encapsulation;
+        if (isBlank(encapsulation)) {
+            encapsulation = this._config.defaultEncapsulation;
         }
-        return new compile_metadata_1.CompileTemplateMetadata({
+        var /** @type {?} */ styles = templateMetadataStyles.styles.concat(templateStyles.styles);
+        var /** @type {?} */ styleUrls = templateMetadataStyles.styleUrls.concat(templateStyles.styleUrls);
+        if (encapsulation === ViewEncapsulation.Emulated && styles.length === 0 &&
+            styleUrls.length === 0) {
+            encapsulation = ViewEncapsulation.None;
+        }
+        return new CompileTemplateMetadata({
             encapsulation: encapsulation,
             template: template,
-            templateUrl: templateAbsUrl,
-            styles: allResolvedStyles,
-            styleUrls: allStyleAbsUrls,
-            ngContentSelectors: visitor.ngContentSelectors
+            templateUrl: templateAbsUrl, styles: styles, styleUrls: styleUrls,
+            ngContentSelectors: visitor.ngContentSelectors,
+            animations: prenomData.animations,
+            interpolation: prenomData.interpolation,
         });
     };
+    /**
+     * @param {?} templateMeta
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeExternalStylesheets = function (templateMeta) {
+        return this._loadMissingExternalStylesheets(templateMeta.styleUrls)
+            .then(function (externalStylesheets) { return new CompileTemplateMetadata({
+            encapsulation: templateMeta.encapsulation,
+            template: templateMeta.template,
+            templateUrl: templateMeta.templateUrl,
+            styles: templateMeta.styles,
+            styleUrls: templateMeta.styleUrls,
+            externalStylesheets: externalStylesheets,
+            ngContentSelectors: templateMeta.ngContentSelectors,
+            animations: templateMeta.animations,
+            interpolation: templateMeta.interpolation
+        }); });
+    };
+    /**
+     * @param {?} styleUrls
+     * @param {?=} loadedStylesheets
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype._loadMissingExternalStylesheets = function (styleUrls, loadedStylesheets) {
+        var _this = this;
+        if (loadedStylesheets === void 0) { loadedStylesheets = new Map(); }
+        return Promise
+            .all(styleUrls.filter(function (styleUrl) { return !loadedStylesheets.has(styleUrl); })
+            .map(function (styleUrl) { return _this._fetch(styleUrl).then(function (loadedStyle) {
+            var /** @type {?} */ stylesheet = _this.normalizeStylesheet(new CompileStylesheetMetadata({ styles: [loadedStyle], moduleUrl: styleUrl }));
+            loadedStylesheets.set(styleUrl, stylesheet);
+            return _this._loadMissingExternalStylesheets(stylesheet.styleUrls, loadedStylesheets);
+        }); }))
+            .then(function (_) { return Array.from(loadedStylesheets.values()); });
+    };
+    /**
+     * @param {?} stylesheet
+     * @return {?}
+     */
+    DirectiveNormalizer.prototype.normalizeStylesheet = function (stylesheet) {
+        var _this = this;
+        var /** @type {?} */ allStyleUrls = stylesheet.styleUrls.filter(isStyleUrlResolvable)
+            .map(function (url) { return _this._urlResolver.resolve(stylesheet.moduleUrl, url); });
+        var /** @type {?} */ allStyles = stylesheet.styles.map(function (style) {
+            var /** @type {?} */ styleWithImports = extractStyleUrls(_this._urlResolver, stylesheet.moduleUrl, style);
+            allStyleUrls.push.apply(allStyleUrls, styleWithImports.styleUrls);
+            return styleWithImports.style;
+        });
+        return new CompileStylesheetMetadata({ styles: allStyles, styleUrls: allStyleUrls, moduleUrl: stylesheet.moduleUrl });
+    };
+    DirectiveNormalizer._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        DirectiveNormalizer.decorators;
+        /** @nocollapse
+        @type {?} */
+        DirectiveNormalizer.ctorParameters;
+        /** @type {?} */
+        DirectiveNormalizer.prototype._resourceLoaderCache;
+        /** @type {?} */
+        DirectiveNormalizer.prototype._resourceLoader;
+        /** @type {?} */
+        DirectiveNormalizer.prototype._urlResolver;
+        /** @type {?} */
+        DirectiveNormalizer.prototype._htmlParser;
+        /** @type {?} */
+        DirectiveNormalizer.prototype._config;
+    };
     DirectiveNormalizer.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
-    /** @nocollapse */ DirectiveNormalizer.ctorParameters = [
-        { type: xhr_1.XHR, },
-        { type: url_resolver_1.UrlResolver, },
-        { type: html_parser_1.HtmlParser, },
+    /** @nocollapse */
+    DirectiveNormalizer.ctorParameters = [
+        { type: ResourceLoader, },
+        { type: UrlResolver, },
+        { type: HtmlParser, },
+        { type: CompilerConfig, },
     ];
     return DirectiveNormalizer;
 }());
-exports.DirectiveNormalizer = DirectiveNormalizer;
 var TemplatePreparseVisitor = (function () {
     function TemplatePreparseVisitor() {
         this.ngContentSelectors = [];
@@ -106,45 +229,83 @@ var TemplatePreparseVisitor = (function () {
         this.styleUrls = [];
         this.ngNonBindableStackCount = 0;
     }
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     TemplatePreparseVisitor.prototype.visitElement = function (ast, context) {
-        var preparsedElement = template_preparser_1.preparseElement(ast);
+        var /** @type {?} */ preparsedElement = preparseElement(ast);
         switch (preparsedElement.type) {
-            case template_preparser_1.PreparsedElementType.NG_CONTENT:
+            case PreparsedElementType.NG_CONTENT:
                 if (this.ngNonBindableStackCount === 0) {
                     this.ngContentSelectors.push(preparsedElement.selectAttr);
                 }
                 break;
-            case template_preparser_1.PreparsedElementType.STYLE:
-                var textContent = '';
+            case PreparsedElementType.STYLE:
+                var /** @type {?} */ textContent_1 = '';
                 ast.children.forEach(function (child) {
-                    if (child instanceof html_ast_1.HtmlTextAst) {
-                        textContent += child.value;
+                    if (child instanceof html.Text) {
+                        textContent_1 += child.value;
                     }
                 });
-                this.styles.push(textContent);
+                this.styles.push(textContent_1);
                 break;
-            case template_preparser_1.PreparsedElementType.STYLESHEET:
+            case PreparsedElementType.STYLESHEET:
                 this.styleUrls.push(preparsedElement.hrefAttr);
                 break;
             default:
-                // DDC reports this as error. See:
-                // https://github.com/dart-lang/dev_compiler/issues/428
                 break;
         }
         if (preparsedElement.nonBindable) {
             this.ngNonBindableStackCount++;
         }
-        html_ast_1.htmlVisitAll(this, ast.children);
+        html.visitAll(this, ast.children);
         if (preparsedElement.nonBindable) {
             this.ngNonBindableStackCount--;
         }
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     TemplatePreparseVisitor.prototype.visitComment = function (ast, context) { return null; };
-    TemplatePreparseVisitor.prototype.visitAttr = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    TemplatePreparseVisitor.prototype.visitAttribute = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     TemplatePreparseVisitor.prototype.visitText = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     TemplatePreparseVisitor.prototype.visitExpansion = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     TemplatePreparseVisitor.prototype.visitExpansionCase = function (ast, context) { return null; };
+    TemplatePreparseVisitor._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        TemplatePreparseVisitor.prototype.ngContentSelectors;
+        /** @type {?} */
+        TemplatePreparseVisitor.prototype.styles;
+        /** @type {?} */
+        TemplatePreparseVisitor.prototype.styleUrls;
+        /** @type {?} */
+        TemplatePreparseVisitor.prototype.ngNonBindableStackCount;
+    };
     return TemplatePreparseVisitor;
 }());
 //# sourceMappingURL=directive_normalizer.js.map

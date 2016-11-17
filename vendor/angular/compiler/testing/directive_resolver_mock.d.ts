@@ -1,22 +1,42 @@
-import { Type } from '../src/facade/lang';
-import { DirectiveMetadata } from '@angular/core';
-import { DirectiveResolver } from '../src/directive_resolver';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { DirectiveResolver } from '@angular/compiler';
+import { AnimationEntryMetadata, Directive, Injector, Provider, Type } from '@angular/core';
+import { ViewMetadata } from './private_import_core';
 /**
  * An implementation of {@link DirectiveResolver} that allows overriding
  * various properties of directives.
  */
 export declare class MockDirectiveResolver extends DirectiveResolver {
+    private _injector;
+    private _directives;
     private _providerOverrides;
-    private viewProviderOverrides;
-    resolve(type: Type): DirectiveMetadata;
+    private _viewProviderOverrides;
+    private _views;
+    private _inlineTemplates;
+    private _animations;
+    constructor(_injector: Injector);
+    private _compiler;
+    private _clearCacheFor(component);
+    resolve(type: Type<any>, throwIfNotFound?: boolean): Directive;
     /**
-     * @deprecated
+     * Overrides the {@link Directive} for a directive.
      */
-    setBindingsOverride(type: Type, bindings: any[]): void;
+    setDirective(type: Type<any>, metadata: Directive): void;
+    setProvidersOverride(type: Type<any>, providers: Provider[]): void;
+    setViewProvidersOverride(type: Type<any>, viewProviders: Provider[]): void;
     /**
-     * @deprecated
+     * Overrides the {@link ViewMetadata} for a component.
      */
-    setViewBindingsOverride(type: Type, viewBindings: any[]): void;
-    setProvidersOverride(type: Type, providers: any[]): void;
-    setViewProvidersOverride(type: Type, viewProviders: any[]): void;
+    setView(component: Type<any>, view: ViewMetadata): void;
+    /**
+     * Overrides the inline template for a component - other configuration remains unchanged.
+     */
+    setInlineTemplate(component: Type<any>, template: string): void;
+    setAnimations(component: Type<any>, animations: AnimationEntryMetadata[]): void;
 }

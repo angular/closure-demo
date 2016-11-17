@@ -4,7 +4,6 @@ import {Component, Injectable} from '@angular/core';
 @Component({
   selector: 'basic',
   templateUrl: './basic.html',
-
 })
 @Injectable()
 export class Basic {

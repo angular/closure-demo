@@ -1,8 +1,46 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var NgClass = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Directive, ElementRef, Input, IterableDiffers, KeyValueDiffers, Renderer } from '@angular/core';
+import { isListLikeIterable } from '../facade/collection';
+import { isPresent, stringify } from '../facade/lang';
+/**
+ * @ngModule CommonModule
+ *
+ * @whatItDoes Adds and removes CSS classes on an HTML element.
+ *
+ * @howToUse
+ * ```
+ *     <some-element [ngClass]="'first second'">...</some-element>
+ *
+ *     <some-element [ngClass]="['first', 'second']">...</some-element>
+ *
+ *     <some-element [ngClass]="{'first': true, 'second': true, 'third': false}">...</some-element>
+ *
+ *     <some-element [ngClass]="stringExp|arrayExp|objExp">...</some-element>
+ * ```
+ *
+ * @description
+ *
+ * The CSS classes are updated as follows, depending on the type of the expression evaluation:
+ * - `string` - the CSS classes listed in the string (space delimited) are added,
+ * - `Array` - the CSS classes declared as Array elements are added,
+ * - `Object` - keys are CSS classes that get added when the expression given in the value
+ *              evaluates to a truthy value, otherwise they are removed.
+ *
+ * @stable
+ */
+export var NgClass = (function () {
+    /**
+     * @param {?} _iterableDiffers
+     * @param {?} _keyValueDiffers
+     * @param {?} _ngEl
+     * @param {?} _renderer
+     */
     function NgClass(_iterableDiffers, _keyValueDiffers, _ngEl, _renderer) {
         this._iterableDiffers = _iterableDiffers;
         this._keyValueDiffers = _keyValueDiffers;
@@ -10,116 +48,167 @@ var NgClass = (function () {
         this._renderer = _renderer;
         this._initialClasses = [];
     }
-    Object.defineProperty(NgClass.prototype, "initialClasses", {
+    Object.defineProperty(NgClass.prototype, "klass", {
         set: function (v) {
             this._applyInitialClasses(true);
-            this._initialClasses = lang_1.isPresent(v) && lang_1.isString(v) ? v.split(' ') : [];
+            this._initialClasses = typeof v === 'string' ? v.split(/\s+/) : [];
             this._applyInitialClasses(false);
             this._applyClasses(this._rawClass, false);
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(NgClass.prototype, "rawClass", {
+    Object.defineProperty(NgClass.prototype, "ngClass", {
         set: function (v) {
             this._cleanupClasses(this._rawClass);
-            if (lang_1.isString(v)) {
-                v = v.split(' ');
-            }
-            this._rawClass = v;
             this._iterableDiffer = null;
             this._keyValueDiffer = null;
-            if (lang_1.isPresent(v)) {
-                if (collection_1.isListLikeIterable(v)) {
-                    this._iterableDiffer = this._iterableDiffers.find(v).create(null);
+            this._rawClass = typeof v === 'string' ? v.split(/\s+/) : v;
+            if (this._rawClass) {
+                if (isListLikeIterable(this._rawClass)) {
+                    this._iterableDiffer = this._iterableDiffers.find(this._rawClass).create(null);
                 }
                 else {
-                    this._keyValueDiffer = this._keyValueDiffers.find(v).create(null);
+                    this._keyValueDiffer = this._keyValueDiffers.find(this._rawClass).create(null);
                 }
             }
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
     NgClass.prototype.ngDoCheck = function () {
-        if (lang_1.isPresent(this._iterableDiffer)) {
-            var changes = this._iterableDiffer.diff(this._rawClass);
-            if (lang_1.isPresent(changes)) {
+        if (this._iterableDiffer) {
+            var /** @type {?} */ changes = this._iterableDiffer.diff(this._rawClass);
+            if (changes) {
                 this._applyIterableChanges(changes);
             }
         }
-        if (lang_1.isPresent(this._keyValueDiffer)) {
-            var changes = this._keyValueDiffer.diff(this._rawClass);
-            if (lang_1.isPresent(changes)) {
+        else if (this._keyValueDiffer) {
+            var /** @type {?} */ changes = this._keyValueDiffer.diff(this._rawClass);
+            if (changes) {
                 this._applyKeyValueChanges(changes);
             }
         }
     };
-    NgClass.prototype.ngOnDestroy = function () { this._cleanupClasses(this._rawClass); };
+    /**
+     * @param {?} rawClassVal
+     * @return {?}
+     */
     NgClass.prototype._cleanupClasses = function (rawClassVal) {
         this._applyClasses(rawClassVal, true);
         this._applyInitialClasses(false);
     };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
     NgClass.prototype._applyKeyValueChanges = function (changes) {
         var _this = this;
-        changes.forEachAddedItem(function (record) { _this._toggleClass(record.key, record.currentValue); });
-        changes.forEachChangedItem(function (record) { _this._toggleClass(record.key, record.currentValue); });
+        changes.forEachAddedItem(function (record) { return _this._toggleClass(record.key, record.currentValue); });
+        changes.forEachChangedItem(function (record) { return _this._toggleClass(record.key, record.currentValue); });
         changes.forEachRemovedItem(function (record) {
             if (record.previousValue) {
                 _this._toggleClass(record.key, false);
             }
         });
     };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
     NgClass.prototype._applyIterableChanges = function (changes) {
         var _this = this;
-        changes.forEachAddedItem(function (record) { _this._toggleClass(record.item, true); });
-        changes.forEachRemovedItem(function (record) { _this._toggleClass(record.item, false); });
-    };
-    NgClass.prototype._applyInitialClasses = function (isCleanup) {
-        var _this = this;
-        this._initialClasses.forEach(function (className) { return _this._toggleClass(className, !isCleanup); });
-    };
-    NgClass.prototype._applyClasses = function (rawClassVal, isCleanup) {
-        var _this = this;
-        if (lang_1.isPresent(rawClassVal)) {
-            if (lang_1.isArray(rawClassVal)) {
-                rawClassVal.forEach(function (className) { return _this._toggleClass(className, !isCleanup); });
-            }
-            else if (rawClassVal instanceof Set) {
-                rawClassVal.forEach(function (className) { return _this._toggleClass(className, !isCleanup); });
+        changes.forEachAddedItem(function (record) {
+            if (typeof record.item === 'string') {
+                _this._toggleClass(record.item, true);
             }
             else {
-                collection_1.StringMapWrapper.forEach(rawClassVal, function (expVal, className) {
-                    if (lang_1.isPresent(expVal))
-                        _this._toggleClass(className, !isCleanup);
+                throw new Error("NgClass can only toggle CSS classes expressed as strings, got " + stringify(record.item));
+            }
+        });
+        changes.forEachRemovedItem(function (record) { return _this._toggleClass(record.item, false); });
+    };
+    /**
+     * @param {?} isCleanup
+     * @return {?}
+     */
+    NgClass.prototype._applyInitialClasses = function (isCleanup) {
+        var _this = this;
+        this._initialClasses.forEach(function (klass) { return _this._toggleClass(klass, !isCleanup); });
+    };
+    /**
+     * @param {?} rawClassVal
+     * @param {?} isCleanup
+     * @return {?}
+     */
+    NgClass.prototype._applyClasses = function (rawClassVal, isCleanup) {
+        var _this = this;
+        if (rawClassVal) {
+            if (Array.isArray(rawClassVal) || rawClassVal instanceof Set) {
+                ((rawClassVal)).forEach(function (klass) { return _this._toggleClass(klass, !isCleanup); });
+            }
+            else {
+                Object.keys(rawClassVal).forEach(function (klass) {
+                    if (isPresent(rawClassVal[klass]))
+                        _this._toggleClass(klass, !isCleanup);
                 });
             }
         }
     };
-    NgClass.prototype._toggleClass = function (className, enabled) {
-        className = className.trim();
-        if (className.length > 0) {
-            if (className.indexOf(' ') > -1) {
-                var classes = className.split(/\s+/g);
-                for (var i = 0, len = classes.length; i < len; i++) {
-                    this._renderer.setElementClass(this._ngEl.nativeElement, classes[i], enabled);
-                }
-            }
-            else {
-                this._renderer.setElementClass(this._ngEl.nativeElement, className, enabled);
-            }
+    /**
+     * @param {?} klass
+     * @param {?} enabled
+     * @return {?}
+     */
+    NgClass.prototype._toggleClass = function (klass, enabled) {
+        var _this = this;
+        klass = klass.trim();
+        if (klass) {
+            klass.split(/\s+/g).forEach(function (klass) { _this._renderer.setElementClass(_this._ngEl.nativeElement, klass, enabled); });
         }
     };
+    NgClass._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        NgClass.decorators;
+        /** @nocollapse
+        @type {?} */
+        NgClass.ctorParameters;
+        /** @type {?} */
+        NgClass.propDecorators;
+        /** @type {?} */
+        NgClass.prototype._iterableDiffer;
+        /** @type {?} */
+        NgClass.prototype._keyValueDiffer;
+        /** @type {?} */
+        NgClass.prototype._initialClasses;
+        /** @type {?} */
+        NgClass.prototype._rawClass;
+        /** @type {?} */
+        NgClass.prototype._iterableDiffers;
+        /** @type {?} */
+        NgClass.prototype._keyValueDiffers;
+        /** @type {?} */
+        NgClass.prototype._ngEl;
+        /** @type {?} */
+        NgClass.prototype._renderer;
+    };
     NgClass.decorators = [
-        { type: core_1.Directive, args: [{ selector: '[ngClass]', inputs: ['rawClass: ngClass', 'initialClasses: class'] },] },
+        { type: Directive, args: [{ selector: '[ngClass]' },] },
     ];
-    /** @nocollapse */ NgClass.ctorParameters = [
-        { type: core_1.IterableDiffers, },
-        { type: core_1.KeyValueDiffers, },
-        { type: core_1.ElementRef, },
-        { type: core_1.Renderer, },
+    /** @nocollapse */
+    NgClass.ctorParameters = [
+        { type: IterableDiffers, },
+        { type: KeyValueDiffers, },
+        { type: ElementRef, },
+        { type: Renderer, },
     ];
+    NgClass.propDecorators = {
+        'klass': [{ type: Input, args: ['class',] },],
+        'ngClass': [{ type: Input },],
+    };
     return NgClass;
 }());
-exports.NgClass = NgClass;
 //# sourceMappingURL=ng_class.js.map

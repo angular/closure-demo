@@ -1,12 +1,22 @@
-import { Type } from '../../src/facade/lang';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Type } from '@angular/core';
 export declare function getDOM(): DomAdapter;
 export declare function setDOM(adapter: DomAdapter): void;
 export declare function setRootDomAdapter(adapter: DomAdapter): void;
 /**
  * Provides DOM operations in an environment-agnostic way.
+ *
+ * @security Tread carefully! Interacting with the DOM directly is dangerous and
+ * can introduce XSS risks.
  */
 export declare abstract class DomAdapter {
-    xhrType: Type;
+    resourceLoaderType: Type<any>;
     abstract hasProperty(element: any, name: string): boolean;
     abstract setProperty(el: Element, name: string, value: any): any;
     abstract getProperty(el: Element, name: string): any;
@@ -15,17 +25,11 @@ export declare abstract class DomAdapter {
     abstract log(error: any): any;
     abstract logGroup(error: any): any;
     abstract logGroupEnd(): any;
-    /** @deprecated */
-    getXHR(): Type;
     /**
      * Maps attribute names to their corresponding property names for cases
      * where attribute name doesn't match property name.
      */
     attrToPropMap: {
-        [key: string]: string;
-    };
-    /** @internal */
-    _attrToPropMap: {
         [key: string]: string;
     };
     abstract parse(templateHtml: string): any;
@@ -129,10 +133,12 @@ export declare abstract class DomAdapter {
     abstract getComputedStyle(element: any): any;
     abstract getData(element: any, name: string): string;
     abstract setGlobalVar(name: string, value: any): any;
-    abstract requestAnimationFrame(callback: any): number;
-    abstract cancelAnimationFrame(id: any): any;
+    abstract supportsWebAnimation(): boolean;
     abstract performanceNow(): number;
     abstract getAnimationPrefix(): string;
     abstract getTransitionEnd(): string;
     abstract supportsAnimation(): boolean;
+    abstract supportsCookies(): boolean;
+    abstract getCookie(name: string): string;
+    abstract setCookie(name: string, value: string): any;
 }

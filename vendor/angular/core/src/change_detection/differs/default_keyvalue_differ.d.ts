@@ -16,50 +16,28 @@ export declare class DefaultKeyValueDiffer implements KeyValueDiffer {
     private _removalsHead;
     private _removalsTail;
     isDirty: boolean;
-    forEachItem(fn: Function): void;
-    forEachPreviousItem(fn: Function): void;
-    forEachChangedItem(fn: Function): void;
-    forEachAddedItem(fn: Function): void;
-    forEachRemovedItem(fn: Function): void;
-    diff(map: Map<any, any>): any;
+    forEachItem(fn: (r: KeyValueChangeRecord) => void): void;
+    forEachPreviousItem(fn: (r: KeyValueChangeRecord) => void): void;
+    forEachChangedItem(fn: (r: KeyValueChangeRecord) => void): void;
+    forEachAddedItem(fn: (r: KeyValueChangeRecord) => void): void;
+    forEachRemovedItem(fn: (r: KeyValueChangeRecord) => void): void;
+    diff(map: Map<any, any> | {
+        [k: string]: any;
+    }): any;
     onDestroy(): void;
-    check(map: Map<any, any>): boolean;
-    /** @internal */
-    _reset(): void;
-    /** @internal */
-    _truncate(lastRecord: KeyValueChangeRecord, record: KeyValueChangeRecord): void;
-    /** @internal */
-    _isInRemovals(record: KeyValueChangeRecord): boolean;
-    /** @internal */
-    _addToRemovals(record: KeyValueChangeRecord): void;
-    /** @internal */
-    _removeFromSeq(prev: KeyValueChangeRecord, record: KeyValueChangeRecord): void;
-    /** @internal */
-    _removeFromRemovals(record: KeyValueChangeRecord): void;
-    /** @internal */
-    _addToAdditions(record: KeyValueChangeRecord): void;
-    /** @internal */
-    _addToChanges(record: KeyValueChangeRecord): void;
+    check(map: Map<any, any> | {
+        [k: string]: any;
+    }): boolean;
+    private _maybeAddToChanges(record, newValue);
     toString(): string;
-    /** @internal */
-    _forEach(obj: any, fn: Function): void;
 }
+/**
+ * @stable
+ */
 export declare class KeyValueChangeRecord {
     key: any;
     previousValue: any;
     currentValue: any;
-    /** @internal */
-    _nextPrevious: KeyValueChangeRecord;
-    /** @internal */
-    _next: KeyValueChangeRecord;
-    /** @internal */
-    _nextAdded: KeyValueChangeRecord;
-    /** @internal */
-    _nextRemoved: KeyValueChangeRecord;
-    /** @internal */
-    _prevRemoved: KeyValueChangeRecord;
-    /** @internal */
-    _nextChanged: KeyValueChangeRecord;
     constructor(key: any);
     toString(): string;
 }

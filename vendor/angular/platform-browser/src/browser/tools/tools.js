@@ -1,27 +1,29 @@
-"use strict";
-var lang_1 = require('../../../src/facade/lang');
-var common_tools_1 = require('./common_tools');
-var context = lang_1.global;
 /**
- * Enabled Angular 2 debug tools that are accessible via your browser's
- * developer console.
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
  *
- * Usage:
- *
- * 1. Open developer console (e.g. in Chrome Ctrl + Shift + j)
- * 1. Type `ng.` (usually the console will show auto-complete suggestion)
- * 1. Try the change detection profiler `ng.profiler.timeChangeDetection()`
- *    then hit Enter.
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-function enableDebugTools(ref) {
-    context.ng = new common_tools_1.AngularTools(ref);
-}
-exports.enableDebugTools = enableDebugTools;
+import { global } from '../../facade/lang';
+import { AngularTools } from './common_tools';
+var /** @type {?} */ context = (global);
 /**
- * Disables Angular 2 tools.
+ *  Enabled Angular 2 debug tools that are accessible via your browser's developer console. * Usage: * 1. Open developer console (e.g. in Chrome Ctrl + Shift + j) 1. Type `ng.` (usually the console will show auto-complete suggestion) 1. Try the change detection profiler `ng.profiler.timeChangeDetection()` then hit Enter. *
+ * @param {?} ref
+ * @return {?}
  */
-function disableDebugTools() {
-    delete context.ng;
+export function enableDebugTools(ref) {
+    ((Object)).assign(context.ng, new AngularTools(ref));
+    return ref;
 }
-exports.disableDebugTools = disableDebugTools;
+/**
+ *  Disables Angular 2 tools. *
+ * @return {?}
+ */
+export function disableDebugTools() {
+    if (context.ng) {
+        delete context.ng.profiler;
+    }
+}
 //# sourceMappingURL=tools.js.map

@@ -1,10 +1,16 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { Injector } from '../di/injector';
-import { WtfScopeFn } from '../profile/profile';
-import { AppElement } from './element';
+import { ComponentFactory, ComponentRef } from './component_factory';
 import { ElementRef } from './element_ref';
 import { TemplateRef } from './template_ref';
+import { ViewContainer } from './view_container';
 import { EmbeddedViewRef, ViewRef } from './view_ref';
-import { ComponentFactory, ComponentRef } from './component_factory';
 /**
  * Represents a container where one or more Views can be attached.
  *
@@ -21,6 +27,7 @@ import { ComponentFactory, ComponentRef } from './component_factory';
  *
  * To access a `ViewContainerRef` of an Element, you can either place a {@link Directive} injected
  * with `ViewContainerRef` on the Element, or you obtain it via a {@link ViewChild} query.
+ * @stable
  */
 export declare abstract class ViewContainerRef {
     /**
@@ -56,7 +63,7 @@ export declare abstract class ViewContainerRef {
      * specified `index`.
      *
      * The component is instantiated using its {@link ComponentFactory} which can be
-     * obtained via {@link ComponentResolver#resolveComponent}.
+     * obtained via {@link ComponentFactoryResolver#resolveComponentFactory}.
      *
      * If `index` is not specified, the new View will be inserted as the last View in the container.
      *
@@ -73,6 +80,12 @@ export declare abstract class ViewContainerRef {
      * Returns the inserted {@link ViewRef}.
      */
     abstract insert(viewRef: ViewRef, index?: number): ViewRef;
+    /**
+     * Moves a View identified by a {@link ViewRef} into the container at the specified `index`.
+     *
+     * Returns the inserted {@link ViewRef}.
+     */
+    abstract move(viewRef: ViewRef, currentIndex: number): ViewRef;
     /**
      * Returns the index of the View, specified via {@link ViewRef}, within the current container or
      * `-1` if this container doesn't contain the View.
@@ -93,25 +106,18 @@ export declare abstract class ViewContainerRef {
 }
 export declare class ViewContainerRef_ implements ViewContainerRef {
     private _element;
-    constructor(_element: AppElement);
+    constructor(_element: ViewContainer);
     get(index: number): ViewRef;
     length: number;
     element: ElementRef;
     injector: Injector;
     parentInjector: Injector;
     createEmbeddedView<C>(templateRef: TemplateRef<C>, context?: C, index?: number): EmbeddedViewRef<C>;
-    /** @internal */
-    _createComponentInContainerScope: WtfScopeFn;
     createComponent<C>(componentFactory: ComponentFactory<C>, index?: number, injector?: Injector, projectableNodes?: any[][]): ComponentRef<C>;
-    /** @internal */
-    _insertScope: WtfScopeFn;
     insert(viewRef: ViewRef, index?: number): ViewRef;
+    move(viewRef: ViewRef, currentIndex: number): ViewRef;
     indexOf(viewRef: ViewRef): number;
-    /** @internal */
-    _removeScope: WtfScopeFn;
     remove(index?: number): void;
-    /** @internal */
-    _detachScope: WtfScopeFn;
     detach(index?: number): ViewRef;
     clear(): void;
 }

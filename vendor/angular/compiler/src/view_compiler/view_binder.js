@@ -1,77 +1,166 @@
-"use strict";
-var collection_1 = require('../../src/facade/collection');
-var template_ast_1 = require('../template_ast');
-var property_binder_1 = require('./property_binder');
-var event_binder_1 = require('./event_binder');
-var lifecycle_binder_1 = require('./lifecycle_binder');
-function bindView(view, parsedTemplate) {
-    var visitor = new ViewBinderVisitor(view);
-    template_ast_1.templateVisitAll(visitor, parsedTemplate);
-    view.pipes.forEach(function (pipe) { lifecycle_binder_1.bindPipeDestroyLifecycleCallbacks(pipe.meta, pipe.instance, pipe.view); });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { templateVisitAll } from '../template_parser/template_ast';
+import { bindOutputs } from './event_binder';
+import { bindDirectiveAfterContentLifecycleCallbacks, bindDirectiveAfterViewLifecycleCallbacks, bindDirectiveWrapperLifecycleCallbacks, bindInjectableDestroyLifecycleCallbacks, bindPipeDestroyLifecycleCallbacks } from './lifecycle_binder';
+import { bindDirectiveHostProps, bindDirectiveInputs, bindRenderInputs, bindRenderText } from './property_binder';
+/**
+ * @param {?} view
+ * @param {?} parsedTemplate
+ * @param {?} schemaRegistry
+ * @return {?}
+ */
+export function bindView(view, parsedTemplate, schemaRegistry) {
+    var /** @type {?} */ visitor = new ViewBinderVisitor(view, schemaRegistry);
+    templateVisitAll(visitor, parsedTemplate);
+    view.pipes.forEach(function (pipe) { bindPipeDestroyLifecycleCallbacks(pipe.meta, pipe.instance, pipe.view); });
 }
-exports.bindView = bindView;
 var ViewBinderVisitor = (function () {
-    function ViewBinderVisitor(view) {
+    /**
+     * @param {?} view
+     * @param {?} _schemaRegistry
+     */
+    function ViewBinderVisitor(view, _schemaRegistry) {
         this.view = view;
+        this._schemaRegistry = _schemaRegistry;
         this._nodeIndex = 0;
     }
+    /**
+     * @param {?} ast
+     * @param {?} parent
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitBoundText = function (ast, parent) {
-        var node = this.view.nodes[this._nodeIndex++];
-        property_binder_1.bindRenderText(ast, node, this.view);
+        var /** @type {?} */ node = this.view.nodes[this._nodeIndex++];
+        bindRenderText(ast, node, this.view);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} parent
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitText = function (ast, parent) {
         this._nodeIndex++;
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} parent
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitNgContent = function (ast, parent) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} parent
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitElement = function (ast, parent) {
-        var compileElement = this.view.nodes[this._nodeIndex++];
-        var eventListeners = event_binder_1.collectEventListeners(ast.outputs, ast.directives, compileElement);
-        property_binder_1.bindRenderInputs(ast.inputs, compileElement);
-        event_binder_1.bindRenderOutputs(eventListeners);
-        collection_1.ListWrapper.forEachWithIndex(ast.directives, function (directiveAst, index) {
-            var directiveInstance = compileElement.directiveInstances[index];
-            property_binder_1.bindDirectiveInputs(directiveAst, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveDetectChangesLifecycleCallbacks(directiveAst, directiveInstance, compileElement);
-            property_binder_1.bindDirectiveHostProps(directiveAst, directiveInstance, compileElement);
-            event_binder_1.bindDirectiveOutputs(directiveAst, directiveInstance, eventListeners);
+        var _this = this;
+        var /** @type {?} */ compileElement = (this.view.nodes[this._nodeIndex++]);
+        var /** @type {?} */ hasEvents = bindOutputs(ast.outputs, ast.directives, compileElement, true);
+        bindRenderInputs(ast.inputs, hasEvents, compileElement);
+        ast.directives.forEach(function (directiveAst, dirIndex) {
+            var /** @type {?} */ directiveWrapperInstance = compileElement.directiveWrapperInstance.get(directiveAst.directive.type.reference);
+            bindDirectiveInputs(directiveAst, directiveWrapperInstance, dirIndex, compileElement);
+            bindDirectiveHostProps(directiveAst, directiveWrapperInstance, compileElement, ast.name, _this._schemaRegistry);
         });
-        template_ast_1.templateVisitAll(this, ast.children, compileElement);
+        templateVisitAll(this, ast.children, compileElement);
         // afterContent and afterView lifecycles need to be called bottom up
         // so that children are notified before parents
-        collection_1.ListWrapper.forEachWithIndex(ast.directives, function (directiveAst, index) {
-            var directiveInstance = compileElement.directiveInstances[index];
-            lifecycle_binder_1.bindDirectiveAfterContentLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveAfterViewLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveDestroyLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+        ast.directives.forEach(function (directiveAst) {
+            var /** @type {?} */ directiveInstance = compileElement.instances.get(directiveAst.directive.type.reference);
+            var /** @type {?} */ directiveWrapperInstance = compileElement.directiveWrapperInstance.get(directiveAst.directive.type.reference);
+            bindDirectiveAfterContentLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+            bindDirectiveAfterViewLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+            bindDirectiveWrapperLifecycleCallbacks(directiveAst, directiveWrapperInstance, compileElement);
+        });
+        ast.providers.forEach(function (providerAst) {
+            var /** @type {?} */ providerInstance = compileElement.instances.get(providerAst.token.reference);
+            bindInjectableDestroyLifecycleCallbacks(providerAst, providerInstance, compileElement);
         });
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} parent
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitEmbeddedTemplate = function (ast, parent) {
-        var compileElement = this.view.nodes[this._nodeIndex++];
-        var eventListeners = event_binder_1.collectEventListeners(ast.outputs, ast.directives, compileElement);
-        collection_1.ListWrapper.forEachWithIndex(ast.directives, function (directiveAst, index) {
-            var directiveInstance = compileElement.directiveInstances[index];
-            property_binder_1.bindDirectiveInputs(directiveAst, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveDetectChangesLifecycleCallbacks(directiveAst, directiveInstance, compileElement);
-            event_binder_1.bindDirectiveOutputs(directiveAst, directiveInstance, eventListeners);
-            lifecycle_binder_1.bindDirectiveAfterContentLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveAfterViewLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
-            lifecycle_binder_1.bindDirectiveDestroyLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+        var /** @type {?} */ compileElement = (this.view.nodes[this._nodeIndex++]);
+        bindOutputs(ast.outputs, ast.directives, compileElement, false);
+        ast.directives.forEach(function (directiveAst, dirIndex) {
+            var /** @type {?} */ directiveInstance = compileElement.instances.get(directiveAst.directive.type.reference);
+            var /** @type {?} */ directiveWrapperInstance = compileElement.directiveWrapperInstance.get(directiveAst.directive.type.reference);
+            bindDirectiveInputs(directiveAst, directiveWrapperInstance, dirIndex, compileElement);
+            bindDirectiveAfterContentLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+            bindDirectiveAfterViewLifecycleCallbacks(directiveAst.directive, directiveInstance, compileElement);
+            bindDirectiveWrapperLifecycleCallbacks(directiveAst, directiveWrapperInstance, compileElement);
         });
-        bindView(compileElement.embeddedView, ast.children);
+        ast.providers.forEach(function (providerAst) {
+            var /** @type {?} */ providerInstance = compileElement.instances.get(providerAst.token.reference);
+            bindInjectableDestroyLifecycleCallbacks(providerAst, providerInstance, compileElement);
+        });
+        bindView(compileElement.embeddedView, ast.children, this._schemaRegistry);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} ctx
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitAttr = function (ast, ctx) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} ctx
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitDirective = function (ast, ctx) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} eventTargetAndNames
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitEvent = function (ast, eventTargetAndNames) {
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} ctx
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitReference = function (ast, ctx) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} ctx
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitVariable = function (ast, ctx) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitDirectiveProperty = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     ViewBinderVisitor.prototype.visitElementProperty = function (ast, context) { return null; };
+    ViewBinderVisitor._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ViewBinderVisitor.prototype._nodeIndex;
+        /** @type {?} */
+        ViewBinderVisitor.prototype.view;
+        /** @type {?} */
+        ViewBinderVisitor.prototype._schemaRegistry;
+    };
     return ViewBinderVisitor;
 }());
 //# sourceMappingURL=view_binder.js.map

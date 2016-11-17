@@ -1,76 +1,170 @@
-"use strict";
-var core_1 = require('@angular/core');
-var compile_metadata_1 = require('./compile_metadata');
-var o = require('./output/output_ast');
-var shadow_css_1 = require('./shadow_css');
-var url_resolver_1 = require('./url_resolver');
-var style_url_resolver_1 = require('./style_url_resolver');
-var lang_1 = require('../src/facade/lang');
-var COMPONENT_VARIABLE = '%COMP%';
-var HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
-var CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
-var StylesCompileDependency = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Injectable, ViewEncapsulation } from '@angular/core';
+import { CompileIdentifierMetadata, CompileStylesheetMetadata } from './compile_metadata';
+import * as o from './output/output_ast';
+import { ShadowCss } from './shadow_css';
+import { UrlResolver } from './url_resolver';
+var /** @type {?} */ COMPONENT_VARIABLE = '%COMP%';
+var /** @type {?} */ HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
+var /** @type {?} */ CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
+export var StylesCompileDependency = (function () {
+    /**
+     * @param {?} moduleUrl
+     * @param {?} isShimmed
+     * @param {?} valuePlaceholder
+     */
     function StylesCompileDependency(moduleUrl, isShimmed, valuePlaceholder) {
         this.moduleUrl = moduleUrl;
         this.isShimmed = isShimmed;
         this.valuePlaceholder = valuePlaceholder;
     }
+    StylesCompileDependency._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        StylesCompileDependency.prototype.moduleUrl;
+        /** @type {?} */
+        StylesCompileDependency.prototype.isShimmed;
+        /** @type {?} */
+        StylesCompileDependency.prototype.valuePlaceholder;
+    };
     return StylesCompileDependency;
 }());
-exports.StylesCompileDependency = StylesCompileDependency;
-var StylesCompileResult = (function () {
-    function StylesCompileResult(statements, stylesVar, dependencies) {
+export var StylesCompileResult = (function () {
+    /**
+     * @param {?} componentStylesheet
+     * @param {?} externalStylesheets
+     */
+    function StylesCompileResult(componentStylesheet, externalStylesheets) {
+        this.componentStylesheet = componentStylesheet;
+        this.externalStylesheets = externalStylesheets;
+    }
+    StylesCompileResult._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        StylesCompileResult.prototype.componentStylesheet;
+        /** @type {?} */
+        StylesCompileResult.prototype.externalStylesheets;
+    };
+    return StylesCompileResult;
+}());
+export var CompiledStylesheet = (function () {
+    /**
+     * @param {?} statements
+     * @param {?} stylesVar
+     * @param {?} dependencies
+     * @param {?} isShimmed
+     * @param {?} meta
+     */
+    function CompiledStylesheet(statements, stylesVar, dependencies, isShimmed, meta) {
         this.statements = statements;
         this.stylesVar = stylesVar;
         this.dependencies = dependencies;
+        this.isShimmed = isShimmed;
+        this.meta = meta;
     }
-    return StylesCompileResult;
+    CompiledStylesheet._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompiledStylesheet.prototype.statements;
+        /** @type {?} */
+        CompiledStylesheet.prototype.stylesVar;
+        /** @type {?} */
+        CompiledStylesheet.prototype.dependencies;
+        /** @type {?} */
+        CompiledStylesheet.prototype.isShimmed;
+        /** @type {?} */
+        CompiledStylesheet.prototype.meta;
+    };
+    return CompiledStylesheet;
 }());
-exports.StylesCompileResult = StylesCompileResult;
-var StyleCompiler = (function () {
+export var StyleCompiler = (function () {
+    /**
+     * @param {?} _urlResolver
+     */
     function StyleCompiler(_urlResolver) {
         this._urlResolver = _urlResolver;
-        this._shadowCss = new shadow_css_1.ShadowCss();
+        this._shadowCss = new ShadowCss();
     }
+    /**
+     * @param {?} comp
+     * @return {?}
+     */
     StyleCompiler.prototype.compileComponent = function (comp) {
-        var shim = comp.template.encapsulation === core_1.ViewEncapsulation.Emulated;
-        return this._compileStyles(getStylesVarName(comp), comp.template.styles, comp.template.styleUrls, shim);
-    };
-    StyleCompiler.prototype.compileStylesheet = function (stylesheetUrl, cssText, isShimmed) {
-        var styleWithImports = style_url_resolver_1.extractStyleUrls(this._urlResolver, stylesheetUrl, cssText);
-        return this._compileStyles(getStylesVarName(null), [styleWithImports.style], styleWithImports.styleUrls, isShimmed);
-    };
-    StyleCompiler.prototype._compileStyles = function (stylesVar, plainStyles, absUrls, shim) {
         var _this = this;
-        var styleExpressions = plainStyles.map(function (plainStyle) { return o.literal(_this._shimIfNeeded(plainStyle, shim)); });
-        var dependencies = [];
-        for (var i = 0; i < absUrls.length; i++) {
-            var identifier = new compile_metadata_1.CompileIdentifierMetadata({ name: getStylesVarName(null) });
-            dependencies.push(new StylesCompileDependency(absUrls[i], shim, identifier));
+        var /** @type {?} */ externalStylesheets = [];
+        var /** @type {?} */ componentStylesheet = this._compileStyles(comp, new CompileStylesheetMetadata({
+            styles: comp.template.styles,
+            styleUrls: comp.template.styleUrls,
+            moduleUrl: comp.type.moduleUrl
+        }), true);
+        comp.template.externalStylesheets.forEach(function (stylesheetMeta) {
+            var /** @type {?} */ compiledStylesheet = _this._compileStyles(comp, stylesheetMeta, false);
+            externalStylesheets.push(compiledStylesheet);
+        });
+        return new StylesCompileResult(componentStylesheet, externalStylesheets);
+    };
+    /**
+     * @param {?} comp
+     * @param {?} stylesheet
+     * @param {?} isComponentStylesheet
+     * @return {?}
+     */
+    StyleCompiler.prototype._compileStyles = function (comp, stylesheet, isComponentStylesheet) {
+        var _this = this;
+        var /** @type {?} */ shim = comp.template.encapsulation === ViewEncapsulation.Emulated;
+        var /** @type {?} */ styleExpressions = stylesheet.styles.map(function (plainStyle) { return o.literal(_this._shimIfNeeded(plainStyle, shim)); });
+        var /** @type {?} */ dependencies = [];
+        for (var /** @type {?} */ i = 0; i < stylesheet.styleUrls.length; i++) {
+            var /** @type {?} */ identifier = new CompileIdentifierMetadata({ name: getStylesVarName(null) });
+            dependencies.push(new StylesCompileDependency(stylesheet.styleUrls[i], shim, identifier));
             styleExpressions.push(new o.ExternalExpr(identifier));
         }
         // styles variable contains plain strings and arrays of other styles arrays (recursive),
         // so we set its type to dynamic.
-        var stmt = o.variable(stylesVar)
+        var /** @type {?} */ stylesVar = getStylesVarName(isComponentStylesheet ? comp : null);
+        var /** @type {?} */ stmt = o.variable(stylesVar)
             .set(o.literalArr(styleExpressions, new o.ArrayType(o.DYNAMIC_TYPE, [o.TypeModifier.Const])))
             .toDeclStmt(null, [o.StmtModifier.Final]);
-        return new StylesCompileResult([stmt], stylesVar, dependencies);
+        return new CompiledStylesheet([stmt], stylesVar, dependencies, shim, stylesheet);
     };
+    /**
+     * @param {?} style
+     * @param {?} shim
+     * @return {?}
+     */
     StyleCompiler.prototype._shimIfNeeded = function (style, shim) {
         return shim ? this._shadowCss.shimCssText(style, CONTENT_ATTR, HOST_ATTR) : style;
     };
+    StyleCompiler._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        StyleCompiler.decorators;
+        /** @nocollapse
+        @type {?} */
+        StyleCompiler.ctorParameters;
+        /** @type {?} */
+        StyleCompiler.prototype._shadowCss;
+        /** @type {?} */
+        StyleCompiler.prototype._urlResolver;
+    };
     StyleCompiler.decorators = [
-        { type: core_1.Injectable },
+        { type: Injectable },
     ];
-    /** @nocollapse */ StyleCompiler.ctorParameters = [
-        { type: url_resolver_1.UrlResolver, },
+    /** @nocollapse */
+    StyleCompiler.ctorParameters = [
+        { type: UrlResolver, },
     ];
     return StyleCompiler;
 }());
-exports.StyleCompiler = StyleCompiler;
+/**
+ * @param {?} component
+ * @return {?}
+ */
 function getStylesVarName(component) {
-    var result = "styles";
-    if (lang_1.isPresent(component)) {
+    var /** @type {?} */ result = "styles";
+    if (component) {
         result += "_" + component.type.name;
     }
     return result;

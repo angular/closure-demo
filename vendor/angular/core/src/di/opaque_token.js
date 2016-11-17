@@ -1,4 +1,11 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Injectable } from './metadata';
 /**
  * Creates a token that can be used in a DI Provider.
  *
@@ -8,7 +15,7 @@
  * var t = new OpaqueToken("value");
  *
  * var injector = Injector.resolveAndCreate([
- *   provide(t, {useValue: "bindingValue"})
+ *   {provide: t, useValue: "bindingValue"}
  * ]);
  *
  * expect(injector.get(t)).toEqual("bindingValue");
@@ -19,14 +26,36 @@
  *
  * Using an `OpaqueToken` is preferable to using an `Object` as tokens because it provides better
  * error messages.
- * @ts2dart_const
+ * @stable
  */
-var OpaqueToken = (function () {
+// so that metadata is gathered for this class
+export var OpaqueToken = (function () {
+    /**
+     * @param {?} _desc
+     */
     function OpaqueToken(_desc) {
         this._desc = _desc;
     }
+    /**
+     * @return {?}
+     */
     OpaqueToken.prototype.toString = function () { return "Token " + this._desc; };
+    OpaqueToken._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        OpaqueToken.decorators;
+        /** @nocollapse
+        @type {?} */
+        OpaqueToken.ctorParameters;
+        /** @type {?} */
+        OpaqueToken.prototype._desc;
+    };
+    OpaqueToken.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    OpaqueToken.ctorParameters = [
+        null,
+    ];
     return OpaqueToken;
 }());
-exports.OpaqueToken = OpaqueToken;
 //# sourceMappingURL=opaque_token.js.map

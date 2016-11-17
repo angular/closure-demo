@@ -1,4 +1,11 @@
 /**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * This class should not be used directly by an application developer. Instead, use
  * {@link Location}.
  *
@@ -21,11 +28,13 @@
  * {@link Location} / {@link LocationStrategy} and DOM apis flow through the `PlatformLocation`
  * class
  * they are all platform independent.
+ *
+ * @stable
  */
 export declare abstract class PlatformLocation {
     abstract getBaseHrefFromDOM(): string;
-    abstract onPopState(fn: UrlChangeListener): void;
-    abstract onHashChange(fn: UrlChangeListener): void;
+    abstract onPopState(fn: LocationChangeListener): void;
+    abstract onHashChange(fn: LocationChangeListener): void;
     pathname: string;
     search: string;
     hash: string;
@@ -36,10 +45,15 @@ export declare abstract class PlatformLocation {
 }
 /**
  * A serializable version of the event from onPopState or onHashChange
+ *
+ * @experimental
  */
-export interface UrlChangeEvent {
+export interface LocationChangeEvent {
     type: string;
 }
-export interface UrlChangeListener {
-    (e: UrlChangeEvent): any;
+/**
+ * @experimental
+ */
+export interface LocationChangeListener {
+    (e: LocationChangeEvent): any;
 }

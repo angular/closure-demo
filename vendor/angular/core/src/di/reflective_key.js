@@ -1,7 +1,12 @@
-"use strict";
-var lang_1 = require('../../src/facade/lang');
-var exceptions_1 = require('../../src/facade/exceptions');
-var forward_ref_1 = require('./forward_ref');
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { stringify } from '../facade/lang';
+import { resolveForwardRef } from './forward_ref';
 /**
  * A unique object used for retrieving items from the {@link ReflectiveInjector}.
  *
@@ -16,31 +21,36 @@ var forward_ref_1 = require('./forward_ref');
  * `Key` should not be created directly. {@link ReflectiveInjector} creates keys automatically when
  * resolving
  * providers.
+ * @experimental
  */
-var ReflectiveKey = (function () {
+export var ReflectiveKey = (function () {
     /**
-     * Private
+     *  Private
+     * @param {?} token
+     * @param {?} id
      */
     function ReflectiveKey(token, id) {
         this.token = token;
         this.id = id;
-        if (lang_1.isBlank(token)) {
-            throw new exceptions_1.BaseException('Token must be defined!');
+        if (!token) {
+            throw new Error('Token must be defined!');
         }
     }
     Object.defineProperty(ReflectiveKey.prototype, "displayName", {
         /**
          * Returns a stringified token.
          */
-        get: function () { return lang_1.stringify(this.token); },
+        get: function () { return stringify(this.token); },
         enumerable: true,
         configurable: true
     });
     /**
-     * Retrieves a `Key` for a token.
+     *  Retrieves a `Key` for a token.
+     * @param {?} token
+     * @return {?}
      */
     ReflectiveKey.get = function (token) {
-        return _globalKeyRegistry.get(forward_ref_1.resolveForwardRef(token));
+        return _globalKeyRegistry.get(resolveForwardRef(token));
     };
     Object.defineProperty(ReflectiveKey, "numberOfKeys", {
         /**
@@ -50,23 +60,32 @@ var ReflectiveKey = (function () {
         enumerable: true,
         configurable: true
     });
+    ReflectiveKey._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveKey.prototype.token;
+        /** @type {?} */
+        ReflectiveKey.prototype.id;
+    };
     return ReflectiveKey;
 }());
-exports.ReflectiveKey = ReflectiveKey;
 /**
  * @internal
  */
-var KeyRegistry = (function () {
+export var KeyRegistry = (function () {
     function KeyRegistry() {
         this._allKeys = new Map();
     }
+    /**
+     * @param {?} token
+     * @return {?}
+     */
     KeyRegistry.prototype.get = function (token) {
         if (token instanceof ReflectiveKey)
             return token;
         if (this._allKeys.has(token)) {
             return this._allKeys.get(token);
         }
-        var newKey = new ReflectiveKey(token, ReflectiveKey.numberOfKeys);
+        var /** @type {?} */ newKey = new ReflectiveKey(token, ReflectiveKey.numberOfKeys);
         this._allKeys.set(token, newKey);
         return newKey;
     };
@@ -75,8 +94,11 @@ var KeyRegistry = (function () {
         enumerable: true,
         configurable: true
     });
+    KeyRegistry._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        KeyRegistry.prototype._allKeys;
+    };
     return KeyRegistry;
 }());
-exports.KeyRegistry = KeyRegistry;
-var _globalKeyRegistry = new KeyRegistry();
+var /** @type {?} */ _globalKeyRegistry = new KeyRegistry();
 //# sourceMappingURL=reflective_key.js.map

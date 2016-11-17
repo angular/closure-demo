@@ -1,80 +1,158 @@
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var collection_1 = require('../src/facade/collection');
-var lang_1 = require('../src/facade/lang');
-var core_1 = require('@angular/core');
-var directive_resolver_1 = require('../src/directive_resolver');
-var MockDirectiveResolver = (function (_super) {
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import { DirectiveResolver } from '@angular/compiler';
+import { Compiler, Component, Directive, Injectable, resolveForwardRef } from '@angular/core';
+import { isPresent } from './facade/lang';
+/**
+ * An implementation of {@link DirectiveResolver} that allows overriding
+ * various properties of directives.
+ */
+export var MockDirectiveResolver = (function (_super) {
     __extends(MockDirectiveResolver, _super);
-    function MockDirectiveResolver() {
-        _super.apply(this, arguments);
-        this._providerOverrides = new collection_1.Map();
-        this.viewProviderOverrides = new collection_1.Map();
+    function MockDirectiveResolver(_injector) {
+        _super.call(this);
+        this._injector = _injector;
+        this._directives = new Map();
+        this._providerOverrides = new Map();
+        this._viewProviderOverrides = new Map();
+        this._views = new Map();
+        this._inlineTemplates = new Map();
+        this._animations = new Map();
     }
-    MockDirectiveResolver.prototype.resolve = function (type) {
-        var dm = _super.prototype.resolve.call(this, type);
+    Object.defineProperty(MockDirectiveResolver.prototype, "_compiler", {
+        get: function () { return this._injector.get(Compiler); },
+        enumerable: true,
+        configurable: true
+    });
+    MockDirectiveResolver.prototype._clearCacheFor = function (component) { this._compiler.clearCacheFor(component); };
+    MockDirectiveResolver.prototype.resolve = function (type, throwIfNotFound) {
+        if (throwIfNotFound === void 0) { throwIfNotFound = true; }
+        var metadata = this._directives.get(type);
+        if (!metadata) {
+            metadata = _super.prototype.resolve.call(this, type, throwIfNotFound);
+        }
+        if (!metadata) {
+            return null;
+        }
         var providerOverrides = this._providerOverrides.get(type);
-        var viewProviderOverrides = this.viewProviderOverrides.get(type);
-        var providers = dm.providers;
-        if (lang_1.isPresent(providerOverrides)) {
-            var originalViewProviders = lang_1.isPresent(dm.providers) ? dm.providers : [];
+        var viewProviderOverrides = this._viewProviderOverrides.get(type);
+        var providers = metadata.providers;
+        if (isPresent(providerOverrides)) {
+            var originalViewProviders = metadata.providers || [];
             providers = originalViewProviders.concat(providerOverrides);
         }
-        if (dm instanceof core_1.ComponentMetadata) {
-            var viewProviders = dm.viewProviders;
-            if (lang_1.isPresent(viewProviderOverrides)) {
-                var originalViewProviders = lang_1.isPresent(dm.viewProviders) ? dm.viewProviders : [];
+        if (metadata instanceof Component) {
+            var viewProviders = metadata.viewProviders;
+            if (isPresent(viewProviderOverrides)) {
+                var originalViewProviders = metadata.viewProviders || [];
                 viewProviders = originalViewProviders.concat(viewProviderOverrides);
             }
-            return new core_1.ComponentMetadata({
-                selector: dm.selector,
-                inputs: dm.inputs,
-                outputs: dm.outputs,
-                host: dm.host,
-                exportAs: dm.exportAs,
-                moduleId: dm.moduleId,
-                queries: dm.queries,
-                changeDetection: dm.changeDetection,
+            var view = this._views.get(type);
+            if (!view) {
+                view = metadata;
+            }
+            var animations = view.animations;
+            var templateUrl = view.templateUrl;
+            var inlineAnimations = this._animations.get(type);
+            if (isPresent(inlineAnimations)) {
+                animations = inlineAnimations;
+            }
+            var inlineTemplate = this._inlineTemplates.get(type);
+            if (isPresent(inlineTemplate)) {
+                templateUrl = null;
+            }
+            else {
+                inlineTemplate = view.template;
+            }
+            return new Component({
+                selector: metadata.selector,
+                inputs: metadata.inputs,
+                outputs: metadata.outputs,
+                host: metadata.host,
+                exportAs: metadata.exportAs,
+                moduleId: metadata.moduleId,
+                queries: metadata.queries,
+                changeDetection: metadata.changeDetection,
                 providers: providers,
-                viewProviders: viewProviders
+                viewProviders: viewProviders,
+                entryComponents: metadata.entryComponents,
+                template: inlineTemplate,
+                templateUrl: templateUrl,
+                animations: animations,
+                styles: view.styles,
+                styleUrls: view.styleUrls,
+                encapsulation: view.encapsulation,
+                interpolation: view.interpolation
             });
         }
-        return new core_1.DirectiveMetadata({
-            selector: dm.selector,
-            inputs: dm.inputs,
-            outputs: dm.outputs,
-            host: dm.host,
+        return new Directive({
+            selector: metadata.selector,
+            inputs: metadata.inputs,
+            outputs: metadata.outputs,
+            host: metadata.host,
             providers: providers,
-            exportAs: dm.exportAs,
-            queries: dm.queries
+            exportAs: metadata.exportAs,
+            queries: metadata.queries
         });
     };
     /**
-     * @deprecated
+     * Overrides the {@link Directive} for a directive.
      */
-    MockDirectiveResolver.prototype.setBindingsOverride = function (type, bindings) {
-        this._providerOverrides.set(type, bindings);
-    };
-    /**
-     * @deprecated
-     */
-    MockDirectiveResolver.prototype.setViewBindingsOverride = function (type, viewBindings) {
-        this.viewProviderOverrides.set(type, viewBindings);
+    MockDirectiveResolver.prototype.setDirective = function (type, metadata) {
+        this._directives.set(type, metadata);
+        this._clearCacheFor(type);
     };
     MockDirectiveResolver.prototype.setProvidersOverride = function (type, providers) {
         this._providerOverrides.set(type, providers);
+        this._clearCacheFor(type);
     };
     MockDirectiveResolver.prototype.setViewProvidersOverride = function (type, viewProviders) {
-        this.viewProviderOverrides.set(type, viewProviders);
+        this._viewProviderOverrides.set(type, viewProviders);
+        this._clearCacheFor(type);
     };
-    MockDirectiveResolver.decorators = [
-        { type: core_1.Injectable },
-    ];
+    /**
+     * Overrides the {@link ViewMetadata} for a component.
+     */
+    MockDirectiveResolver.prototype.setView = function (component, view) {
+        this._views.set(component, view);
+        this._clearCacheFor(component);
+    };
+    /**
+     * Overrides the inline template for a component - other configuration remains unchanged.
+     */
+    MockDirectiveResolver.prototype.setInlineTemplate = function (component, template) {
+        this._inlineTemplates.set(component, template);
+        this._clearCacheFor(component);
+    };
+    MockDirectiveResolver.prototype.setAnimations = function (component, animations) {
+        this._animations.set(component, animations);
+        this._clearCacheFor(component);
+    };
+    MockDirectiveResolver = __decorate([
+        Injectable()
+    ], MockDirectiveResolver);
     return MockDirectiveResolver;
-}(directive_resolver_1.DirectiveResolver));
-exports.MockDirectiveResolver = MockDirectiveResolver;
+}(DirectiveResolver));
+function flattenArray(tree, out) {
+    if (!isPresent(tree))
+        return;
+    for (var i = 0; i < tree.length; i++) {
+        var item = resolveForwardRef(tree[i]);
+        if (Array.isArray(item)) {
+            flattenArray(item, out);
+        }
+        else {
+            out.push(item);
+        }
+    }
+}
 //# sourceMappingURL=directive_resolver_mock.js.map

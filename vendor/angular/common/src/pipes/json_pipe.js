@@ -1,15 +1,44 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../../src/facade/lang');
-var JsonPipe = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Pipe } from '@angular/core';
+/**
+ * @ngModule CommonModule
+ * @whatItDoes Converts value into JSON string.
+ * @howToUse `expression | json`
+ * @description
+ *
+ * Converts value into string using `JSON.stringify`. Useful for debugging.
+ *
+ * ### Example
+ * {@example common/pipes/ts/json_pipe.ts region='JsonPipe'}
+ *
+ * @stable
+ */
+export var JsonPipe = (function () {
     function JsonPipe() {
     }
-    JsonPipe.prototype.transform = function (value) { return lang_1.Json.stringify(value); };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    JsonPipe.prototype.transform = function (value) { return JSON.stringify(value, null, 2); };
+    JsonPipe._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        JsonPipe.decorators;
+        /** @nocollapse
+        @type {?} */
+        JsonPipe.ctorParameters;
+    };
     JsonPipe.decorators = [
-        { type: core_1.Pipe, args: [{ name: 'json', pure: false },] },
-        { type: core_1.Injectable },
+        { type: Pipe, args: [{ name: 'json', pure: false },] },
     ];
+    /** @nocollapse */
+    JsonPipe.ctorParameters = [];
     return JsonPipe;
 }());
-exports.JsonPipe = JsonPipe;
 //# sourceMappingURL=json_pipe.js.map

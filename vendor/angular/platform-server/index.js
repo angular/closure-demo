@@ -1,5 +1,14 @@
-"use strict";
-// TODO: vsavkin add SERVER_PROVIDERS and SERVER_APP_PROVIDERS
-var parse5_adapter_1 = require('./src/parse5_adapter');
-exports.Parse5DomAdapter = parse5_adapter_1.Parse5DomAdapter;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the platform-server package.
+ */
+export { ServerModule, platformDynamicServer, platformServer, __platform_server_private__ } from './src/platform-server';
 //# sourceMappingURL=index.js.map

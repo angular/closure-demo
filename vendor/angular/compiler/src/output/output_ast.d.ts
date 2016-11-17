@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { CompileIdentifierMetadata } from '../compile_metadata';
 export declare enum TypeModifier {
     Const = 0,
@@ -15,6 +22,7 @@ export declare enum BuiltinTypeName {
     Int = 3,
     Number = 4,
     Function = 5,
+    Null = 6,
 }
 export declare class BuiltinType extends Type {
     name: BuiltinTypeName;
@@ -43,6 +51,7 @@ export declare var INT_TYPE: BuiltinType;
 export declare var NUMBER_TYPE: BuiltinType;
 export declare var STRING_TYPE: BuiltinType;
 export declare var FUNCTION_TYPE: BuiltinType;
+export declare var NULL_TYPE: BuiltinType;
 export interface TypeVisitor {
     visitBuiltintType(type: BuiltinType, context: any): any;
     visitExternalType(type: ExternalType, context: any): any;
@@ -102,7 +111,7 @@ export declare enum BuiltinVar {
     CatchStack = 3,
 }
 export declare class ReadVarExpr extends Expression {
-    name: any;
+    name: string;
     builtin: BuiltinVar;
     constructor(name: string | BuiltinVar, type?: Type);
     visitExpression(visitor: ExpressionVisitor, context: any): any;
@@ -132,7 +141,7 @@ export declare class WritePropExpr extends Expression {
 export declare enum BuiltinMethod {
     ConcatArray = 0,
     SubscribeObservable = 1,
-    bind = 2,
+    Bind = 2,
 }
 export declare class InvokeMethodExpr extends Expression {
     receiver: Expression;
@@ -221,9 +230,9 @@ export declare class LiteralArrayExpr extends Expression {
     visitExpression(visitor: ExpressionVisitor, context: any): any;
 }
 export declare class LiteralMapExpr extends Expression {
-    entries: Array<Array<string | Expression>>;
+    entries: [string, Expression][];
     valueType: Type;
-    constructor(entries: Array<Array<string | Expression>>, type?: MapType);
+    constructor(entries: [string, Expression][], type?: MapType);
     visitExpression(visitor: ExpressionVisitor, context: any): any;
 }
 export interface ExpressionVisitor {
@@ -251,6 +260,7 @@ export declare var SUPER_EXPR: ReadVarExpr;
 export declare var CATCH_ERROR_VAR: ReadVarExpr;
 export declare var CATCH_STACK_VAR: ReadVarExpr;
 export declare var NULL_EXPR: LiteralExpr;
+export declare var TYPED_NULL_EXPR: LiteralExpr;
 export declare enum StmtModifier {
     Final = 0,
     Private = 1,
@@ -418,8 +428,8 @@ export declare function findReadVarNames(stmts: Statement[]): Set<string>;
 export declare function variable(name: string, type?: Type): ReadVarExpr;
 export declare function importExpr(id: CompileIdentifierMetadata, typeParams?: Type[]): ExternalExpr;
 export declare function importType(id: CompileIdentifierMetadata, typeParams?: Type[], typeModifiers?: TypeModifier[]): ExternalType;
-export declare function literal(value: any, type?: Type): LiteralExpr;
 export declare function literalArr(values: Expression[], type?: Type): LiteralArrayExpr;
-export declare function literalMap(values: Array<Array<string | Expression>>, type?: MapType): LiteralMapExpr;
+export declare function literalMap(values: [string, Expression][], type?: MapType): LiteralMapExpr;
 export declare function not(expr: Expression): NotExpr;
 export declare function fn(params: FnParam[], body: Statement[], type?: Type): FunctionExpr;
+export declare function literal(value: any, type?: Type): LiteralExpr;

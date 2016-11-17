@@ -1,16 +1,24 @@
-"use strict";
-var collection_1 = require('../../src/facade/collection');
-var reflective_provider_1 = require('./reflective_provider');
-var reflective_exceptions_1 = require('./reflective_exceptions');
-var exceptions_1 = require('../../src/facade/exceptions');
-var reflective_key_1 = require('./reflective_key');
-var metadata_1 = require('./metadata');
-var injector_1 = require('./injector');
-var __unused; // avoid unused import when Type union types are erased
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { unimplemented } from '../facade/errors';
+import { Injector, THROW_IF_NOT_FOUND } from './injector';
+import { Self, SkipSelf } from './metadata';
+import { AbstractProviderError, CyclicDependencyError, InstantiationError, NoProviderError, OutOfBoundsError } from './reflective_errors';
+import { ReflectiveKey } from './reflective_key';
+import { resolveReflectiveProviders } from './reflective_provider';
 // Threshold for the dynamic version
-var _MAX_CONSTRUCTION_COUNTER = 10;
-var UNDEFINED = new Object();
-var ReflectiveProtoInjectorInlineStrategy = (function () {
+var /** @type {?} */ _MAX_CONSTRUCTION_COUNTER = 10;
+var /** @type {?} */ UNDEFINED = new Object();
+export var ReflectiveProtoInjectorInlineStrategy = (function () {
+    /**
+     * @param {?} protoEI
+     * @param {?} providers
+     */
     function ReflectiveProtoInjectorInlineStrategy(protoEI, providers) {
         this.provider0 = null;
         this.provider1 = null;
@@ -74,6 +82,10 @@ var ReflectiveProtoInjectorInlineStrategy = (function () {
             this.keyId9 = providers[9].key.id;
         }
     }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveProtoInjectorInlineStrategy.prototype.getProviderAtIndex = function (index) {
         if (index == 0)
             return this.provider0;
@@ -95,52 +107,134 @@ var ReflectiveProtoInjectorInlineStrategy = (function () {
             return this.provider8;
         if (index == 9)
             return this.provider9;
-        throw new reflective_exceptions_1.OutOfBoundsError(index);
+        throw new OutOfBoundsError(index);
     };
+    /**
+     * @param {?} injector
+     * @return {?}
+     */
     ReflectiveProtoInjectorInlineStrategy.prototype.createInjectorStrategy = function (injector) {
         return new ReflectiveInjectorInlineStrategy(injector, this);
     };
+    ReflectiveProtoInjectorInlineStrategy._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider0;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider1;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider2;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider3;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider4;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider5;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider6;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider7;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider8;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.provider9;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId0;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId1;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId2;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId3;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId4;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId5;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId6;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId7;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId8;
+        /** @type {?} */
+        ReflectiveProtoInjectorInlineStrategy.prototype.keyId9;
+    };
     return ReflectiveProtoInjectorInlineStrategy;
 }());
-exports.ReflectiveProtoInjectorInlineStrategy = ReflectiveProtoInjectorInlineStrategy;
-var ReflectiveProtoInjectorDynamicStrategy = (function () {
+export var ReflectiveProtoInjectorDynamicStrategy = (function () {
+    /**
+     * @param {?} protoInj
+     * @param {?} providers
+     */
     function ReflectiveProtoInjectorDynamicStrategy(protoInj, providers) {
         this.providers = providers;
         var len = providers.length;
-        this.keyIds = collection_1.ListWrapper.createFixedSize(len);
+        this.keyIds = new Array(len);
         for (var i = 0; i < len; i++) {
             this.keyIds[i] = providers[i].key.id;
         }
     }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveProtoInjectorDynamicStrategy.prototype.getProviderAtIndex = function (index) {
         if (index < 0 || index >= this.providers.length) {
-            throw new reflective_exceptions_1.OutOfBoundsError(index);
+            throw new OutOfBoundsError(index);
         }
         return this.providers[index];
     };
+    /**
+     * @param {?} ei
+     * @return {?}
+     */
     ReflectiveProtoInjectorDynamicStrategy.prototype.createInjectorStrategy = function (ei) {
         return new ReflectiveInjectorDynamicStrategy(this, ei);
     };
+    ReflectiveProtoInjectorDynamicStrategy._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveProtoInjectorDynamicStrategy.prototype.keyIds;
+        /** @type {?} */
+        ReflectiveProtoInjectorDynamicStrategy.prototype.providers;
+    };
     return ReflectiveProtoInjectorDynamicStrategy;
 }());
-exports.ReflectiveProtoInjectorDynamicStrategy = ReflectiveProtoInjectorDynamicStrategy;
-var ReflectiveProtoInjector = (function () {
+export var ReflectiveProtoInjector = (function () {
+    /**
+     * @param {?} providers
+     */
     function ReflectiveProtoInjector(providers) {
         this.numberOfProviders = providers.length;
         this._strategy = providers.length > _MAX_CONSTRUCTION_COUNTER ?
             new ReflectiveProtoInjectorDynamicStrategy(this, providers) :
             new ReflectiveProtoInjectorInlineStrategy(this, providers);
     }
+    /**
+     * @param {?} providers
+     * @return {?}
+     */
     ReflectiveProtoInjector.fromResolvedProviders = function (providers) {
         return new ReflectiveProtoInjector(providers);
     };
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveProtoInjector.prototype.getProviderAtIndex = function (index) {
         return this._strategy.getProviderAtIndex(index);
     };
+    ReflectiveProtoInjector._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveProtoInjector.prototype._strategy;
+        /** @type {?} */
+        ReflectiveProtoInjector.prototype.numberOfProviders;
+    };
     return ReflectiveProtoInjector;
 }());
-exports.ReflectiveProtoInjector = ReflectiveProtoInjector;
-var ReflectiveInjectorInlineStrategy = (function () {
+export var ReflectiveInjectorInlineStrategy = (function () {
+    /**
+     * @param {?} injector
+     * @param {?} protoStrategy
+     */
     function ReflectiveInjectorInlineStrategy(injector, protoStrategy) {
         this.injector = injector;
         this.protoStrategy = protoStrategy;
@@ -155,13 +249,24 @@ var ReflectiveInjectorInlineStrategy = (function () {
         this.obj8 = UNDEFINED;
         this.obj9 = UNDEFINED;
     }
+    /**
+     * @return {?}
+     */
     ReflectiveInjectorInlineStrategy.prototype.resetConstructionCounter = function () { this.injector._constructionCounter = 0; };
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjectorInlineStrategy.prototype.instantiateProvider = function (provider) {
         return this.injector._new(provider);
     };
+    /**
+     * @param {?} keyId
+     * @return {?}
+     */
     ReflectiveInjectorInlineStrategy.prototype.getObjByKeyId = function (keyId) {
-        var p = this.protoStrategy;
-        var inj = this.injector;
+        var /** @type {?} */ p = this.protoStrategy;
+        var /** @type {?} */ inj = this.injector;
         if (p.keyId0 === keyId) {
             if (this.obj0 === UNDEFINED) {
                 this.obj0 = inj._new(p.provider0);
@@ -224,6 +329,10 @@ var ReflectiveInjectorInlineStrategy = (function () {
         }
         return UNDEFINED;
     };
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveInjectorInlineStrategy.prototype.getObjAtIndex = function (index) {
         if (index == 0)
             return this.obj0;
@@ -245,26 +354,68 @@ var ReflectiveInjectorInlineStrategy = (function () {
             return this.obj8;
         if (index == 9)
             return this.obj9;
-        throw new reflective_exceptions_1.OutOfBoundsError(index);
+        throw new OutOfBoundsError(index);
     };
+    /**
+     * @return {?}
+     */
     ReflectiveInjectorInlineStrategy.prototype.getMaxNumberOfObjects = function () { return _MAX_CONSTRUCTION_COUNTER; };
+    ReflectiveInjectorInlineStrategy._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj0;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj1;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj2;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj3;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj4;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj5;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj6;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj7;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj8;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.obj9;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.injector;
+        /** @type {?} */
+        ReflectiveInjectorInlineStrategy.prototype.protoStrategy;
+    };
     return ReflectiveInjectorInlineStrategy;
 }());
-exports.ReflectiveInjectorInlineStrategy = ReflectiveInjectorInlineStrategy;
-var ReflectiveInjectorDynamicStrategy = (function () {
+export var ReflectiveInjectorDynamicStrategy = (function () {
+    /**
+     * @param {?} protoStrategy
+     * @param {?} injector
+     */
     function ReflectiveInjectorDynamicStrategy(protoStrategy, injector) {
         this.protoStrategy = protoStrategy;
         this.injector = injector;
-        this.objs = collection_1.ListWrapper.createFixedSize(protoStrategy.providers.length);
-        collection_1.ListWrapper.fill(this.objs, UNDEFINED);
+        this.objs = new Array(protoStrategy.providers.length).fill(UNDEFINED);
     }
+    /**
+     * @return {?}
+     */
     ReflectiveInjectorDynamicStrategy.prototype.resetConstructionCounter = function () { this.injector._constructionCounter = 0; };
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjectorDynamicStrategy.prototype.instantiateProvider = function (provider) {
         return this.injector._new(provider);
     };
+    /**
+     * @param {?} keyId
+     * @return {?}
+     */
     ReflectiveInjectorDynamicStrategy.prototype.getObjByKeyId = function (keyId) {
-        var p = this.protoStrategy;
-        for (var i = 0; i < p.keyIds.length; i++) {
+        var /** @type {?} */ p = this.protoStrategy;
+        for (var /** @type {?} */ i = 0; i < p.keyIds.length; i++) {
             if (p.keyIds[i] === keyId) {
                 if (this.objs[i] === UNDEFINED) {
                     this.objs[i] = this.injector._new(p.providers[i]);
@@ -274,16 +425,30 @@ var ReflectiveInjectorDynamicStrategy = (function () {
         }
         return UNDEFINED;
     };
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveInjectorDynamicStrategy.prototype.getObjAtIndex = function (index) {
         if (index < 0 || index >= this.objs.length) {
-            throw new reflective_exceptions_1.OutOfBoundsError(index);
+            throw new OutOfBoundsError(index);
         }
         return this.objs[index];
     };
+    /**
+     * @return {?}
+     */
     ReflectiveInjectorDynamicStrategy.prototype.getMaxNumberOfObjects = function () { return this.objs.length; };
+    ReflectiveInjectorDynamicStrategy._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveInjectorDynamicStrategy.prototype.objs;
+        /** @type {?} */
+        ReflectiveInjectorDynamicStrategy.prototype.protoStrategy;
+        /** @type {?} */
+        ReflectiveInjectorDynamicStrategy.prototype.injector;
+    };
     return ReflectiveInjectorDynamicStrategy;
 }());
-exports.ReflectiveInjectorDynamicStrategy = ReflectiveInjectorDynamicStrategy;
 /**
  * A ReflectiveDependency injection container used for instantiating objects and resolving
  * dependencies.
@@ -316,108 +481,40 @@ exports.ReflectiveInjectorDynamicStrategy = ReflectiveInjectorDynamicStrategy;
  *
  * Notice, we don't use the `new` operator because we explicitly want to have the `Injector`
  * resolve all of the object's dependencies automatically.
+ *
+ * @stable
  */
-var ReflectiveInjector = (function () {
+export var ReflectiveInjector = (function () {
     function ReflectiveInjector() {
     }
     /**
-     * Turns an array of provider definitions into an array of resolved providers.
-     *
-     * A resolution is a process of flattening multiple nested arrays and converting individual
-     * providers into an array of {@link ResolvedReflectiveProvider}s.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/AiXTHi?p=preview))
-     *
-     * ```typescript
-     * @Injectable()
-     * class Engine {
-     * }
-     *
-     * @Injectable()
-     * class Car {
-     *   constructor(public engine:Engine) {}
-     * }
-     *
-     * var providers = ReflectiveInjector.resolve([Car, [[Engine]]]);
-     *
-     * expect(providers.length).toEqual(2);
-     *
-     * expect(providers[0] instanceof ResolvedReflectiveProvider).toBe(true);
-     * expect(providers[0].key.displayName).toBe("Car");
-     * expect(providers[0].dependencies.length).toEqual(1);
-     * expect(providers[0].factory).toBeDefined();
-     *
-     * expect(providers[1].key.displayName).toBe("Engine");
-     * });
-     * ```
-     *
-     * See {@link ReflectiveInjector#fromResolvedProviders} for more info.
+     *  Turns an array of provider definitions into an array of resolved providers. * A resolution is a process of flattening multiple nested arrays and converting individual providers into an array of {@link ResolvedReflectiveProvider}s. * ### Example ([live demo](http://plnkr.co/edit/AiXTHi?p=preview)) * ```typescript class Engine { } * class Car { constructor(public engine:Engine) {} } * var providers = ReflectiveInjector.resolve([Car, [[Engine]]]); * expect(providers.length).toEqual(2); * expect(providers[0] instanceof ResolvedReflectiveProvider).toBe(true); expect(providers[0].key.displayName).toBe("Car"); expect(providers[0].dependencies.length).toEqual(1); expect(providers[0].factory).toBeDefined(); * expect(providers[1].key.displayName).toBe("Engine"); }); ``` * See {@link ReflectiveInjector#fromResolvedProviders} for more info.
+     * @param {?} providers
+     * @return {?}
      */
     ReflectiveInjector.resolve = function (providers) {
-        return reflective_provider_1.resolveReflectiveProviders(providers);
+        return resolveReflectiveProviders(providers);
     };
     /**
-     * Resolves an array of providers and creates an injector from those providers.
-     *
-     * The passed-in providers can be an array of `Type`, {@link Provider},
-     * or a recursive array of more providers.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/ePOccA?p=preview))
-     *
-     * ```typescript
-     * @Injectable()
-     * class Engine {
-     * }
-     *
-     * @Injectable()
-     * class Car {
-     *   constructor(public engine:Engine) {}
-     * }
-     *
-     * var injector = ReflectiveInjector.resolveAndCreate([Car, Engine]);
-     * expect(injector.get(Car) instanceof Car).toBe(true);
-     * ```
-     *
-     * This function is slower than the corresponding `fromResolvedProviders`
-     * because it needs to resolve the passed-in providers first.
-     * See {@link Injector#resolve} and {@link Injector#fromResolvedProviders}.
+     *  Resolves an array of providers and creates an injector from those providers. * The passed-in providers can be an array of `Type`, {@link Provider}, or a recursive array of more providers. * ### Example ([live demo](http://plnkr.co/edit/ePOccA?p=preview)) * ```typescript class Engine { } * class Car { constructor(public engine:Engine) {} } * var injector = ReflectiveInjector.resolveAndCreate([Car, Engine]); expect(injector.get(Car) instanceof Car).toBe(true); ``` * This function is slower than the corresponding `fromResolvedProviders` because it needs to resolve the passed-in providers first. See {@link Injector#resolve} and {@link Injector#fromResolvedProviders}.
+     * @param {?} providers
+     * @param {?=} parent
+     * @return {?}
      */
     ReflectiveInjector.resolveAndCreate = function (providers, parent) {
         if (parent === void 0) { parent = null; }
-        var ResolvedReflectiveProviders = ReflectiveInjector.resolve(providers);
+        var /** @type {?} */ ResolvedReflectiveProviders = ReflectiveInjector.resolve(providers);
         return ReflectiveInjector.fromResolvedProviders(ResolvedReflectiveProviders, parent);
     };
     /**
-     * Creates an injector from previously resolved providers.
-     *
-     * This API is the recommended way to construct injectors in performance-sensitive parts.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/KrSMci?p=preview))
-     *
-     * ```typescript
-     * @Injectable()
-     * class Engine {
-     * }
-     *
-     * @Injectable()
-     * class Car {
-     *   constructor(public engine:Engine) {}
-     * }
-     *
-     * var providers = ReflectiveInjector.resolve([Car, Engine]);
-     * var injector = ReflectiveInjector.fromResolvedProviders(providers);
-     * expect(injector.get(Car) instanceof Car).toBe(true);
-     * ```
+     *  Creates an injector from previously resolved providers. * This API is the recommended way to construct injectors in performance-sensitive parts. * ### Example ([live demo](http://plnkr.co/edit/KrSMci?p=preview)) * ```typescript class Engine { } * class Car { constructor(public engine:Engine) {} } * var providers = ReflectiveInjector.resolve([Car, Engine]); var injector = ReflectiveInjector.fromResolvedProviders(providers); expect(injector.get(Car) instanceof Car).toBe(true); ```
+     * @param {?} providers
+     * @param {?=} parent
+     * @return {?}
      */
     ReflectiveInjector.fromResolvedProviders = function (providers, parent) {
         if (parent === void 0) { parent = null; }
         return new ReflectiveInjector_(ReflectiveProtoInjector.fromResolvedProviders(providers), parent);
-    };
-    /**
-     * @deprecated
-     */
-    ReflectiveInjector.fromResolvedBindings = function (providers) {
-        return ReflectiveInjector.fromResolvedProviders(providers);
     };
     Object.defineProperty(ReflectiveInjector.prototype, "parent", {
         /**
@@ -434,133 +531,53 @@ var ReflectiveInjector = (function () {
          * expect(child.parent).toBe(parent);
          * ```
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     /**
-     * @internal
+     *  Resolves an array of providers and creates a child injector from those providers. * <!-- TODO: Add a link to the section of the user guide talking about hierarchical injection. --> * The passed-in providers can be an array of `Type`, {@link Provider}, or a recursive array of more providers. * ### Example ([live demo](http://plnkr.co/edit/opB3T4?p=preview)) * ```typescript class ParentProvider {} class ChildProvider {} * var parent = ReflectiveInjector.resolveAndCreate([ParentProvider]); var child = parent.resolveAndCreateChild([ChildProvider]); * expect(child.get(ParentProvider) instanceof ParentProvider).toBe(true); expect(child.get(ChildProvider) instanceof ChildProvider).toBe(true); expect(child.get(ParentProvider)).toBe(parent.get(ParentProvider)); ``` * This function is slower than the corresponding `createChildFromResolved` because it needs to resolve the passed-in providers first. See {@link Injector#resolve} and {@link Injector#createChildFromResolved}.
+     * @param {?} providers
+     * @return {?}
      */
-    ReflectiveInjector.prototype.debugContext = function () { return null; };
+    ReflectiveInjector.prototype.resolveAndCreateChild = function (providers) { return unimplemented(); };
     /**
-     * Resolves an array of providers and creates a child injector from those providers.
-     *
-     * <!-- TODO: Add a link to the section of the user guide talking about hierarchical injection.
-     * -->
-     *
-     * The passed-in providers can be an array of `Type`, {@link Provider},
-     * or a recursive array of more providers.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/opB3T4?p=preview))
-     *
-     * ```typescript
-     * class ParentProvider {}
-     * class ChildProvider {}
-     *
-     * var parent = ReflectiveInjector.resolveAndCreate([ParentProvider]);
-     * var child = parent.resolveAndCreateChild([ChildProvider]);
-     *
-     * expect(child.get(ParentProvider) instanceof ParentProvider).toBe(true);
-     * expect(child.get(ChildProvider) instanceof ChildProvider).toBe(true);
-     * expect(child.get(ParentProvider)).toBe(parent.get(ParentProvider));
-     * ```
-     *
-     * This function is slower than the corresponding `createChildFromResolved`
-     * because it needs to resolve the passed-in providers first.
-     * See {@link Injector#resolve} and {@link Injector#createChildFromResolved}.
-     */
-    ReflectiveInjector.prototype.resolveAndCreateChild = function (providers) {
-        return exceptions_1.unimplemented();
-    };
-    /**
-     * Creates a child injector from previously resolved providers.
-     *
-     * <!-- TODO: Add a link to the section of the user guide talking about hierarchical injection.
-     * -->
-     *
-     * This API is the recommended way to construct injectors in performance-sensitive parts.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/VhyfjN?p=preview))
-     *
-     * ```typescript
-     * class ParentProvider {}
-     * class ChildProvider {}
-     *
-     * var parentProviders = ReflectiveInjector.resolve([ParentProvider]);
-     * var childProviders = ReflectiveInjector.resolve([ChildProvider]);
-     *
-     * var parent = ReflectiveInjector.fromResolvedProviders(parentProviders);
-     * var child = parent.createChildFromResolved(childProviders);
-     *
-     * expect(child.get(ParentProvider) instanceof ParentProvider).toBe(true);
-     * expect(child.get(ChildProvider) instanceof ChildProvider).toBe(true);
-     * expect(child.get(ParentProvider)).toBe(parent.get(ParentProvider));
-     * ```
+     *  Creates a child injector from previously resolved providers. * <!-- TODO: Add a link to the section of the user guide talking about hierarchical injection. --> * This API is the recommended way to construct injectors in performance-sensitive parts. * ### Example ([live demo](http://plnkr.co/edit/VhyfjN?p=preview)) * ```typescript class ParentProvider {} class ChildProvider {} * var parentProviders = ReflectiveInjector.resolve([ParentProvider]); var childProviders = ReflectiveInjector.resolve([ChildProvider]); * var parent = ReflectiveInjector.fromResolvedProviders(parentProviders); var child = parent.createChildFromResolved(childProviders); * expect(child.get(ParentProvider) instanceof ParentProvider).toBe(true); expect(child.get(ChildProvider) instanceof ChildProvider).toBe(true); expect(child.get(ParentProvider)).toBe(parent.get(ParentProvider)); ```
+     * @param {?} providers
+     * @return {?}
      */
     ReflectiveInjector.prototype.createChildFromResolved = function (providers) {
-        return exceptions_1.unimplemented();
+        return unimplemented();
     };
     /**
-     * Resolves a provider and instantiates an object in the context of the injector.
-     *
-     * The created object does not get cached by the injector.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/yvVXoB?p=preview))
-     *
-     * ```typescript
-     * @Injectable()
-     * class Engine {
-     * }
-     *
-     * @Injectable()
-     * class Car {
-     *   constructor(public engine:Engine) {}
-     * }
-     *
-     * var injector = ReflectiveInjector.resolveAndCreate([Engine]);
-     *
-     * var car = injector.resolveAndInstantiate(Car);
-     * expect(car.engine).toBe(injector.get(Engine));
-     * expect(car).not.toBe(injector.resolveAndInstantiate(Car));
-     * ```
+     *  Resolves a provider and instantiates an object in the context of the injector. * The created object does not get cached by the injector. * ### Example ([live demo](http://plnkr.co/edit/yvVXoB?p=preview)) * ```typescript class Engine { } * class Car { constructor(public engine:Engine) {} } * var injector = ReflectiveInjector.resolveAndCreate([Engine]); * var car = injector.resolveAndInstantiate(Car); expect(car.engine).toBe(injector.get(Engine)); expect(car).not.toBe(injector.resolveAndInstantiate(Car)); ```
+     * @param {?} provider
+     * @return {?}
      */
-    ReflectiveInjector.prototype.resolveAndInstantiate = function (provider) { return exceptions_1.unimplemented(); };
+    ReflectiveInjector.prototype.resolveAndInstantiate = function (provider) { return unimplemented(); };
     /**
-     * Instantiates an object using a resolved provider in the context of the injector.
-     *
-     * The created object does not get cached by the injector.
-     *
-     * ### Example ([live demo](http://plnkr.co/edit/ptCImQ?p=preview))
-     *
-     * ```typescript
-     * @Injectable()
-     * class Engine {
-     * }
-     *
-     * @Injectable()
-     * class Car {
-     *   constructor(public engine:Engine) {}
-     * }
-     *
-     * var injector = ReflectiveInjector.resolveAndCreate([Engine]);
-     * var carProvider = ReflectiveInjector.resolve([Car])[0];
-     * var car = injector.instantiateResolved(carProvider);
-     * expect(car.engine).toBe(injector.get(Engine));
-     * expect(car).not.toBe(injector.instantiateResolved(carProvider));
-     * ```
+     *  Instantiates an object using a resolved provider in the context of the injector. * The created object does not get cached by the injector. * ### Example ([live demo](http://plnkr.co/edit/ptCImQ?p=preview)) * ```typescript class Engine { } * class Car { constructor(public engine:Engine) {} } * var injector = ReflectiveInjector.resolveAndCreate([Engine]); var carProvider = ReflectiveInjector.resolve([Car])[0]; var car = injector.instantiateResolved(carProvider); expect(car.engine).toBe(injector.get(Engine)); expect(car).not.toBe(injector.instantiateResolved(carProvider)); ```
+     * @param {?} provider
+     * @return {?}
      */
-    ReflectiveInjector.prototype.instantiateResolved = function (provider) { return exceptions_1.unimplemented(); };
+    ReflectiveInjector.prototype.instantiateResolved = function (provider) { return unimplemented(); };
+    /**
+     * @abstract
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
+     */
+    ReflectiveInjector.prototype.get = function (token, notFoundValue) { };
     return ReflectiveInjector;
 }());
-exports.ReflectiveInjector = ReflectiveInjector;
-var ReflectiveInjector_ = (function () {
+export var ReflectiveInjector_ = (function () {
     /**
-     * Private
+     *  Private
+     * @param {?} _proto
+     * @param {?=} _parent
      */
-    function ReflectiveInjector_(_proto /* ProtoInjector */, _parent, _debugContext) {
+    function ReflectiveInjector_(_proto /* ProtoInjector */, _parent) {
         if (_parent === void 0) { _parent = null; }
-        if (_debugContext === void 0) { _debugContext = null; }
-        this._debugContext = _debugContext;
         /** @internal */
         this._constructionCounter = 0;
         this._proto = _proto;
@@ -568,13 +585,18 @@ var ReflectiveInjector_ = (function () {
         this._strategy = _proto._strategy.createInjectorStrategy(this);
     }
     /**
-     * @internal
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
      */
-    ReflectiveInjector_.prototype.debugContext = function () { return this._debugContext(); };
     ReflectiveInjector_.prototype.get = function (token, notFoundValue) {
-        if (notFoundValue === void 0) { notFoundValue = injector_1.THROW_IF_NOT_FOUND; }
-        return this._getByKey(reflective_key_1.ReflectiveKey.get(token), null, null, notFoundValue);
+        if (notFoundValue === void 0) { notFoundValue = THROW_IF_NOT_FOUND; }
+        return this._getByKey(ReflectiveKey.get(token), null, null, notFoundValue);
     };
+    /**
+     * @param {?} index
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.getAt = function (index) { return this._strategy.getObjAtIndex(index); };
     Object.defineProperty(ReflectiveInjector_.prototype, "parent", {
         get: function () { return this._parent; },
@@ -591,33 +613,56 @@ var ReflectiveInjector_ = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @param {?} providers
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.resolveAndCreateChild = function (providers) {
-        var ResolvedReflectiveProviders = ReflectiveInjector.resolve(providers);
+        var /** @type {?} */ ResolvedReflectiveProviders = ReflectiveInjector.resolve(providers);
         return this.createChildFromResolved(ResolvedReflectiveProviders);
     };
+    /**
+     * @param {?} providers
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.createChildFromResolved = function (providers) {
-        var proto = new ReflectiveProtoInjector(providers);
-        var inj = new ReflectiveInjector_(proto);
+        var /** @type {?} */ proto = new ReflectiveProtoInjector(providers);
+        var /** @type {?} */ inj = new ReflectiveInjector_(proto);
         inj._parent = this;
         return inj;
     };
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.resolveAndInstantiate = function (provider) {
         return this.instantiateResolved(ReflectiveInjector.resolve([provider])[0]);
     };
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.instantiateResolved = function (provider) {
         return this._instantiateProvider(provider);
     };
-    /** @internal */
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._new = function (provider) {
         if (this._constructionCounter++ > this._strategy.getMaxNumberOfObjects()) {
-            throw new reflective_exceptions_1.CyclicDependencyError(this, provider.key);
+            throw new CyclicDependencyError(this, provider.key);
         }
         return this._instantiateProvider(provider);
     };
+    /**
+     * @param {?} provider
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._instantiateProvider = function (provider) {
         if (provider.multiProvider) {
-            var res = collection_1.ListWrapper.createFixedSize(provider.resolvedFactories.length);
-            for (var i = 0; i < provider.resolvedFactories.length; ++i) {
+            var /** @type {?} */ res = new Array(provider.resolvedFactories.length);
+            for (var /** @type {?} */ i = 0; i < provider.resolvedFactories.length; ++i) {
                 res[i] = this._instantiate(provider, provider.resolvedFactories[i]);
             }
             return res;
@@ -626,30 +671,35 @@ var ReflectiveInjector_ = (function () {
             return this._instantiate(provider, provider.resolvedFactories[0]);
         }
     };
+    /**
+     * @param {?} provider
+     * @param {?} ResolvedReflectiveFactory
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._instantiate = function (provider, ResolvedReflectiveFactory) {
-        var factory = ResolvedReflectiveFactory.factory;
-        var deps = ResolvedReflectiveFactory.dependencies;
-        var length = deps.length;
-        var d0;
-        var d1;
-        var d2;
-        var d3;
-        var d4;
-        var d5;
-        var d6;
-        var d7;
-        var d8;
-        var d9;
-        var d10;
-        var d11;
-        var d12;
-        var d13;
-        var d14;
-        var d15;
-        var d16;
-        var d17;
-        var d18;
-        var d19;
+        var /** @type {?} */ factory = ResolvedReflectiveFactory.factory;
+        var /** @type {?} */ deps = ResolvedReflectiveFactory.dependencies;
+        var /** @type {?} */ length = deps.length;
+        var /** @type {?} */ d0;
+        var /** @type {?} */ d1;
+        var /** @type {?} */ d2;
+        var /** @type {?} */ d3;
+        var /** @type {?} */ d4;
+        var /** @type {?} */ d5;
+        var /** @type {?} */ d6;
+        var /** @type {?} */ d7;
+        var /** @type {?} */ d8;
+        var /** @type {?} */ d9;
+        var /** @type {?} */ d10;
+        var /** @type {?} */ d11;
+        var /** @type {?} */ d12;
+        var /** @type {?} */ d13;
+        var /** @type {?} */ d14;
+        var /** @type {?} */ d15;
+        var /** @type {?} */ d16;
+        var /** @type {?} */ d17;
+        var /** @type {?} */ d18;
+        var /** @type {?} */ d19;
         try {
             d0 = length > 0 ? this._getByReflectiveDependency(provider, deps[0]) : null;
             d1 = length > 1 ? this._getByReflectiveDependency(provider, deps[1]) : null;
@@ -673,12 +723,12 @@ var ReflectiveInjector_ = (function () {
             d19 = length > 19 ? this._getByReflectiveDependency(provider, deps[19]) : null;
         }
         catch (e) {
-            if (e instanceof reflective_exceptions_1.AbstractProviderError || e instanceof reflective_exceptions_1.InstantiationError) {
+            if (e instanceof AbstractProviderError || e instanceof InstantiationError) {
                 e.addKey(this, provider.key);
             }
             throw e;
         }
-        var obj;
+        var /** @type {?} */ obj;
         try {
             switch (length) {
                 case 0:
@@ -745,54 +795,79 @@ var ReflectiveInjector_ = (function () {
                     obj = factory(d0, d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15, d16, d17, d18, d19);
                     break;
                 default:
-                    throw new exceptions_1.BaseException("Cannot instantiate '" + provider.key.displayName + "' because it has more than 20 dependencies");
+                    throw new Error("Cannot instantiate '" + provider.key.displayName + "' because it has more than 20 dependencies");
             }
         }
         catch (e) {
-            throw new reflective_exceptions_1.InstantiationError(this, e, e.stack, provider.key);
+            throw new InstantiationError(this, e, e.stack, provider.key);
         }
         return obj;
     };
+    /**
+     * @param {?} provider
+     * @param {?} dep
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._getByReflectiveDependency = function (provider, dep) {
-        return this._getByKey(dep.key, dep.lowerBoundVisibility, dep.upperBoundVisibility, dep.optional ? null : injector_1.THROW_IF_NOT_FOUND);
+        return this._getByKey(dep.key, dep.lowerBoundVisibility, dep.upperBoundVisibility, dep.optional ? null : THROW_IF_NOT_FOUND);
     };
+    /**
+     * @param {?} key
+     * @param {?} lowerBoundVisibility
+     * @param {?} upperBoundVisibility
+     * @param {?} notFoundValue
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._getByKey = function (key, lowerBoundVisibility, upperBoundVisibility, notFoundValue) {
         if (key === INJECTOR_KEY) {
             return this;
         }
-        if (upperBoundVisibility instanceof metadata_1.SelfMetadata) {
+        if (upperBoundVisibility instanceof Self) {
             return this._getByKeySelf(key, notFoundValue);
         }
         else {
             return this._getByKeyDefault(key, notFoundValue, lowerBoundVisibility);
         }
     };
-    /** @internal */
+    /**
+     * @param {?} key
+     * @param {?} notFoundValue
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._throwOrNull = function (key, notFoundValue) {
-        if (notFoundValue !== injector_1.THROW_IF_NOT_FOUND) {
+        if (notFoundValue !== THROW_IF_NOT_FOUND) {
             return notFoundValue;
         }
         else {
-            throw new reflective_exceptions_1.NoProviderError(this, key);
+            throw new NoProviderError(this, key);
         }
     };
-    /** @internal */
+    /**
+     * @param {?} key
+     * @param {?} notFoundValue
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._getByKeySelf = function (key, notFoundValue) {
-        var obj = this._strategy.getObjByKeyId(key.id);
+        var /** @type {?} */ obj = this._strategy.getObjByKeyId(key.id);
         return (obj !== UNDEFINED) ? obj : this._throwOrNull(key, notFoundValue);
     };
-    /** @internal */
+    /**
+     * @param {?} key
+     * @param {?} notFoundValue
+     * @param {?} lowerBoundVisibility
+     * @return {?}
+     */
     ReflectiveInjector_.prototype._getByKeyDefault = function (key, notFoundValue, lowerBoundVisibility) {
-        var inj;
-        if (lowerBoundVisibility instanceof metadata_1.SkipSelfMetadata) {
+        var /** @type {?} */ inj;
+        if (lowerBoundVisibility instanceof SkipSelf) {
             inj = this._parent;
         }
         else {
             inj = this;
         }
         while (inj instanceof ReflectiveInjector_) {
-            var inj_ = inj;
-            var obj = inj_._strategy.getObjByKeyId(key.id);
+            var /** @type {?} */ inj_ = (inj);
+            var /** @type {?} */ obj = inj_._strategy.getObjByKeyId(key.id);
             if (obj !== UNDEFINED)
                 return obj;
             inj = inj_._parent;
@@ -806,20 +881,39 @@ var ReflectiveInjector_ = (function () {
     };
     Object.defineProperty(ReflectiveInjector_.prototype, "displayName", {
         get: function () {
-            return "ReflectiveInjector(providers: [" + _mapProviders(this, function (b) { return (" \"" + b.key.displayName + "\" "); }).join(", ") + "])";
+            var /** @type {?} */ providers = _mapProviders(this, function (b) { return ' "' + b.key.displayName + '" '; })
+                .join(', ');
+            return "ReflectiveInjector(providers: [" + providers + "])";
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
     ReflectiveInjector_.prototype.toString = function () { return this.displayName; };
+    ReflectiveInjector_._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ReflectiveInjector_.prototype._strategy;
+        /** @type {?} */
+        ReflectiveInjector_.prototype._constructionCounter;
+        /** @type {?} */
+        ReflectiveInjector_.prototype._proto;
+        /** @type {?} */
+        ReflectiveInjector_.prototype._parent;
+    };
     return ReflectiveInjector_;
 }());
-exports.ReflectiveInjector_ = ReflectiveInjector_;
-var INJECTOR_KEY = reflective_key_1.ReflectiveKey.get(injector_1.Injector);
+var /** @type {?} */ INJECTOR_KEY = ReflectiveKey.get(Injector);
+/**
+ * @param {?} injector
+ * @param {?} fn
+ * @return {?}
+ */
 function _mapProviders(injector, fn) {
-    var res = [];
-    for (var i = 0; i < injector._proto.numberOfProviders; ++i) {
-        res.push(fn(injector._proto.getProviderAtIndex(i)));
+    var /** @type {?} */ res = new Array(injector._proto.numberOfProviders);
+    for (var /** @type {?} */ i = 0; i < injector._proto.numberOfProviders; ++i) {
+        res[i] = fn(injector._proto.getProviderAtIndex(i));
     }
     return res;
 }

@@ -1,5 +1,5 @@
 import { LocationStrategy } from './location_strategy';
-import { UrlChangeListener, PlatformLocation } from './platform_location';
+import { LocationChangeListener, PlatformLocation } from './platform_location';
 /**
  * `HashLocationStrategy` is a {@link LocationStrategy} used to configure the
  * {@link Location} service to represent its state in the
@@ -12,41 +12,27 @@ import { UrlChangeListener, PlatformLocation } from './platform_location';
  * ### Example
  *
  * ```
- * import {Component, provide} from '@angular/core';
+ * import {Component, NgModule} from '@angular/core';
  * import {
- *   Location,
  *   LocationStrategy,
  *   HashLocationStrategy
  * } from '@angular/common';
- * import {
- *   ROUTER_DIRECTIVES,
- *   ROUTER_PROVIDERS,
- *   RouteConfig
- * } from '@angular/router';
  *
- * @Component({directives: [ROUTER_DIRECTIVES]})
- * @RouteConfig([
- *  {...},
- * ])
- * class AppCmp {
- *   constructor(location: Location) {
- *     location.go('/foo');
- *   }
- * }
- *
- * bootstrap(AppCmp, [
- *   ROUTER_PROVIDERS,
- *   provide(LocationStrategy, {useClass: HashLocationStrategy})
- * ]);
+ * @NgModule({
+ *   providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}]
+ * })
+ * class AppModule {}
  * ```
+ *
+ * @stable
  */
 export declare class HashLocationStrategy extends LocationStrategy {
     private _platformLocation;
     private _baseHref;
     constructor(_platformLocation: PlatformLocation, _baseHref?: string);
-    onPopState(fn: UrlChangeListener): void;
+    onPopState(fn: LocationChangeListener): void;
     getBaseHref(): string;
-    path(): string;
+    path(includeHash?: boolean): string;
     prepareExternalUrl(internal: string): string;
     pushState(state: any, title: string, path: string, queryParams: string): void;
     replaceState(state: any, title: string, path: string, queryParams: string): void;

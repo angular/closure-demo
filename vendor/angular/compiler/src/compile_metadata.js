@@ -1,132 +1,273 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var core_1 = require('@angular/core');
-var core_private_1 = require('../core_private');
-var lang_1 = require('../src/facade/lang');
-var exceptions_1 = require('../src/facade/exceptions');
-var collection_1 = require('../src/facade/collection');
-var selector_1 = require('./selector');
-var util_1 = require('./util');
-var url_resolver_1 = require('./url_resolver');
-// group 1: "property" from "[property]"
+import { ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { ListWrapper } from './facade/collection';
+import { isPresent } from './facade/lang';
+import { CssSelector } from './selector';
+import { sanitizeIdentifier, splitAtColon } from './util';
+/**
+ * @return {?}
+ */
+function unimplemented() {
+    throw new Error('unimplemented');
+}
+// group 0: "[prop] or (event) or @trigger"
+// group 1: "prop" from "[prop]"
 // group 2: "event" from "(event)"
-var HOST_REG_EXP = /^(?:(?:\[([^\]]+)\])|(?:\(([^\)]+)\)))$/g;
-var CompileMetadataWithIdentifier = (function () {
+// group 3: "@trigger" from "@trigger"
+var /** @type {?} */ HOST_REG_EXP = /^(?:(?:\[([^\]]+)\])|(?:\(([^\)]+)\)))|(\@[-\w]+)$/;
+export var CompileMetadataWithIdentifier = (function () {
     function CompileMetadataWithIdentifier() {
     }
     Object.defineProperty(CompileMetadataWithIdentifier.prototype, "identifier", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return (unimplemented()); },
         enumerable: true,
         configurable: true
     });
     return CompileMetadataWithIdentifier;
 }());
-exports.CompileMetadataWithIdentifier = CompileMetadataWithIdentifier;
-var CompileMetadataWithType = (function (_super) {
-    __extends(CompileMetadataWithType, _super);
-    function CompileMetadataWithType() {
-        _super.apply(this, arguments);
+export var CompileAnimationEntryMetadata = (function () {
+    /**
+     * @param {?=} name
+     * @param {?=} definitions
+     */
+    function CompileAnimationEntryMetadata(name, definitions) {
+        if (name === void 0) { name = null; }
+        if (definitions === void 0) { definitions = null; }
+        this.name = name;
+        this.definitions = definitions;
     }
-    Object.defineProperty(CompileMetadataWithType.prototype, "type", {
-        get: function () { return exceptions_1.unimplemented(); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileMetadataWithType.prototype, "identifier", {
-        get: function () { return exceptions_1.unimplemented(); },
-        enumerable: true,
-        configurable: true
-    });
-    return CompileMetadataWithType;
-}(CompileMetadataWithIdentifier));
-exports.CompileMetadataWithType = CompileMetadataWithType;
-function metadataFromJson(data) {
-    return _COMPILE_METADATA_FROM_JSON[data['class']](data);
-}
-exports.metadataFromJson = metadataFromJson;
-var CompileIdentifierMetadata = (function () {
+    CompileAnimationEntryMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationEntryMetadata.prototype.name;
+        /** @type {?} */
+        CompileAnimationEntryMetadata.prototype.definitions;
+    };
+    return CompileAnimationEntryMetadata;
+}());
+export var CompileAnimationStateMetadata = (function () {
+    function CompileAnimationStateMetadata() {
+    }
+    return CompileAnimationStateMetadata;
+}());
+export var CompileAnimationStateDeclarationMetadata = (function (_super) {
+    __extends(CompileAnimationStateDeclarationMetadata, _super);
+    /**
+     * @param {?} stateNameExpr
+     * @param {?} styles
+     */
+    function CompileAnimationStateDeclarationMetadata(stateNameExpr, styles) {
+        _super.call(this);
+        this.stateNameExpr = stateNameExpr;
+        this.styles = styles;
+    }
+    CompileAnimationStateDeclarationMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationStateDeclarationMetadata.prototype.stateNameExpr;
+        /** @type {?} */
+        CompileAnimationStateDeclarationMetadata.prototype.styles;
+    };
+    return CompileAnimationStateDeclarationMetadata;
+}(CompileAnimationStateMetadata));
+export var CompileAnimationStateTransitionMetadata = (function (_super) {
+    __extends(CompileAnimationStateTransitionMetadata, _super);
+    /**
+     * @param {?} stateChangeExpr
+     * @param {?} steps
+     */
+    function CompileAnimationStateTransitionMetadata(stateChangeExpr, steps) {
+        _super.call(this);
+        this.stateChangeExpr = stateChangeExpr;
+        this.steps = steps;
+    }
+    CompileAnimationStateTransitionMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationStateTransitionMetadata.prototype.stateChangeExpr;
+        /** @type {?} */
+        CompileAnimationStateTransitionMetadata.prototype.steps;
+    };
+    return CompileAnimationStateTransitionMetadata;
+}(CompileAnimationStateMetadata));
+export var CompileAnimationMetadata = (function () {
+    function CompileAnimationMetadata() {
+    }
+    return CompileAnimationMetadata;
+}());
+export var CompileAnimationKeyframesSequenceMetadata = (function (_super) {
+    __extends(CompileAnimationKeyframesSequenceMetadata, _super);
+    /**
+     * @param {?=} steps
+     */
+    function CompileAnimationKeyframesSequenceMetadata(steps) {
+        if (steps === void 0) { steps = []; }
+        _super.call(this);
+        this.steps = steps;
+    }
+    CompileAnimationKeyframesSequenceMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationKeyframesSequenceMetadata.prototype.steps;
+    };
+    return CompileAnimationKeyframesSequenceMetadata;
+}(CompileAnimationMetadata));
+export var CompileAnimationStyleMetadata = (function (_super) {
+    __extends(CompileAnimationStyleMetadata, _super);
+    /**
+     * @param {?} offset
+     * @param {?=} styles
+     */
+    function CompileAnimationStyleMetadata(offset, styles) {
+        if (styles === void 0) { styles = null; }
+        _super.call(this);
+        this.offset = offset;
+        this.styles = styles;
+    }
+    CompileAnimationStyleMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationStyleMetadata.prototype.offset;
+        /** @type {?} */
+        CompileAnimationStyleMetadata.prototype.styles;
+    };
+    return CompileAnimationStyleMetadata;
+}(CompileAnimationMetadata));
+export var CompileAnimationAnimateMetadata = (function (_super) {
+    __extends(CompileAnimationAnimateMetadata, _super);
+    /**
+     * @param {?=} timings
+     * @param {?=} styles
+     */
+    function CompileAnimationAnimateMetadata(timings, styles) {
+        if (timings === void 0) { timings = 0; }
+        if (styles === void 0) { styles = null; }
+        _super.call(this);
+        this.timings = timings;
+        this.styles = styles;
+    }
+    CompileAnimationAnimateMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationAnimateMetadata.prototype.timings;
+        /** @type {?} */
+        CompileAnimationAnimateMetadata.prototype.styles;
+    };
+    return CompileAnimationAnimateMetadata;
+}(CompileAnimationMetadata));
+export var CompileAnimationWithStepsMetadata = (function (_super) {
+    __extends(CompileAnimationWithStepsMetadata, _super);
+    /**
+     * @param {?=} steps
+     */
+    function CompileAnimationWithStepsMetadata(steps) {
+        if (steps === void 0) { steps = null; }
+        _super.call(this);
+        this.steps = steps;
+    }
+    CompileAnimationWithStepsMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileAnimationWithStepsMetadata.prototype.steps;
+    };
+    return CompileAnimationWithStepsMetadata;
+}(CompileAnimationMetadata));
+export var CompileAnimationSequenceMetadata = (function (_super) {
+    __extends(CompileAnimationSequenceMetadata, _super);
+    /**
+     * @param {?=} steps
+     */
+    function CompileAnimationSequenceMetadata(steps) {
+        if (steps === void 0) { steps = null; }
+        _super.call(this, steps);
+    }
+    return CompileAnimationSequenceMetadata;
+}(CompileAnimationWithStepsMetadata));
+export var CompileAnimationGroupMetadata = (function (_super) {
+    __extends(CompileAnimationGroupMetadata, _super);
+    /**
+     * @param {?=} steps
+     */
+    function CompileAnimationGroupMetadata(steps) {
+        if (steps === void 0) { steps = null; }
+        _super.call(this, steps);
+    }
+    return CompileAnimationGroupMetadata;
+}(CompileAnimationWithStepsMetadata));
+export var CompileIdentifierMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompileIdentifierMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, runtime = _b.runtime, name = _b.name, moduleUrl = _b.moduleUrl, prefix = _b.prefix, value = _b.value;
-        this.runtime = runtime;
+        var _b = _a === void 0 ? {} : _a, reference = _b.reference, name = _b.name, moduleUrl = _b.moduleUrl, prefix = _b.prefix, value = _b.value;
+        this.reference = reference;
         this.name = name;
         this.prefix = prefix;
         this.moduleUrl = moduleUrl;
         this.value = value;
     }
-    CompileIdentifierMetadata.fromJson = function (data) {
-        var value = lang_1.isArray(data['value']) ? _arrayFromJson(data['value'], metadataFromJson) :
-            _objFromJson(data['value'], metadataFromJson);
-        return new CompileIdentifierMetadata({ name: data['name'], prefix: data['prefix'], moduleUrl: data['moduleUrl'], value: value });
-    };
-    CompileIdentifierMetadata.prototype.toJson = function () {
-        var value = lang_1.isArray(this.value) ? _arrayToJson(this.value) : _objToJson(this.value);
-        return {
-            // Note: Runtime type can't be serialized...
-            'class': 'Identifier',
-            'name': this.name,
-            'moduleUrl': this.moduleUrl,
-            'prefix': this.prefix,
-            'value': value
-        };
-    };
     Object.defineProperty(CompileIdentifierMetadata.prototype, "identifier", {
         get: function () { return this; },
         enumerable: true,
         configurable: true
     });
+    CompileIdentifierMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileIdentifierMetadata.prototype.reference;
+        /** @type {?} */
+        CompileIdentifierMetadata.prototype.name;
+        /** @type {?} */
+        CompileIdentifierMetadata.prototype.prefix;
+        /** @type {?} */
+        CompileIdentifierMetadata.prototype.moduleUrl;
+        /** @type {?} */
+        CompileIdentifierMetadata.prototype.value;
+    };
     return CompileIdentifierMetadata;
 }());
-exports.CompileIdentifierMetadata = CompileIdentifierMetadata;
-var CompileDiDependencyMetadata = (function () {
+export var CompileDiDependencyMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompileDiDependencyMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, isAttribute = _b.isAttribute, isSelf = _b.isSelf, isHost = _b.isHost, isSkipSelf = _b.isSkipSelf, isOptional = _b.isOptional, isValue = _b.isValue, query = _b.query, viewQuery = _b.viewQuery, token = _b.token, value = _b.value;
-        this.isAttribute = lang_1.normalizeBool(isAttribute);
-        this.isSelf = lang_1.normalizeBool(isSelf);
-        this.isHost = lang_1.normalizeBool(isHost);
-        this.isSkipSelf = lang_1.normalizeBool(isSkipSelf);
-        this.isOptional = lang_1.normalizeBool(isOptional);
-        this.isValue = lang_1.normalizeBool(isValue);
-        this.query = query;
-        this.viewQuery = viewQuery;
+        var _b = _a === void 0 ? {} : _a, isAttribute = _b.isAttribute, isSelf = _b.isSelf, isHost = _b.isHost, isSkipSelf = _b.isSkipSelf, isOptional = _b.isOptional, isValue = _b.isValue, token = _b.token, value = _b.value;
+        this.isAttribute = !!isAttribute;
+        this.isSelf = !!isSelf;
+        this.isHost = !!isHost;
+        this.isSkipSelf = !!isSkipSelf;
+        this.isOptional = !!isOptional;
+        this.isValue = !!isValue;
         this.token = token;
         this.value = value;
     }
-    CompileDiDependencyMetadata.fromJson = function (data) {
-        return new CompileDiDependencyMetadata({
-            token: _objFromJson(data['token'], CompileTokenMetadata.fromJson),
-            query: _objFromJson(data['query'], CompileQueryMetadata.fromJson),
-            viewQuery: _objFromJson(data['viewQuery'], CompileQueryMetadata.fromJson),
-            value: data['value'],
-            isAttribute: data['isAttribute'],
-            isSelf: data['isSelf'],
-            isHost: data['isHost'],
-            isSkipSelf: data['isSkipSelf'],
-            isOptional: data['isOptional'],
-            isValue: data['isValue']
-        });
-    };
-    CompileDiDependencyMetadata.prototype.toJson = function () {
-        return {
-            'token': _objToJson(this.token),
-            'query': _objToJson(this.query),
-            'viewQuery': _objToJson(this.viewQuery),
-            'value': this.value,
-            'isAttribute': this.isAttribute,
-            'isSelf': this.isSelf,
-            'isHost': this.isHost,
-            'isSkipSelf': this.isSkipSelf,
-            'isOptional': this.isOptional,
-            'isValue': this.isValue
-        };
+    CompileDiDependencyMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isAttribute;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isSelf;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isHost;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isSkipSelf;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isOptional;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.isValue;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.token;
+        /** @type {?} */
+        CompileDiDependencyMetadata.prototype.value;
     };
     return CompileDiDependencyMetadata;
 }());
-exports.CompileDiDependencyMetadata = CompileDiDependencyMetadata;
-var CompileProviderMetadata = (function () {
+export var CompileProviderMetadata = (function () {
+    /**
+     * @param {?} __0
+     */
     function CompileProviderMetadata(_a) {
         var token = _a.token, useClass = _a.useClass, useValue = _a.useValue, useExisting = _a.useExisting, useFactory = _a.useFactory, deps = _a.deps, multi = _a.multi;
         this.token = token;
@@ -134,100 +275,57 @@ var CompileProviderMetadata = (function () {
         this.useValue = useValue;
         this.useExisting = useExisting;
         this.useFactory = useFactory;
-        this.deps = lang_1.normalizeBlank(deps);
-        this.multi = lang_1.normalizeBool(multi);
+        this.deps = deps || null;
+        this.multi = !!multi;
     }
-    CompileProviderMetadata.fromJson = function (data) {
-        return new CompileProviderMetadata({
-            token: _objFromJson(data['token'], CompileTokenMetadata.fromJson),
-            useClass: _objFromJson(data['useClass'], CompileTypeMetadata.fromJson),
-            useExisting: _objFromJson(data['useExisting'], CompileTokenMetadata.fromJson),
-            useValue: _objFromJson(data['useValue'], CompileIdentifierMetadata.fromJson),
-            useFactory: _objFromJson(data['useFactory'], CompileFactoryMetadata.fromJson),
-            multi: data['multi'],
-            deps: _arrayFromJson(data['deps'], CompileDiDependencyMetadata.fromJson)
-        });
-    };
-    CompileProviderMetadata.prototype.toJson = function () {
-        return {
-            // Note: Runtime type can't be serialized...
-            'class': 'Provider',
-            'token': _objToJson(this.token),
-            'useClass': _objToJson(this.useClass),
-            'useExisting': _objToJson(this.useExisting),
-            'useValue': _objToJson(this.useValue),
-            'useFactory': _objToJson(this.useFactory),
-            'multi': this.multi,
-            'deps': _arrayToJson(this.deps)
-        };
+    CompileProviderMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileProviderMetadata.prototype.token;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.useClass;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.useValue;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.useExisting;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.useFactory;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.deps;
+        /** @type {?} */
+        CompileProviderMetadata.prototype.multi;
     };
     return CompileProviderMetadata;
 }());
-exports.CompileProviderMetadata = CompileProviderMetadata;
-var CompileFactoryMetadata = (function () {
+export var CompileFactoryMetadata = (function (_super) {
+    __extends(CompileFactoryMetadata, _super);
+    /**
+     * @param {?} __0
+     */
     function CompileFactoryMetadata(_a) {
-        var runtime = _a.runtime, name = _a.name, moduleUrl = _a.moduleUrl, prefix = _a.prefix, diDeps = _a.diDeps, value = _a.value;
-        this.runtime = runtime;
-        this.name = name;
-        this.prefix = prefix;
-        this.moduleUrl = moduleUrl;
+        var reference = _a.reference, name = _a.name, moduleUrl = _a.moduleUrl, prefix = _a.prefix, diDeps = _a.diDeps, value = _a.value;
+        _super.call(this, { reference: reference, name: name, prefix: prefix, moduleUrl: moduleUrl, value: value });
         this.diDeps = _normalizeArray(diDeps);
-        this.value = value;
     }
-    Object.defineProperty(CompileFactoryMetadata.prototype, "identifier", {
-        get: function () { return this; },
-        enumerable: true,
-        configurable: true
-    });
-    CompileFactoryMetadata.fromJson = function (data) {
-        return new CompileFactoryMetadata({
-            name: data['name'],
-            prefix: data['prefix'],
-            moduleUrl: data['moduleUrl'],
-            value: data['value'],
-            diDeps: _arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
-        });
-    };
-    CompileFactoryMetadata.prototype.toJson = function () {
-        return {
-            'class': 'Factory',
-            'name': this.name,
-            'prefix': this.prefix,
-            'moduleUrl': this.moduleUrl,
-            'value': this.value,
-            'diDeps': _arrayToJson(this.diDeps)
-        };
+    CompileFactoryMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileFactoryMetadata.prototype.diDeps;
     };
     return CompileFactoryMetadata;
-}());
-exports.CompileFactoryMetadata = CompileFactoryMetadata;
-var UNDEFINED = new Object();
-var CompileTokenMetadata = (function () {
+}(CompileIdentifierMetadata));
+export var CompileTokenMetadata = (function () {
+    /**
+     * @param {?} __0
+     */
     function CompileTokenMetadata(_a) {
         var value = _a.value, identifier = _a.identifier, identifierIsInstance = _a.identifierIsInstance;
-        this._assetCacheKey = UNDEFINED;
         this.value = value;
         this.identifier = identifier;
-        this.identifierIsInstance = lang_1.normalizeBool(identifierIsInstance);
+        this.identifierIsInstance = !!identifierIsInstance;
     }
-    CompileTokenMetadata.fromJson = function (data) {
-        return new CompileTokenMetadata({
-            value: data['value'],
-            identifier: _objFromJson(data['identifier'], CompileIdentifierMetadata.fromJson),
-            identifierIsInstance: data['identifierIsInstance']
-        });
-    };
-    CompileTokenMetadata.prototype.toJson = function () {
-        return {
-            'value': this.value,
-            'identifier': _objToJson(this.identifier),
-            'identifierIsInstance': this.identifierIsInstance
-        };
-    };
-    Object.defineProperty(CompileTokenMetadata.prototype, "runtimeCacheKey", {
+    Object.defineProperty(CompileTokenMetadata.prototype, "reference", {
         get: function () {
-            if (lang_1.isPresent(this.identifier)) {
-                return this.identifier.runtime;
+            if (isPresent(this.identifier)) {
+                return this.identifier.reference;
             }
             else {
                 return this.value;
@@ -236,211 +334,161 @@ var CompileTokenMetadata = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CompileTokenMetadata.prototype, "assetCacheKey", {
-        get: function () {
-            if (this._assetCacheKey === UNDEFINED) {
-                if (lang_1.isPresent(this.identifier)) {
-                    if (lang_1.isPresent(this.identifier.moduleUrl) &&
-                        lang_1.isPresent(url_resolver_1.getUrlScheme(this.identifier.moduleUrl))) {
-                        var uri = core_1.reflector.importUri({
-                            'filePath': this.identifier.moduleUrl,
-                            'name': this.identifier.name
-                        });
-                        this._assetCacheKey = this.identifier.name + "|" + uri + "|" + this.identifierIsInstance;
-                    }
-                    else {
-                        this._assetCacheKey = null;
-                    }
-                }
-                else {
-                    this._assetCacheKey = this.value;
-                }
-            }
-            return this._assetCacheKey;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    CompileTokenMetadata.prototype.equalsTo = function (token2) {
-        var rk = this.runtimeCacheKey;
-        var ak = this.assetCacheKey;
-        return (lang_1.isPresent(rk) && rk == token2.runtimeCacheKey) ||
-            (lang_1.isPresent(ak) && ak == token2.assetCacheKey);
-    };
     Object.defineProperty(CompileTokenMetadata.prototype, "name", {
         get: function () {
-            return lang_1.isPresent(this.value) ? util_1.sanitizeIdentifier(this.value) : this.identifier.name;
+            return isPresent(this.value) ? sanitizeIdentifier(this.value) : this.identifier.name;
         },
         enumerable: true,
         configurable: true
     });
+    CompileTokenMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileTokenMetadata.prototype.value;
+        /** @type {?} */
+        CompileTokenMetadata.prototype.identifier;
+        /** @type {?} */
+        CompileTokenMetadata.prototype.identifierIsInstance;
+    };
     return CompileTokenMetadata;
 }());
-exports.CompileTokenMetadata = CompileTokenMetadata;
-var CompileTokenMap = (function () {
-    function CompileTokenMap() {
-        this._valueMap = new Map();
-        this._values = [];
-    }
-    CompileTokenMap.prototype.add = function (token, value) {
-        var existing = this.get(token);
-        if (lang_1.isPresent(existing)) {
-            throw new exceptions_1.BaseException("Can only add to a TokenMap! Token: " + token.name);
-        }
-        this._values.push(value);
-        var rk = token.runtimeCacheKey;
-        if (lang_1.isPresent(rk)) {
-            this._valueMap.set(rk, value);
-        }
-        var ak = token.assetCacheKey;
-        if (lang_1.isPresent(ak)) {
-            this._valueMap.set(ak, value);
-        }
-    };
-    CompileTokenMap.prototype.get = function (token) {
-        var rk = token.runtimeCacheKey;
-        var ak = token.assetCacheKey;
-        var result;
-        if (lang_1.isPresent(rk)) {
-            result = this._valueMap.get(rk);
-        }
-        if (lang_1.isBlank(result) && lang_1.isPresent(ak)) {
-            result = this._valueMap.get(ak);
-        }
-        return result;
-    };
-    CompileTokenMap.prototype.values = function () { return this._values; };
-    Object.defineProperty(CompileTokenMap.prototype, "size", {
-        get: function () { return this._values.length; },
-        enumerable: true,
-        configurable: true
-    });
-    return CompileTokenMap;
-}());
-exports.CompileTokenMap = CompileTokenMap;
 /**
  * Metadata regarding compilation of a type.
  */
-var CompileTypeMetadata = (function () {
+export var CompileTypeMetadata = (function (_super) {
+    __extends(CompileTypeMetadata, _super);
+    /**
+     * @param {?=} __0
+     */
     function CompileTypeMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, runtime = _b.runtime, name = _b.name, moduleUrl = _b.moduleUrl, prefix = _b.prefix, isHost = _b.isHost, value = _b.value, diDeps = _b.diDeps;
-        this.runtime = runtime;
-        this.name = name;
-        this.moduleUrl = moduleUrl;
-        this.prefix = prefix;
-        this.isHost = lang_1.normalizeBool(isHost);
-        this.value = value;
+        var _b = _a === void 0 ? {} : _a, reference = _b.reference, name = _b.name, moduleUrl = _b.moduleUrl, prefix = _b.prefix, isHost = _b.isHost, value = _b.value, diDeps = _b.diDeps, lifecycleHooks = _b.lifecycleHooks;
+        _super.call(this, { reference: reference, name: name, moduleUrl: moduleUrl, prefix: prefix, value: value });
+        this.isHost = !!isHost;
         this.diDeps = _normalizeArray(diDeps);
+        this.lifecycleHooks = _normalizeArray(lifecycleHooks);
     }
-    CompileTypeMetadata.fromJson = function (data) {
-        return new CompileTypeMetadata({
-            name: data['name'],
-            moduleUrl: data['moduleUrl'],
-            prefix: data['prefix'],
-            isHost: data['isHost'],
-            value: data['value'],
-            diDeps: _arrayFromJson(data['diDeps'], CompileDiDependencyMetadata.fromJson)
-        });
-    };
-    Object.defineProperty(CompileTypeMetadata.prototype, "identifier", {
-        get: function () { return this; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CompileTypeMetadata.prototype, "type", {
-        get: function () { return this; },
-        enumerable: true,
-        configurable: true
-    });
-    CompileTypeMetadata.prototype.toJson = function () {
-        return {
-            // Note: Runtime type can't be serialized...
-            'class': 'Type',
-            'name': this.name,
-            'moduleUrl': this.moduleUrl,
-            'prefix': this.prefix,
-            'isHost': this.isHost,
-            'value': this.value,
-            'diDeps': _arrayToJson(this.diDeps)
-        };
+    CompileTypeMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileTypeMetadata.prototype.isHost;
+        /** @type {?} */
+        CompileTypeMetadata.prototype.diDeps;
+        /** @type {?} */
+        CompileTypeMetadata.prototype.lifecycleHooks;
     };
     return CompileTypeMetadata;
-}());
-exports.CompileTypeMetadata = CompileTypeMetadata;
-var CompileQueryMetadata = (function () {
+}(CompileIdentifierMetadata));
+export var CompileQueryMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompileQueryMetadata(_a) {
         var _b = _a === void 0 ? {} : _a, selectors = _b.selectors, descendants = _b.descendants, first = _b.first, propertyName = _b.propertyName, read = _b.read;
         this.selectors = selectors;
-        this.descendants = lang_1.normalizeBool(descendants);
-        this.first = lang_1.normalizeBool(first);
+        this.descendants = !!descendants;
+        this.first = !!first;
         this.propertyName = propertyName;
         this.read = read;
     }
-    CompileQueryMetadata.fromJson = function (data) {
-        return new CompileQueryMetadata({
-            selectors: _arrayFromJson(data['selectors'], CompileTokenMetadata.fromJson),
-            descendants: data['descendants'],
-            first: data['first'],
-            propertyName: data['propertyName'],
-            read: _objFromJson(data['read'], CompileTokenMetadata.fromJson)
-        });
-    };
-    CompileQueryMetadata.prototype.toJson = function () {
-        return {
-            'selectors': _arrayToJson(this.selectors),
-            'descendants': this.descendants,
-            'first': this.first,
-            'propertyName': this.propertyName,
-            'read': _objToJson(this.read)
-        };
+    CompileQueryMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileQueryMetadata.prototype.selectors;
+        /** @type {?} */
+        CompileQueryMetadata.prototype.descendants;
+        /** @type {?} */
+        CompileQueryMetadata.prototype.first;
+        /** @type {?} */
+        CompileQueryMetadata.prototype.propertyName;
+        /** @type {?} */
+        CompileQueryMetadata.prototype.read;
     };
     return CompileQueryMetadata;
 }());
-exports.CompileQueryMetadata = CompileQueryMetadata;
+/**
+ * Metadata about a stylesheet
+ */
+export var CompileStylesheetMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
+    function CompileStylesheetMetadata(_a) {
+        var _b = _a === void 0 ? {} : _a, moduleUrl = _b.moduleUrl, styles = _b.styles, styleUrls = _b.styleUrls;
+        this.moduleUrl = moduleUrl;
+        this.styles = _normalizeArray(styles);
+        this.styleUrls = _normalizeArray(styleUrls);
+    }
+    CompileStylesheetMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileStylesheetMetadata.prototype.moduleUrl;
+        /** @type {?} */
+        CompileStylesheetMetadata.prototype.styles;
+        /** @type {?} */
+        CompileStylesheetMetadata.prototype.styleUrls;
+    };
+    return CompileStylesheetMetadata;
+}());
 /**
  * Metadata regarding compilation of a template.
  */
-var CompileTemplateMetadata = (function () {
+export var CompileTemplateMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompileTemplateMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, encapsulation = _b.encapsulation, template = _b.template, templateUrl = _b.templateUrl, styles = _b.styles, styleUrls = _b.styleUrls, ngContentSelectors = _b.ngContentSelectors;
-        this.encapsulation = lang_1.isPresent(encapsulation) ? encapsulation : core_1.ViewEncapsulation.Emulated;
+        var _b = _a === void 0 ? {} : _a, encapsulation = _b.encapsulation, template = _b.template, templateUrl = _b.templateUrl, styles = _b.styles, styleUrls = _b.styleUrls, externalStylesheets = _b.externalStylesheets, animations = _b.animations, ngContentSelectors = _b.ngContentSelectors, interpolation = _b.interpolation;
+        this.encapsulation = encapsulation;
         this.template = template;
         this.templateUrl = templateUrl;
-        this.styles = lang_1.isPresent(styles) ? styles : [];
-        this.styleUrls = lang_1.isPresent(styleUrls) ? styleUrls : [];
-        this.ngContentSelectors = lang_1.isPresent(ngContentSelectors) ? ngContentSelectors : [];
+        this.styles = _normalizeArray(styles);
+        this.styleUrls = _normalizeArray(styleUrls);
+        this.externalStylesheets = _normalizeArray(externalStylesheets);
+        this.animations = animations ? ListWrapper.flatten(animations) : [];
+        this.ngContentSelectors = ngContentSelectors || [];
+        if (interpolation && interpolation.length != 2) {
+            throw new Error("'interpolation' should have a start and an end symbol.");
+        }
+        this.interpolation = interpolation;
     }
-    CompileTemplateMetadata.fromJson = function (data) {
-        return new CompileTemplateMetadata({
-            encapsulation: lang_1.isPresent(data['encapsulation']) ?
-                core_private_1.VIEW_ENCAPSULATION_VALUES[data['encapsulation']] :
-                data['encapsulation'],
-            template: data['template'],
-            templateUrl: data['templateUrl'],
-            styles: data['styles'],
-            styleUrls: data['styleUrls'],
-            ngContentSelectors: data['ngContentSelectors']
-        });
-    };
-    CompileTemplateMetadata.prototype.toJson = function () {
+    /**
+     * @return {?}
+     */
+    CompileTemplateMetadata.prototype.toSummary = function () {
         return {
-            'encapsulation': lang_1.isPresent(this.encapsulation) ? lang_1.serializeEnum(this.encapsulation) : this.encapsulation,
-            'template': this.template,
-            'templateUrl': this.templateUrl,
-            'styles': this.styles,
-            'styleUrls': this.styleUrls,
-            'ngContentSelectors': this.ngContentSelectors
+            isSummary: true,
+            animations: this.animations.map(function (anim) { return anim.name; }),
+            ngContentSelectors: this.ngContentSelectors,
+            encapsulation: this.encapsulation
         };
+    };
+    CompileTemplateMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.encapsulation;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.template;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.templateUrl;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.styles;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.styleUrls;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.externalStylesheets;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.animations;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.ngContentSelectors;
+        /** @type {?} */
+        CompileTemplateMetadata.prototype.interpolation;
     };
     return CompileTemplateMetadata;
 }());
-exports.CompileTemplateMetadata = CompileTemplateMetadata;
 /**
  * Metadata regarding compilation of a directive.
  */
-var CompileDirectiveMetadata = (function () {
+export var CompileDirectiveMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompileDirectiveMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, type = _b.type, isComponent = _b.isComponent, selector = _b.selector, exportAs = _b.exportAs, changeDetection = _b.changeDetection, inputs = _b.inputs, outputs = _b.outputs, hostListeners = _b.hostListeners, hostProperties = _b.hostProperties, hostAttributes = _b.hostAttributes, lifecycleHooks = _b.lifecycleHooks, providers = _b.providers, viewProviders = _b.viewProviders, queries = _b.queries, viewQueries = _b.viewQueries, template = _b.template;
+        var _b = _a === void 0 ? {} : _a, type = _b.type, isComponent = _b.isComponent, selector = _b.selector, exportAs = _b.exportAs, changeDetection = _b.changeDetection, inputs = _b.inputs, outputs = _b.outputs, hostListeners = _b.hostListeners, hostProperties = _b.hostProperties, hostAttributes = _b.hostAttributes, providers = _b.providers, viewProviders = _b.viewProviders, queries = _b.queries, viewQueries = _b.viewQueries, entryComponents = _b.entryComponents, template = _b.template;
         this.type = type;
         this.isComponent = isComponent;
         this.selector = selector;
@@ -451,67 +499,69 @@ var CompileDirectiveMetadata = (function () {
         this.hostListeners = hostListeners;
         this.hostProperties = hostProperties;
         this.hostAttributes = hostAttributes;
-        this.lifecycleHooks = _normalizeArray(lifecycleHooks);
         this.providers = _normalizeArray(providers);
         this.viewProviders = _normalizeArray(viewProviders);
         this.queries = _normalizeArray(queries);
         this.viewQueries = _normalizeArray(viewQueries);
+        this.entryComponents = _normalizeArray(entryComponents);
         this.template = template;
     }
+    /**
+     * @param {?=} __0
+     * @return {?}
+     */
     CompileDirectiveMetadata.create = function (_a) {
-        var _b = _a === void 0 ? {} : _a, type = _b.type, isComponent = _b.isComponent, selector = _b.selector, exportAs = _b.exportAs, changeDetection = _b.changeDetection, inputs = _b.inputs, outputs = _b.outputs, host = _b.host, lifecycleHooks = _b.lifecycleHooks, providers = _b.providers, viewProviders = _b.viewProviders, queries = _b.queries, viewQueries = _b.viewQueries, template = _b.template;
-        var hostListeners = {};
-        var hostProperties = {};
-        var hostAttributes = {};
-        if (lang_1.isPresent(host)) {
-            collection_1.StringMapWrapper.forEach(host, function (value, key) {
-                var matches = lang_1.RegExpWrapper.firstMatch(HOST_REG_EXP, key);
-                if (lang_1.isBlank(matches)) {
+        var _b = _a === void 0 ? {} : _a, type = _b.type, isComponent = _b.isComponent, selector = _b.selector, exportAs = _b.exportAs, changeDetection = _b.changeDetection, inputs = _b.inputs, outputs = _b.outputs, host = _b.host, providers = _b.providers, viewProviders = _b.viewProviders, queries = _b.queries, viewQueries = _b.viewQueries, entryComponents = _b.entryComponents, template = _b.template;
+        var /** @type {?} */ hostListeners = {};
+        var /** @type {?} */ hostProperties = {};
+        var /** @type {?} */ hostAttributes = {};
+        if (isPresent(host)) {
+            Object.keys(host).forEach(function (key) {
+                var /** @type {?} */ value = host[key];
+                var /** @type {?} */ matches = key.match(HOST_REG_EXP);
+                if (matches === null) {
                     hostAttributes[key] = value;
                 }
-                else if (lang_1.isPresent(matches[1])) {
+                else if (isPresent(matches[1])) {
                     hostProperties[matches[1]] = value;
                 }
-                else if (lang_1.isPresent(matches[2])) {
+                else if (isPresent(matches[2])) {
                     hostListeners[matches[2]] = value;
                 }
             });
         }
-        var inputsMap = {};
-        if (lang_1.isPresent(inputs)) {
+        var /** @type {?} */ inputsMap = {};
+        if (isPresent(inputs)) {
             inputs.forEach(function (bindConfig) {
                 // canonical syntax: `dirProp: elProp`
                 // if there is no `:`, use dirProp = elProp
-                var parts = util_1.splitAtColon(bindConfig, [bindConfig, bindConfig]);
+                var /** @type {?} */ parts = splitAtColon(bindConfig, [bindConfig, bindConfig]);
                 inputsMap[parts[0]] = parts[1];
             });
         }
-        var outputsMap = {};
-        if (lang_1.isPresent(outputs)) {
+        var /** @type {?} */ outputsMap = {};
+        if (isPresent(outputs)) {
             outputs.forEach(function (bindConfig) {
                 // canonical syntax: `dirProp: elProp`
                 // if there is no `:`, use dirProp = elProp
-                var parts = util_1.splitAtColon(bindConfig, [bindConfig, bindConfig]);
+                var /** @type {?} */ parts = splitAtColon(bindConfig, [bindConfig, bindConfig]);
                 outputsMap[parts[0]] = parts[1];
             });
         }
         return new CompileDirectiveMetadata({
             type: type,
-            isComponent: lang_1.normalizeBool(isComponent),
-            selector: selector,
-            exportAs: exportAs,
-            changeDetection: changeDetection,
+            isComponent: !!isComponent, selector: selector, exportAs: exportAs, changeDetection: changeDetection,
             inputs: inputsMap,
             outputs: outputsMap,
             hostListeners: hostListeners,
             hostProperties: hostProperties,
             hostAttributes: hostAttributes,
-            lifecycleHooks: lang_1.isPresent(lifecycleHooks) ? lifecycleHooks : [],
             providers: providers,
             viewProviders: viewProviders,
             queries: queries,
             viewQueries: viewQueries,
-            template: template
+            entryComponents: entryComponents,
+            template: template,
         });
     };
     Object.defineProperty(CompileDirectiveMetadata.prototype, "identifier", {
@@ -519,72 +569,92 @@ var CompileDirectiveMetadata = (function () {
         enumerable: true,
         configurable: true
     });
-    CompileDirectiveMetadata.fromJson = function (data) {
-        return new CompileDirectiveMetadata({
-            isComponent: data['isComponent'],
-            selector: data['selector'],
-            exportAs: data['exportAs'],
-            type: lang_1.isPresent(data['type']) ? CompileTypeMetadata.fromJson(data['type']) : data['type'],
-            changeDetection: lang_1.isPresent(data['changeDetection']) ?
-                core_private_1.CHANGE_DETECTION_STRATEGY_VALUES[data['changeDetection']] :
-                data['changeDetection'],
-            inputs: data['inputs'],
-            outputs: data['outputs'],
-            hostListeners: data['hostListeners'],
-            hostProperties: data['hostProperties'],
-            hostAttributes: data['hostAttributes'],
-            lifecycleHooks: data['lifecycleHooks'].map(function (hookValue) { return core_private_1.LIFECYCLE_HOOKS_VALUES[hookValue]; }),
-            template: lang_1.isPresent(data['template']) ? CompileTemplateMetadata.fromJson(data['template']) :
-                data['template'],
-            providers: _arrayFromJson(data['providers'], metadataFromJson),
-            viewProviders: _arrayFromJson(data['viewProviders'], metadataFromJson),
-            queries: _arrayFromJson(data['queries'], CompileQueryMetadata.fromJson),
-            viewQueries: _arrayFromJson(data['viewQueries'], CompileQueryMetadata.fromJson)
-        });
-    };
-    CompileDirectiveMetadata.prototype.toJson = function () {
+    /**
+     * @return {?}
+     */
+    CompileDirectiveMetadata.prototype.toSummary = function () {
         return {
-            'class': 'Directive',
-            'isComponent': this.isComponent,
-            'selector': this.selector,
-            'exportAs': this.exportAs,
-            'type': lang_1.isPresent(this.type) ? this.type.toJson() : this.type,
-            'changeDetection': lang_1.isPresent(this.changeDetection) ? lang_1.serializeEnum(this.changeDetection) :
-                this.changeDetection,
-            'inputs': this.inputs,
-            'outputs': this.outputs,
-            'hostListeners': this.hostListeners,
-            'hostProperties': this.hostProperties,
-            'hostAttributes': this.hostAttributes,
-            'lifecycleHooks': this.lifecycleHooks.map(function (hook) { return lang_1.serializeEnum(hook); }),
-            'template': lang_1.isPresent(this.template) ? this.template.toJson() : this.template,
-            'providers': _arrayToJson(this.providers),
-            'viewProviders': _arrayToJson(this.viewProviders),
-            'queries': _arrayToJson(this.queries),
-            'viewQueries': _arrayToJson(this.viewQueries)
+            isSummary: true,
+            type: this.type,
+            isComponent: this.isComponent,
+            selector: this.selector,
+            exportAs: this.exportAs,
+            inputs: this.inputs,
+            outputs: this.outputs,
+            hostListeners: this.hostListeners,
+            hostProperties: this.hostProperties,
+            hostAttributes: this.hostAttributes,
+            providers: this.providers,
+            viewProviders: this.viewProviders,
+            queries: this.queries,
+            entryComponents: this.entryComponents,
+            changeDetection: this.changeDetection,
+            template: this.template && this.template.toSummary()
         };
+    };
+    CompileDirectiveMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.type;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.isComponent;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.selector;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.exportAs;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.changeDetection;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.inputs;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.outputs;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.hostListeners;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.hostProperties;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.hostAttributes;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.providers;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.viewProviders;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.queries;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.viewQueries;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.entryComponents;
+        /** @type {?} */
+        CompileDirectiveMetadata.prototype.template;
     };
     return CompileDirectiveMetadata;
 }());
-exports.CompileDirectiveMetadata = CompileDirectiveMetadata;
 /**
- * Construct {@link CompileDirectiveMetadata} from {@link ComponentTypeMetadata} and a selector.
+ *  Construct {@link CompileDirectiveMetadata} from {@link ComponentTypeMetadata} and a selector.
+ * @param {?} compMeta
+ * @return {?}
  */
-function createHostComponentMeta(componentType, componentSelector) {
-    var template = selector_1.CssSelector.parse(componentSelector)[0].getMatchingElementTemplate();
+export function createHostComponentMeta(compMeta) {
+    var /** @type {?} */ template = CssSelector.parse(compMeta.selector)[0].getMatchingElementTemplate();
     return CompileDirectiveMetadata.create({
         type: new CompileTypeMetadata({
-            runtime: Object,
-            name: componentType.name + "_Host",
-            moduleUrl: componentType.moduleUrl,
+            reference: Object,
+            name: compMeta.type.name + "_Host",
+            moduleUrl: compMeta.type.moduleUrl,
             isHost: true
         }),
-        template: new CompileTemplateMetadata({ template: template, templateUrl: '', styles: [], styleUrls: [], ngContentSelectors: [] }),
-        changeDetection: core_1.ChangeDetectionStrategy.Default,
+        template: new CompileTemplateMetadata({
+            encapsulation: ViewEncapsulation.None,
+            template: template,
+            templateUrl: '',
+            styles: [],
+            styleUrls: [],
+            ngContentSelectors: [],
+            animations: []
+        }),
+        changeDetection: ChangeDetectionStrategy.Default,
         inputs: [],
         outputs: [],
         host: {},
-        lifecycleHooks: [],
         isComponent: true,
         selector: '*',
         providers: [],
@@ -593,67 +663,237 @@ function createHostComponentMeta(componentType, componentSelector) {
         viewQueries: []
     });
 }
-exports.createHostComponentMeta = createHostComponentMeta;
-var CompilePipeMetadata = (function () {
+export var CompilePipeMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
     function CompilePipeMetadata(_a) {
-        var _b = _a === void 0 ? {} : _a, type = _b.type, name = _b.name, pure = _b.pure, lifecycleHooks = _b.lifecycleHooks;
+        var _b = _a === void 0 ? {} : _a, type = _b.type, name = _b.name, pure = _b.pure;
         this.type = type;
         this.name = name;
-        this.pure = lang_1.normalizeBool(pure);
-        this.lifecycleHooks = _normalizeArray(lifecycleHooks);
+        this.pure = !!pure;
     }
     Object.defineProperty(CompilePipeMetadata.prototype, "identifier", {
         get: function () { return this.type; },
         enumerable: true,
         configurable: true
     });
-    CompilePipeMetadata.fromJson = function (data) {
-        return new CompilePipeMetadata({
-            type: lang_1.isPresent(data['type']) ? CompileTypeMetadata.fromJson(data['type']) : data['type'],
-            name: data['name'],
-            pure: data['pure']
-        });
+    /**
+     * @return {?}
+     */
+    CompilePipeMetadata.prototype.toSummary = function () {
+        return { isSummary: true, type: this.type, name: this.name, pure: this.pure };
     };
-    CompilePipeMetadata.prototype.toJson = function () {
-        return {
-            'class': 'Pipe',
-            'type': lang_1.isPresent(this.type) ? this.type.toJson() : null,
-            'name': this.name,
-            'pure': this.pure
-        };
+    CompilePipeMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompilePipeMetadata.prototype.type;
+        /** @type {?} */
+        CompilePipeMetadata.prototype.name;
+        /** @type {?} */
+        CompilePipeMetadata.prototype.pure;
     };
     return CompilePipeMetadata;
 }());
-exports.CompilePipeMetadata = CompilePipeMetadata;
-var _COMPILE_METADATA_FROM_JSON = {
-    'Directive': CompileDirectiveMetadata.fromJson,
-    'Pipe': CompilePipeMetadata.fromJson,
-    'Type': CompileTypeMetadata.fromJson,
-    'Provider': CompileProviderMetadata.fromJson,
-    'Identifier': CompileIdentifierMetadata.fromJson,
-    'Factory': CompileFactoryMetadata.fromJson
-};
-function _arrayFromJson(obj, fn) {
-    return lang_1.isBlank(obj) ? null : obj.map(function (o) { return _objFromJson(o, fn); });
+/**
+ * Metadata regarding compilation of a module.
+ */
+export var CompileNgModuleMetadata = (function () {
+    /**
+     * @param {?=} __0
+     */
+    function CompileNgModuleMetadata(_a) {
+        var _b = _a === void 0 ? {} : _a, type = _b.type, providers = _b.providers, declaredDirectives = _b.declaredDirectives, exportedDirectives = _b.exportedDirectives, declaredPipes = _b.declaredPipes, exportedPipes = _b.exportedPipes, entryComponents = _b.entryComponents, bootstrapComponents = _b.bootstrapComponents, importedModules = _b.importedModules, exportedModules = _b.exportedModules, schemas = _b.schemas, transitiveModule = _b.transitiveModule, id = _b.id;
+        this.type = type;
+        this.declaredDirectives = _normalizeArray(declaredDirectives);
+        this.exportedDirectives = _normalizeArray(exportedDirectives);
+        this.declaredPipes = _normalizeArray(declaredPipes);
+        this.exportedPipes = _normalizeArray(exportedPipes);
+        this.providers = _normalizeArray(providers);
+        this.entryComponents = _normalizeArray(entryComponents);
+        this.bootstrapComponents = _normalizeArray(bootstrapComponents);
+        this.importedModules = _normalizeArray(importedModules);
+        this.exportedModules = _normalizeArray(exportedModules);
+        this.schemas = _normalizeArray(schemas);
+        this.id = id;
+        this.transitiveModule = transitiveModule;
+    }
+    Object.defineProperty(CompileNgModuleMetadata.prototype, "identifier", {
+        get: function () { return this.type; },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    CompileNgModuleMetadata.prototype.toSummary = function () {
+        return {
+            isSummary: true,
+            type: this.type,
+            entryComponents: this.entryComponents,
+            providers: this.providers,
+            importedModules: this.importedModules,
+            exportedModules: this.exportedModules,
+            exportedDirectives: this.exportedDirectives,
+            exportedPipes: this.exportedPipes,
+            directiveLoaders: this.transitiveModule.directiveLoaders
+        };
+    };
+    /**
+     * @return {?}
+     */
+    CompileNgModuleMetadata.prototype.toInjectorSummary = function () {
+        return {
+            isSummary: true,
+            type: this.type,
+            entryComponents: this.entryComponents,
+            providers: this.providers,
+            importedModules: this.importedModules,
+            exportedModules: this.exportedModules
+        };
+    };
+    /**
+     * @return {?}
+     */
+    CompileNgModuleMetadata.prototype.toDirectiveSummary = function () {
+        return {
+            isSummary: true,
+            type: this.type,
+            exportedDirectives: this.exportedDirectives,
+            exportedPipes: this.exportedPipes,
+            exportedModules: this.exportedModules,
+            directiveLoaders: this.transitiveModule.directiveLoaders
+        };
+    };
+    CompileNgModuleMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.type;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.declaredDirectives;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.exportedDirectives;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.declaredPipes;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.exportedPipes;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.entryComponents;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.bootstrapComponents;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.providers;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.importedModules;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.exportedModules;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.schemas;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.id;
+        /** @type {?} */
+        CompileNgModuleMetadata.prototype.transitiveModule;
+    };
+    return CompileNgModuleMetadata;
+}());
+export var TransitiveCompileNgModuleMetadata = (function () {
+    /**
+     * @param {?} modules
+     * @param {?} providers
+     * @param {?} entryComponents
+     * @param {?} directives
+     * @param {?} pipes
+     * @param {?} directiveLoaders
+     */
+    function TransitiveCompileNgModuleMetadata(modules, providers, entryComponents, directives, pipes, directiveLoaders) {
+        var _this = this;
+        this.modules = modules;
+        this.providers = providers;
+        this.entryComponents = entryComponents;
+        this.directives = directives;
+        this.pipes = pipes;
+        this.directiveLoaders = directiveLoaders;
+        this.directivesSet = new Set();
+        this.pipesSet = new Set();
+        directives.forEach(function (dir) { return _this.directivesSet.add(dir.reference); });
+        pipes.forEach(function (pipe) { return _this.pipesSet.add(pipe.reference); });
+    }
+    TransitiveCompileNgModuleMetadata._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.directivesSet;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.pipesSet;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.modules;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.providers;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.entryComponents;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.directives;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.pipes;
+        /** @type {?} */
+        TransitiveCompileNgModuleMetadata.prototype.directiveLoaders;
+    };
+    return TransitiveCompileNgModuleMetadata;
+}());
+/**
+ * @param {?} items
+ * @return {?}
+ */
+export function removeIdentifierDuplicates(items) {
+    var /** @type {?} */ map = new Map();
+    items.forEach(function (item) {
+        if (!map.get(item.identifier.reference)) {
+            map.set(item.identifier.reference, item);
+        }
+    });
+    return Array.from(map.values());
 }
-function _arrayToJson(obj) {
-    return lang_1.isBlank(obj) ? null : obj.map(_objToJson);
-}
-function _objFromJson(obj, fn) {
-    if (lang_1.isArray(obj))
-        return _arrayFromJson(obj, fn);
-    if (lang_1.isString(obj) || lang_1.isBlank(obj) || lang_1.isBoolean(obj) || lang_1.isNumber(obj))
-        return obj;
-    return fn(obj);
-}
-function _objToJson(obj) {
-    if (lang_1.isArray(obj))
-        return _arrayToJson(obj);
-    if (lang_1.isString(obj) || lang_1.isBlank(obj) || lang_1.isBoolean(obj) || lang_1.isNumber(obj))
-        return obj;
-    return obj.toJson();
-}
+/**
+ * @param {?} obj
+ * @return {?}
+ */
 function _normalizeArray(obj) {
-    return lang_1.isPresent(obj) ? obj : [];
+    return obj || [];
 }
+/**
+ * @param {?} value
+ * @return {?}
+ */
+export function isStaticSymbol(value) {
+    return typeof value === 'object' && value !== null && value['name'] && value['filePath'];
+}
+export var ProviderMeta = (function () {
+    /**
+     * @param {?} token
+     * @param {?} __1
+     */
+    function ProviderMeta(token, _a) {
+        var useClass = _a.useClass, useValue = _a.useValue, useExisting = _a.useExisting, useFactory = _a.useFactory, deps = _a.deps, multi = _a.multi;
+        this.token = token;
+        this.useClass = useClass;
+        this.useValue = useValue;
+        this.useExisting = useExisting;
+        this.useFactory = useFactory;
+        this.dependencies = deps;
+        this.multi = !!multi;
+    }
+    ProviderMeta._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ProviderMeta.prototype.token;
+        /** @type {?} */
+        ProviderMeta.prototype.useClass;
+        /** @type {?} */
+        ProviderMeta.prototype.useValue;
+        /** @type {?} */
+        ProviderMeta.prototype.useExisting;
+        /** @type {?} */
+        ProviderMeta.prototype.useFactory;
+        /** @type {?} */
+        ProviderMeta.prototype.dependencies;
+        /** @type {?} */
+        ProviderMeta.prototype.multi;
+    };
+    return ProviderMeta;
+}());
 //# sourceMappingURL=compile_metadata.js.map

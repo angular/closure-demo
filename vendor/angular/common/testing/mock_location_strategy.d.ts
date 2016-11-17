@@ -1,19 +1,25 @@
-import { EventEmitter } from '../src/facade/async';
-import { LocationStrategy } from '../index';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { LocationStrategy } from '@angular/common';
 /**
  * A mock implementation of {@link LocationStrategy} that allows tests to fire simulated
  * location events.
+ *
+ * @stable
  */
 export declare class MockLocationStrategy extends LocationStrategy {
     internalBaseHref: string;
     internalPath: string;
     internalTitle: string;
     urlChanges: string[];
-    /** @internal */
-    _subject: EventEmitter<any>;
     constructor();
     simulatePopState(url: string): void;
-    path(): string;
+    path(includeHash?: boolean): string;
     prepareExternalUrl(internal: string): string;
     pushState(ctx: any, title: string, path: string, query: string): void;
     replaceState(ctx: any, title: string, path: string, query: string): void;

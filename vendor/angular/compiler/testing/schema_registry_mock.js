@@ -1,23 +1,56 @@
-"use strict";
-var lang_1 = require('../src/facade/lang');
-var core_private_1 = require('../core_private');
-var MockSchemaRegistry = (function () {
-    function MockSchemaRegistry(existingProperties, attrPropMapping) {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { SecurityContext } from '@angular/core';
+export var MockSchemaRegistry = (function () {
+    function MockSchemaRegistry(existingProperties, attrPropMapping, existingElements, invalidProperties, invalidAttributes) {
         this.existingProperties = existingProperties;
         this.attrPropMapping = attrPropMapping;
+        this.existingElements = existingElements;
+        this.invalidProperties = invalidProperties;
+        this.invalidAttributes = invalidAttributes;
     }
-    MockSchemaRegistry.prototype.hasProperty = function (tagName, property) {
-        var result = this.existingProperties[property];
-        return lang_1.isPresent(result) ? result : true;
+    MockSchemaRegistry.prototype.hasProperty = function (tagName, property, schemas) {
+        var value = this.existingProperties[property];
+        return value === void 0 ? true : value;
     };
-    MockSchemaRegistry.prototype.securityContext = function (tagName, property) {
-        return core_private_1.SecurityContext.NONE;
+    MockSchemaRegistry.prototype.hasElement = function (tagName, schemaMetas) {
+        var value = this.existingElements[tagName.toLowerCase()];
+        return value === void 0 ? true : value;
     };
-    MockSchemaRegistry.prototype.getMappedPropName = function (attrName) {
-        var result = this.attrPropMapping[attrName];
-        return lang_1.isPresent(result) ? result : attrName;
+    MockSchemaRegistry.prototype.allKnownElementNames = function () { return Object.keys(this.existingElements); };
+    MockSchemaRegistry.prototype.securityContext = function (selector, property, isAttribute) {
+        return SecurityContext.NONE;
+    };
+    MockSchemaRegistry.prototype.getMappedPropName = function (attrName) { return this.attrPropMapping[attrName] || attrName; };
+    MockSchemaRegistry.prototype.getDefaultComponentElementName = function () { return 'ng-component'; };
+    MockSchemaRegistry.prototype.validateProperty = function (name) {
+        if (this.invalidProperties.indexOf(name) > -1) {
+            return { error: true, msg: "Binding to property '" + name + "' is disallowed for security reasons" };
+        }
+        else {
+            return { error: false };
+        }
+    };
+    MockSchemaRegistry.prototype.validateAttribute = function (name) {
+        if (this.invalidAttributes.indexOf(name) > -1) {
+            return {
+                error: true,
+                msg: "Binding to attribute '" + name + "' is disallowed for security reasons"
+            };
+        }
+        else {
+            return { error: false };
+        }
+    };
+    MockSchemaRegistry.prototype.normalizeAnimationStyleProperty = function (propName) { return propName; };
+    MockSchemaRegistry.prototype.normalizeAnimationStyleValue = function (camelCaseProp, userProvidedProp, val) {
+        return { error: null, value: val.toString() };
     };
     return MockSchemaRegistry;
 }());
-exports.MockSchemaRegistry = MockSchemaRegistry;
 //# sourceMappingURL=schema_registry_mock.js.map

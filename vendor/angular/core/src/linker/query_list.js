@@ -1,12 +1,18 @@
-"use strict";
-var collection_1 = require('../../src/facade/collection');
-var lang_1 = require('../../src/facade/lang');
-var async_1 = require('../../src/facade/async');
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { EventEmitter } from '../facade/async';
+import { ListWrapper } from '../facade/collection';
+import { getSymbolIterator } from '../facade/lang';
 /**
  * An unmodifiable list of items that Angular keeps up to date when the state
  * of the application changes.
  *
- * The type of object that {@link QueryMetadata} and {@link ViewQueryMetadata} provide.
+ * The type of object that {@link Query} and {@link ViewQueryMetadata} provide.
  *
  * Implements an iterable interface, therefore it can be used in both ES6
  * javascript `for (var i of items)` loops as well as in Angular templates with
@@ -20,17 +26,16 @@ var async_1 = require('../../src/facade/async');
  * ```typescript
  * @Component({...})
  * class Container {
- *   constructor(@Query(Item) items: QueryList<Item>) {
- *     items.changes.subscribe(_ => console.log(items.length));
- *   }
+ *   @ViewChildren(Item) items:QueryList<Item>;
  * }
  * ```
+ * @stable
  */
-var QueryList = (function () {
+export var QueryList = (function () {
     function QueryList() {
         this._dirty = true;
         this._results = [];
-        this._emitter = new async_1.EventEmitter();
+        this._emitter = new EventEmitter();
     }
     Object.defineProperty(QueryList.prototype, "changes", {
         get: function () { return this._emitter; },
@@ -43,47 +48,86 @@ var QueryList = (function () {
         configurable: true
     });
     Object.defineProperty(QueryList.prototype, "first", {
-        get: function () { return collection_1.ListWrapper.first(this._results); },
+        get: function () { return this._results[0]; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(QueryList.prototype, "last", {
-        get: function () { return collection_1.ListWrapper.last(this._results); },
+        get: function () { return this._results[this.length - 1]; },
         enumerable: true,
         configurable: true
     });
     /**
-     * returns a new array with the passed in function applied to each element.
+     *  See [Array.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+     * @param {?} fn
+     * @return {?}
      */
     QueryList.prototype.map = function (fn) { return this._results.map(fn); };
     /**
-     * returns a filtered array.
+     *  See [Array.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+     * @param {?} fn
+     * @return {?}
      */
-    QueryList.prototype.filter = function (fn) { return this._results.filter(fn); };
+    QueryList.prototype.filter = function (fn) {
+        return this._results.filter(fn);
+    };
     /**
-     * returns a reduced value.
+     *  See [Array.find](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find)
+     * @param {?} fn
+     * @return {?}
      */
-    QueryList.prototype.reduce = function (fn, init) { return this._results.reduce(fn, init); };
+    QueryList.prototype.find = function (fn) { return this._results.find(fn); };
     /**
-     * executes function for each element in a query.
+     *  See [Array.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce)
+     * @param {?} fn
+     * @param {?} init
+     * @return {?}
+     */
+    QueryList.prototype.reduce = function (fn, init) {
+        return this._results.reduce(fn, init);
+    };
+    /**
+     *  See [Array.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)
+     * @param {?} fn
+     * @return {?}
      */
     QueryList.prototype.forEach = function (fn) { this._results.forEach(fn); };
     /**
-     * converts QueryList into an array
+     *  See [Array.some](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some)
+     * @param {?} fn
+     * @return {?}
      */
-    QueryList.prototype.toArray = function () { return collection_1.ListWrapper.clone(this._results); };
-    QueryList.prototype[lang_1.getSymbolIterator()] = function () { return this._results[lang_1.getSymbolIterator()](); };
+    QueryList.prototype.some = function (fn) {
+        return this._results.some(fn);
+    };
+    /**
+     * @return {?}
+     */
+    QueryList.prototype.toArray = function () { return this._results.slice(); };
+    /**
+     * @return {?}
+     */
+    QueryList.prototype[getSymbolIterator()] = function () { return ((this._results))[getSymbolIterator()](); };
+    /**
+     * @return {?}
+     */
     QueryList.prototype.toString = function () { return this._results.toString(); };
     /**
-     * @internal
+     * @param {?} res
+     * @return {?}
      */
     QueryList.prototype.reset = function (res) {
-        this._results = collection_1.ListWrapper.flatten(res);
+        this._results = ListWrapper.flatten(res);
         this._dirty = false;
     };
-    /** @internal */
+    /**
+     * @return {?}
+     */
     QueryList.prototype.notifyOnChanges = function () { this._emitter.emit(this); };
-    /** internal */
+    /**
+     *  internal
+     * @return {?}
+     */
     QueryList.prototype.setDirty = function () { this._dirty = true; };
     Object.defineProperty(QueryList.prototype, "dirty", {
         /** internal */
@@ -91,7 +135,14 @@ var QueryList = (function () {
         enumerable: true,
         configurable: true
     });
+    QueryList._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        QueryList.prototype._dirty;
+        /** @type {?} */
+        QueryList.prototype._results;
+        /** @type {?} */
+        QueryList.prototype._emitter;
+    };
     return QueryList;
 }());
-exports.QueryList = QueryList;
 //# sourceMappingURL=query_list.js.map

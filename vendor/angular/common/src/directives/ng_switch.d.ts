@@ -1,107 +1,125 @@
-import { ViewContainerRef, TemplateRef } from '@angular/core';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { DoCheck, TemplateRef, ViewContainerRef } from '@angular/core';
 export declare class SwitchView {
     private _viewContainerRef;
     private _templateRef;
+    private _created;
     constructor(_viewContainerRef: ViewContainerRef, _templateRef: TemplateRef<Object>);
     create(): void;
     destroy(): void;
+    enforceState(created: boolean): void;
 }
 /**
- * Adds or removes DOM sub-trees when their match expressions match the switch expression.
+ * @ngModule CommonModule
  *
- * Elements within `NgSwitch` but without `NgSwitchWhen` or `NgSwitchDefault` directives will be
- * preserved at the location as specified in the template.
+ * @whatItDoes Adds / removes DOM sub-trees when the nest match expressions matches the switch
+ *             expression.
  *
- * `NgSwitch` simply inserts nested elements based on which match expression matches the value
- * obtained from the evaluated switch expression. In other words, you define a container element
- * (where you place the directive with a switch expression on the
- * `[ngSwitch]="..."` attribute), define any inner elements inside of the directive and
- * place a `[ngSwitchWhen]` attribute per element.
- *
- * The `ngSwitchWhen` property is used to inform `NgSwitch` which element to display when the
- * expression is evaluated. If a matching expression is not found via a `ngSwitchWhen` property
- * then an element with the `ngSwitchDefault` attribute is displayed.
- *
- * ### Example ([live demo](http://plnkr.co/edit/DQMTII95CbuqWrl3lYAs?p=preview))
- *
- * ```typescript
- * @Component({
- *   selector: 'app',
- *   template: `
- *     <p>Value = {{value}}</p>
- *     <button (click)="inc()">Increment</button>
- *
- *     <div [ngSwitch]="value">
- *       <p *ngSwitchWhen="'init'">increment to start</p>
- *       <p *ngSwitchWhen="0">0, increment again</p>
- *       <p *ngSwitchWhen="1">1, increment again</p>
- *       <p *ngSwitchWhen="2">2, stop incrementing</p>
- *       <p *ngSwitchDefault>&gt; 2, STOP!</p>
- *     </div>
- *
- *     <!-- alternate syntax -->
- *
- *     <p [ngSwitch]="value">
- *       <template ngSwitchWhen="init">increment to start</template>
- *       <template [ngSwitchWhen]="0">0, increment again</template>
- *       <template [ngSwitchWhen]="1">1, increment again</template>
- *       <template [ngSwitchWhen]="2">2, stop incrementing</template>
- *       <template ngSwitchDefault>&gt; 2, STOP!</template>
- *     </p>
- *   `,
- *   directives: [NgSwitch, NgSwitchWhen, NgSwitchDefault]
- * })
- * export class App {
- *   value = 'init';
- *
- *   inc() {
- *     this.value = this.value === 'init' ? 0 : this.value + 1;
- *   }
- * }
- *
- * bootstrap(App).catch(err => console.error(err));
+ * @howToUse
  * ```
+ *     <container-element [ngSwitch]="switch_expression">
+ *       <some-element *ngSwitchCase="match_expression_1">...</some-element>
+ *       <some-element *ngSwitchCase="match_expression_2">...</some-element>
+ *       <some-other-element *ngSwitchCase="match_expression_3">...</some-other-element>
+ *       <ng-container *ngSwitchCase="match_expression_3">
+ *         <!-- use a ng-container to group multiple root nodes -->
+ *         <inner-element></inner-element>
+ *         <inner-other-element></inner-other-element>
+ *       </ng-container>
+ *       <some-element *ngSwitchDefault>...</some-element>
+ *     </container-element>
+ * ```
+ * @description
+ *
+ * `NgSwitch` stamps out nested views when their match expression value matches the value of the
+ * switch expression.
+ *
+ * In other words:
+ * - you define a container element (where you place the directive with a switch expression on the
+ * `[ngSwitch]="..."` attribute)
+ * - you define inner views inside the `NgSwitch` and place a `*ngSwitchCase` attribute on the view
+ * root elements.
+ *
+ * Elements within `NgSwitch` but outside of a `NgSwitchCase` or `NgSwitchDefault` directives will
+ * be preserved at the location.
+ *
+ * The `ngSwitchCase` directive informs the parent `NgSwitch` of which view to display when the
+ * expression is evaluated.
+ * When no matching expression is found on a `ngSwitchCase` view, the `ngSwitchDefault` view is
+ * stamped out.
+ *
+ * @stable
  */
 export declare class NgSwitch {
-    private _switchValue;
-    private _useDefault;
-    private _valueViews;
-    private _activeViews;
+    private _defaultViews;
+    private _defaultUsed;
+    private _caseCount;
+    private _lastCaseCheckIndex;
+    private _lastCasesMatched;
+    private _ngSwitch;
     ngSwitch: any;
-    /** @internal */
-    _onWhenValueChanged(oldWhen: any, newWhen: any, view: SwitchView): void;
-    /** @internal */
-    _emptyAllActiveViews(): void;
-    /** @internal */
-    _activateViews(views: SwitchView[]): void;
-    /** @internal */
-    _registerView(value: any, view: SwitchView): void;
-    /** @internal */
-    _deregisterView(value: any, view: SwitchView): void;
+    private _updateDefaultCases(useDefault);
 }
 /**
- * Insert the sub-tree when the `ngSwitchWhen` expression evaluates to the same value as the
- * enclosing switch expression.
+ * @ngModule CommonModule
  *
- * If multiple match expression match the switch expression value, all of them are displayed.
+ * @whatItDoes Creates a view that will be added/removed from the parent {@link NgSwitch} when the
+ *             given expression evaluate to respectively the same/different value as the switch
+ *             expression.
+ *
+ * @howToUse
+ * ```
+ * <container-element [ngSwitch]="switch_expression">
+ *   <some-element *ngSwitchCase="match_expression_1">...</some-element>
+ * </container-element>
+ *```
+ * @description
+ *
+ * Insert the sub-tree when the expression evaluates to the same value as the enclosing switch
+ * expression.
+ *
+ * If multiple match expressions match the switch expression value, all of them are displayed.
  *
  * See {@link NgSwitch} for more details and example.
+ *
+ * @stable
  */
-export declare class NgSwitchWhen {
-    /** @internal */
-    _value: any;
-    /** @internal */
-    _view: SwitchView;
-    private _switch;
+export declare class NgSwitchCase implements DoCheck {
+    private ngSwitch;
+    private _view;
+    ngSwitchCase: any;
     constructor(viewContainer: ViewContainerRef, templateRef: TemplateRef<Object>, ngSwitch: NgSwitch);
-    ngSwitchWhen: any;
+    ngDoCheck(): void;
 }
 /**
- * Default case statements are displayed when no match expression matches the switch expression
- * value.
+ * @ngModule CommonModule
+ * @whatItDoes Creates a view that is added to the parent {@link NgSwitch} when no case expressions
+ * match the
+ *             switch expression.
+ *
+ * @howToUse
+ * ```
+ * <container-element [ngSwitch]="switch_expression">
+ *   <some-element *ngSwitchCase="match_expression_1">...</some-element>
+ *   <some-other-element *ngSwitchDefault>...</some-other-element>
+ * </container-element>
+ * ```
+ *
+ * @description
+ *
+ * Insert the sub-tree when no case expressions evaluate to the same value as the enclosing switch
+ * expression.
  *
  * See {@link NgSwitch} for more details and example.
+ *
+ * @stable
  */
 export declare class NgSwitchDefault {
-    constructor(viewContainer: ViewContainerRef, templateRef: TemplateRef<Object>, sswitch: NgSwitch);
+    constructor(viewContainer: ViewContainerRef, templateRef: TemplateRef<Object>, ngSwitch: NgSwitch);
 }

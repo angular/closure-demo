@@ -1,5 +1,11 @@
-"use strict";
-var core_1 = require('@angular/core');
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { OpaqueToken } from '@angular/core';
 /**
  * `LocationStrategy` is responsible for representing and reading route state
  * from the browser's URL. Angular provides two strategies:
@@ -15,13 +21,65 @@ var core_1 = require('@angular/core');
  * `http://example.com/foo` as an equivalent URL.
  *
  * See these two classes for more.
+ *
+ * @stable
  */
-var LocationStrategy = (function () {
+export var LocationStrategy = (function () {
     function LocationStrategy() {
     }
+    /**
+     * @abstract
+     * @param {?=} includeHash
+     * @return {?}
+     */
+    LocationStrategy.prototype.path = function (includeHash) { };
+    /**
+     * @abstract
+     * @param {?} internal
+     * @return {?}
+     */
+    LocationStrategy.prototype.prepareExternalUrl = function (internal) { };
+    /**
+     * @abstract
+     * @param {?} state
+     * @param {?} title
+     * @param {?} url
+     * @param {?} queryParams
+     * @return {?}
+     */
+    LocationStrategy.prototype.pushState = function (state, title, url, queryParams) { };
+    /**
+     * @abstract
+     * @param {?} state
+     * @param {?} title
+     * @param {?} url
+     * @param {?} queryParams
+     * @return {?}
+     */
+    LocationStrategy.prototype.replaceState = function (state, title, url, queryParams) { };
+    /**
+     * @abstract
+     * @return {?}
+     */
+    LocationStrategy.prototype.forward = function () { };
+    /**
+     * @abstract
+     * @return {?}
+     */
+    LocationStrategy.prototype.back = function () { };
+    /**
+     * @abstract
+     * @param {?} fn
+     * @return {?}
+     */
+    LocationStrategy.prototype.onPopState = function (fn) { };
+    /**
+     * @abstract
+     * @return {?}
+     */
+    LocationStrategy.prototype.getBaseHref = function () { };
     return LocationStrategy;
 }());
-exports.LocationStrategy = LocationStrategy;
 /**
  * The `APP_BASE_HREF` token represents the base href to be used with the
  * {@link PathLocationStrategy}.
@@ -32,24 +90,17 @@ exports.LocationStrategy = LocationStrategy;
  *
  * ### Example
  *
- * ```
- * import {Component} from '@angular/core';
- * import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from '@angular/router';
+ * ```typescript
+ * import {Component, NgModule} from '@angular/core';
  * import {APP_BASE_HREF} from '@angular/common';
  *
- * @Component({directives: [ROUTER_DIRECTIVES]})
- * @RouteConfig([
- *  {...},
- * ])
- * class AppCmp {
- *   // ...
- * }
- *
- * bootstrap(AppCmp, [
- *   ROUTER_PROVIDERS,
- *   provide(APP_BASE_HREF, {useValue: '/my/app'})
- * ]);
+ * @NgModule({
+ *   providers: [{provide: APP_BASE_HREF, useValue: '/my/app'}]
+ * })
+ * class AppModule {}
  * ```
+ *
+ * @stable
  */
-exports.APP_BASE_HREF = new core_1.OpaqueToken('appBaseHref');
+export var /** @type {?} */ APP_BASE_HREF = new OpaqueToken('appBaseHref');
 //# sourceMappingURL=location_strategy.js.map

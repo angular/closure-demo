@@ -1,8 +1,9 @@
 import * as o from '../output/output_ast';
-import { BoundTextAst, BoundElementPropertyAst, DirectiveAst } from '../template_ast';
-import { CompileView } from './compile_view';
+import { ElementSchemaRegistry } from '../schema/element_schema_registry';
+import { BoundElementPropertyAst, BoundTextAst, DirectiveAst } from '../template_parser/template_ast';
 import { CompileElement, CompileNode } from './compile_element';
+import { CompileView } from './compile_view';
 export declare function bindRenderText(boundText: BoundTextAst, compileNode: CompileNode, view: CompileView): void;
-export declare function bindRenderInputs(boundProps: BoundElementPropertyAst[], compileElement: CompileElement): void;
-export declare function bindDirectiveHostProps(directiveAst: DirectiveAst, directiveInstance: o.Expression, compileElement: CompileElement): void;
-export declare function bindDirectiveInputs(directiveAst: DirectiveAst, directiveInstance: o.Expression, compileElement: CompileElement): void;
+export declare function bindRenderInputs(boundProps: BoundElementPropertyAst[], hasEvents: boolean, compileElement: CompileElement): void;
+export declare function bindDirectiveHostProps(directiveAst: DirectiveAst, directiveWrapperInstance: o.Expression, compileElement: CompileElement, elementName: string, schemaRegistry: ElementSchemaRegistry): void;
+export declare function bindDirectiveInputs(directiveAst: DirectiveAst, directiveWrapperInstance: o.Expression, dirIndex: number, compileElement: CompileElement): void;

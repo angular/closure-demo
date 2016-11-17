@@ -1,15 +1,23 @@
-import { Type } from '../../src/facade/lang';
-import { ElementRef } from './element_ref';
-import { ViewRef } from './view_ref';
-import { AppElement } from './element';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { ChangeDetectorRef } from '../change_detection/change_detection';
 import { Injector } from '../di/injector';
+import { Type } from '../type';
+import { ElementRef } from './element_ref';
+import { AppView } from './view';
+import { ViewRef } from './view_ref';
 /**
  * Represents an instance of a Component created via a {@link ComponentFactory}.
  *
  * `ComponentRef` provides access to the Component Instance as well other objects related to this
  * Component Instance and allows you to destroy the Component Instance via the {@link #destroy}
  * method.
+ * @stable
  */
 export declare abstract class ComponentRef<C> {
     /**
@@ -35,7 +43,7 @@ export declare abstract class ComponentRef<C> {
     /**
      * The component type.
      */
-    componentType: Type;
+    componentType: Type<any>;
     /**
      * Destroys the component instance and all of the data structures associated with it.
      */
@@ -46,24 +54,29 @@ export declare abstract class ComponentRef<C> {
     abstract onDestroy(callback: Function): void;
 }
 export declare class ComponentRef_<C> extends ComponentRef<C> {
-    private _hostElement;
-    private _componentType;
-    constructor(_hostElement: AppElement, _componentType: Type);
+    private _index;
+    private _parentView;
+    private _nativeElement;
+    private _component;
+    constructor(_index: number, _parentView: AppView<any>, _nativeElement: any, _component: C);
     location: ElementRef;
     injector: Injector;
     instance: C;
     hostView: ViewRef;
     changeDetectorRef: ChangeDetectorRef;
-    componentType: Type;
+    componentType: Type<any>;
     destroy(): void;
     onDestroy(callback: Function): void;
 }
+/**
+ * @stable
+ */
 export declare class ComponentFactory<C> {
     selector: string;
-    private _viewFactory;
+    private _viewClass;
     private _componentType;
-    constructor(selector: string, _viewFactory: Function, _componentType: Type);
-    componentType: Type;
+    constructor(selector: string, _viewClass: Type<AppView<any>>, _componentType: Type<any>);
+    componentType: Type<any>;
     /**
      * Creates a new component.
      */

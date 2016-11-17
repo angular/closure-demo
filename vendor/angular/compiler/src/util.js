@@ -1,83 +1,149 @@
-"use strict";
-var lang_1 = require('./facade/lang');
-var collection_1 = require('./facade/collection');
-exports.MODULE_SUFFIX = lang_1.IS_DART ? '.dart' : '';
-var CAMEL_CASE_REGEXP = /([A-Z])/g;
-var DASH_CASE_REGEXP = /-([a-z])/g;
-function camelCaseToDashCase(input) {
-    return lang_1.StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function (m) { return '-' + m[1].toLowerCase(); });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { isPrimitive, isStrictStringMap } from './facade/lang';
+export var /** @type {?} */ MODULE_SUFFIX = '';
+var /** @type {?} */ CAMEL_CASE_REGEXP = /([A-Z])/g;
+var /** @type {?} */ DASH_CASE_REGEXP = /-+([a-z0-9])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
+export function camelCaseToDashCase(input) {
+    return input.replace(CAMEL_CASE_REGEXP, function () {
+        var m = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            m[_i - 0] = arguments[_i];
+        }
+        return '-' + m[1].toLowerCase();
+    });
 }
-exports.camelCaseToDashCase = camelCaseToDashCase;
-function dashCaseToCamelCase(input) {
-    return lang_1.StringWrapper.replaceAllMapped(input, DASH_CASE_REGEXP, function (m) { return m[1].toUpperCase(); });
+/**
+ * @param {?} input
+ * @return {?}
+ */
+export function dashCaseToCamelCase(input) {
+    return input.replace(DASH_CASE_REGEXP, function () {
+        var m = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            m[_i - 0] = arguments[_i];
+        }
+        return m[1].toUpperCase();
+    });
 }
-exports.dashCaseToCamelCase = dashCaseToCamelCase;
-function splitAtColon(input, defaultValues) {
-    var parts = lang_1.StringWrapper.split(input.trim(), /\s*:\s*/g);
-    if (parts.length > 1) {
-        return parts;
-    }
-    else {
+/**
+ * @param {?} input
+ * @param {?} defaultValues
+ * @return {?}
+ */
+export function splitAtColon(input, defaultValues) {
+    return _splitAt(input, ':', defaultValues);
+}
+/**
+ * @param {?} input
+ * @param {?} defaultValues
+ * @return {?}
+ */
+export function splitAtPeriod(input, defaultValues) {
+    return _splitAt(input, '.', defaultValues);
+}
+/**
+ * @param {?} input
+ * @param {?} character
+ * @param {?} defaultValues
+ * @return {?}
+ */
+function _splitAt(input, character, defaultValues) {
+    var /** @type {?} */ characterIndex = input.indexOf(character);
+    if (characterIndex == -1)
         return defaultValues;
-    }
+    return [input.slice(0, characterIndex).trim(), input.slice(characterIndex + 1).trim()];
 }
-exports.splitAtColon = splitAtColon;
-function sanitizeIdentifier(name) {
-    return lang_1.StringWrapper.replaceAll(name, /\W/g, '_');
+/**
+ * @param {?} name
+ * @return {?}
+ */
+export function sanitizeIdentifier(name) {
+    return name.replace(/\W/g, '_');
 }
-exports.sanitizeIdentifier = sanitizeIdentifier;
-function visitValue(value, visitor, context) {
-    if (lang_1.isArray(value)) {
-        return visitor.visitArray(value, context);
+/**
+ * @param {?} value
+ * @param {?} visitor
+ * @param {?} context
+ * @return {?}
+ */
+export function visitValue(value, visitor, context) {
+    if (Array.isArray(value)) {
+        return visitor.visitArray(/** @type {?} */ (value), context);
     }
-    else if (lang_1.isStrictStringMap(value)) {
-        return visitor.visitStringMap(value, context);
+    if (isStrictStringMap(value)) {
+        return visitor.visitStringMap(/** @type {?} */ (value), context);
     }
-    else if (lang_1.isBlank(value) || lang_1.isPrimitive(value)) {
+    if (value == null || isPrimitive(value)) {
         return visitor.visitPrimitive(value, context);
     }
-    else {
-        return visitor.visitOther(value, context);
-    }
+    return visitor.visitOther(value, context);
 }
-exports.visitValue = visitValue;
-var ValueTransformer = (function () {
+export var ValueTransformer = (function () {
     function ValueTransformer() {
     }
+    /**
+     * @param {?} arr
+     * @param {?} context
+     * @return {?}
+     */
     ValueTransformer.prototype.visitArray = function (arr, context) {
         var _this = this;
         return arr.map(function (value) { return visitValue(value, _this, context); });
     };
+    /**
+     * @param {?} map
+     * @param {?} context
+     * @return {?}
+     */
     ValueTransformer.prototype.visitStringMap = function (map, context) {
         var _this = this;
-        var result = {};
-        collection_1.StringMapWrapper.forEach(map, function (value, key) { result[key] = visitValue(value, _this, context); });
+        var /** @type {?} */ result = {};
+        Object.keys(map).forEach(function (key) { result[key] = visitValue(map[key], _this, context); });
         return result;
     };
+    /**
+     * @param {?} value
+     * @param {?} context
+     * @return {?}
+     */
     ValueTransformer.prototype.visitPrimitive = function (value, context) { return value; };
+    /**
+     * @param {?} value
+     * @param {?} context
+     * @return {?}
+     */
     ValueTransformer.prototype.visitOther = function (value, context) { return value; };
     return ValueTransformer;
 }());
-exports.ValueTransformer = ValueTransformer;
-function assetUrl(pkg, path, type) {
-    if (path === void 0) { path = null; }
-    if (type === void 0) { type = 'src'; }
-    if (lang_1.IS_DART) {
-        if (path == null) {
-            return "asset:angular2/" + pkg + "/" + pkg + ".dart";
-        }
-        else {
-            return "asset:angular2/lib/" + pkg + "/src/" + path + ".dart";
-        }
-    }
-    else {
-        if (path == null) {
-            return "asset:@angular/lib/" + pkg + "/index";
-        }
-        else {
-            return "asset:@angular/lib/" + pkg + "/src/" + path;
+export var SyncAsyncResult = (function () {
+    /**
+     * @param {?} syncResult
+     * @param {?=} asyncResult
+     */
+    function SyncAsyncResult(syncResult, asyncResult) {
+        if (asyncResult === void 0) { asyncResult = null; }
+        this.syncResult = syncResult;
+        this.asyncResult = asyncResult;
+        if (!asyncResult) {
+            this.asyncResult = Promise.resolve(syncResult);
         }
     }
-}
-exports.assetUrl = assetUrl;
+    SyncAsyncResult._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        SyncAsyncResult.prototype.syncResult;
+        /** @type {?} */
+        SyncAsyncResult.prototype.asyncResult;
+    };
+    return SyncAsyncResult;
+}());
 //# sourceMappingURL=util.js.map

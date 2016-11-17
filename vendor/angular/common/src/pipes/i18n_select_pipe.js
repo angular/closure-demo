@@ -1,22 +1,63 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var invalid_pipe_argument_exception_1 = require('./invalid_pipe_argument_exception');
-var I18nSelectPipe = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Pipe } from '@angular/core';
+import { InvalidPipeArgumentError } from './invalid_pipe_argument_error';
+/**
+ * @ngModule CommonModule
+ * @whatItDoes Generic selector that displays the string that matches the current value.
+ * @howToUse `expression | i18nSelect:mapping`
+ * @description
+ *
+ *  Where `mapping` is an object that indicates the text that should be displayed
+ *  for different values of the provided `expression`.
+ *  If none of the keys of the mapping match the value of the `expression`, then the content
+ *  of the `other` key is returned when present, otherwise an empty string is returned.
+ *
+ *  ## Example
+ *
+ * {@example common/pipes/ts/i18n_pipe.ts region='I18nSelectPipeComponent'}
+ *
+ *  @experimental
+ */
+export var I18nSelectPipe = (function () {
     function I18nSelectPipe() {
     }
+    /**
+     * @param {?} value
+     * @param {?} mapping
+     * @return {?}
+     */
     I18nSelectPipe.prototype.transform = function (value, mapping) {
-        if (!lang_1.isStringMap(mapping)) {
-            throw new invalid_pipe_argument_exception_1.InvalidPipeArgumentException(I18nSelectPipe, mapping);
+        if (value == null)
+            return '';
+        if (typeof mapping !== 'object' || typeof value !== 'string') {
+            throw new InvalidPipeArgumentError(I18nSelectPipe, mapping);
         }
-        return collection_1.StringMapWrapper.contains(mapping, value) ? mapping[value] : mapping['other'];
+        if (mapping.hasOwnProperty(value)) {
+            return mapping[value];
+        }
+        if (mapping.hasOwnProperty('other')) {
+            return mapping['other'];
+        }
+        return '';
+    };
+    I18nSelectPipe._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        I18nSelectPipe.decorators;
+        /** @nocollapse
+        @type {?} */
+        I18nSelectPipe.ctorParameters;
     };
     I18nSelectPipe.decorators = [
-        { type: core_1.Pipe, args: [{ name: 'i18nSelect', pure: true },] },
-        { type: core_1.Injectable },
+        { type: Pipe, args: [{ name: 'i18nSelect', pure: true },] },
     ];
+    /** @nocollapse */
+    I18nSelectPipe.ctorParameters = [];
     return I18nSelectPipe;
 }());
-exports.I18nSelectPipe = I18nSelectPipe;
 //# sourceMappingURL=i18n_select_pipe.js.map

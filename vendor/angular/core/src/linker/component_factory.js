@@ -1,27 +1,34 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var lang_1 = require('../../src/facade/lang');
-var exceptions_1 = require('../../src/facade/exceptions');
-var view_utils_1 = require('./view_utils');
+import { unimplemented } from '../facade/errors';
+import { ElementRef } from './element_ref';
+import { ViewUtils } from './view_utils';
 /**
  * Represents an instance of a Component created via a {@link ComponentFactory}.
  *
  * `ComponentRef` provides access to the Component Instance as well other objects related to this
  * Component Instance and allows you to destroy the Component Instance via the {@link #destroy}
  * method.
+ * @stable
  */
-var ComponentRef = (function () {
+export var ComponentRef = (function () {
     function ComponentRef() {
     }
     Object.defineProperty(ComponentRef.prototype, "location", {
         /**
          * Location of the Host Element of this Component Instance.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
@@ -29,7 +36,7 @@ var ComponentRef = (function () {
         /**
          * The injector on which the component instance exists.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
@@ -37,7 +44,7 @@ var ComponentRef = (function () {
         /**
          * The instance of the Component.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
@@ -46,7 +53,7 @@ var ComponentRef = (function () {
         /**
          * The {@link ViewRef} of the Host View of this Component instance.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
@@ -55,7 +62,7 @@ var ComponentRef = (function () {
         /**
          * The {@link ChangeDetectorRef} of the Component instance.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
@@ -63,64 +70,110 @@ var ComponentRef = (function () {
         /**
          * The component type.
          */
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
+    /**
+     *  Destroys the component instance and all of the data structures associated with it.
+     * @abstract
+     * @return {?}
+     */
+    ComponentRef.prototype.destroy = function () { };
+    /**
+     *  Allows to register a callback that will be called when the component is destroyed.
+     * @abstract
+     * @param {?} callback
+     * @return {?}
+     */
+    ComponentRef.prototype.onDestroy = function (callback) { };
     return ComponentRef;
 }());
-exports.ComponentRef = ComponentRef;
-var ComponentRef_ = (function (_super) {
+export var ComponentRef_ = (function (_super) {
     __extends(ComponentRef_, _super);
-    function ComponentRef_(_hostElement, _componentType) {
+    /**
+     * @param {?} _index
+     * @param {?} _parentView
+     * @param {?} _nativeElement
+     * @param {?} _component
+     */
+    function ComponentRef_(_index, _parentView, _nativeElement, _component) {
         _super.call(this);
-        this._hostElement = _hostElement;
-        this._componentType = _componentType;
+        this._index = _index;
+        this._parentView = _parentView;
+        this._nativeElement = _nativeElement;
+        this._component = _component;
     }
     Object.defineProperty(ComponentRef_.prototype, "location", {
-        get: function () { return this._hostElement.elementRef; },
+        get: function () { return new ElementRef(this._nativeElement); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(ComponentRef_.prototype, "injector", {
-        get: function () { return this._hostElement.injector; },
+        get: function () { return this._parentView.injector(this._index); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(ComponentRef_.prototype, "instance", {
-        get: function () { return this._hostElement.component; },
+        get: function () { return this._component; },
         enumerable: true,
         configurable: true
     });
     ;
     Object.defineProperty(ComponentRef_.prototype, "hostView", {
-        get: function () { return this._hostElement.parentView.ref; },
+        get: function () { return this._parentView.ref; },
         enumerable: true,
         configurable: true
     });
     ;
     Object.defineProperty(ComponentRef_.prototype, "changeDetectorRef", {
-        get: function () { return this._hostElement.parentView.ref; },
+        get: function () { return this._parentView.ref; },
         enumerable: true,
         configurable: true
     });
     ;
     Object.defineProperty(ComponentRef_.prototype, "componentType", {
-        get: function () { return this._componentType; },
+        get: function () { return (this._component.constructor); },
         enumerable: true,
         configurable: true
     });
-    ComponentRef_.prototype.destroy = function () { this._hostElement.parentView.destroy(); };
+    /**
+     * @return {?}
+     */
+    ComponentRef_.prototype.destroy = function () { this._parentView.detachAndDestroy(); };
+    /**
+     * @param {?} callback
+     * @return {?}
+     */
     ComponentRef_.prototype.onDestroy = function (callback) { this.hostView.onDestroy(callback); };
+    ComponentRef_._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ComponentRef_.prototype._index;
+        /** @type {?} */
+        ComponentRef_.prototype._parentView;
+        /** @type {?} */
+        ComponentRef_.prototype._nativeElement;
+        /** @type {?} */
+        ComponentRef_.prototype._component;
+    };
     return ComponentRef_;
 }(ComponentRef));
-exports.ComponentRef_ = ComponentRef_;
-var EMPTY_CONTEXT = new Object();
-/*@ts2dart_const*/
-var ComponentFactory = (function () {
-    function ComponentFactory(selector, _viewFactory, _componentType) {
+/**
+ * @experimental
+ */
+var /** @type {?} */ EMPTY_CONTEXT = new Object();
+/**
+ * @stable
+ */
+export var ComponentFactory = (function () {
+    /**
+     * @param {?} selector
+     * @param {?} _viewClass
+     * @param {?} _componentType
+     */
+    function ComponentFactory(selector, _viewClass, _componentType) {
         this.selector = selector;
-        this._viewFactory = _viewFactory;
+        this._viewClass = _viewClass;
         this._componentType = _componentType;
     }
     Object.defineProperty(ComponentFactory.prototype, "componentType", {
@@ -129,21 +182,30 @@ var ComponentFactory = (function () {
         configurable: true
     });
     /**
-     * Creates a new component.
+     *  Creates a new component.
+     * @param {?} injector
+     * @param {?=} projectableNodes
+     * @param {?=} rootSelectorOrNode
+     * @return {?}
      */
     ComponentFactory.prototype.create = function (injector, projectableNodes, rootSelectorOrNode) {
         if (projectableNodes === void 0) { projectableNodes = null; }
         if (rootSelectorOrNode === void 0) { rootSelectorOrNode = null; }
-        var vu = injector.get(view_utils_1.ViewUtils);
-        if (lang_1.isBlank(projectableNodes)) {
+        var /** @type {?} */ vu = injector.get(ViewUtils);
+        if (!projectableNodes) {
             projectableNodes = [];
         }
-        // Note: Host views don't need a declarationAppElement!
-        var hostView = this._viewFactory(vu, injector, null);
-        var hostElement = hostView.create(EMPTY_CONTEXT, projectableNodes, rootSelectorOrNode);
-        return new ComponentRef_(hostElement, this._componentType);
+        var /** @type {?} */ hostView = new this._viewClass(vu, null, null, null);
+        return hostView.createHostView(rootSelectorOrNode, injector, projectableNodes);
+    };
+    ComponentFactory._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ComponentFactory.prototype.selector;
+        /** @type {?} */
+        ComponentFactory.prototype._viewClass;
+        /** @type {?} */
+        ComponentFactory.prototype._componentType;
     };
     return ComponentFactory;
 }());
-exports.ComponentFactory = ComponentFactory;
 //# sourceMappingURL=component_factory.js.map

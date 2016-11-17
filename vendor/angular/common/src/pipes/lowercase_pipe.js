@@ -1,23 +1,54 @@
-"use strict";
-var core_1 = require('@angular/core');
-var lang_1 = require('../../src/facade/lang');
-var invalid_pipe_argument_exception_1 = require('./invalid_pipe_argument_exception');
-var LowerCasePipe = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { Pipe } from '@angular/core';
+import { isBlank } from '../facade/lang';
+import { InvalidPipeArgumentError } from './invalid_pipe_argument_error';
+/**
+ * @ngModule CommonModule
+ * @whatItDoes Transforms string to lowercase.
+ * @howToUse `expression | lowercase`
+ * @description
+ *
+ * Converts value into a lowercase string using `String.prototype.toLowerCase()`.
+ *
+ * ### Example
+ *
+ * {@example common/pipes/ts/lowerupper_pipe.ts region='LowerUpperPipe'}
+ *
+ * @stable
+ */
+export var LowerCasePipe = (function () {
     function LowerCasePipe() {
     }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
     LowerCasePipe.prototype.transform = function (value) {
-        if (lang_1.isBlank(value))
+        if (isBlank(value))
             return value;
-        if (!lang_1.isString(value)) {
-            throw new invalid_pipe_argument_exception_1.InvalidPipeArgumentException(LowerCasePipe, value);
+        if (typeof value !== 'string') {
+            throw new InvalidPipeArgumentError(LowerCasePipe, value);
         }
         return value.toLowerCase();
     };
+    LowerCasePipe._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        LowerCasePipe.decorators;
+        /** @nocollapse
+        @type {?} */
+        LowerCasePipe.ctorParameters;
+    };
     LowerCasePipe.decorators = [
-        { type: core_1.Pipe, args: [{ name: 'lowercase' },] },
-        { type: core_1.Injectable },
+        { type: Pipe, args: [{ name: 'lowercase' },] },
     ];
+    /** @nocollapse */
+    LowerCasePipe.ctorParameters = [];
     return LowerCasePipe;
 }());
-exports.LowerCasePipe = LowerCasePipe;
 //# sourceMappingURL=lowercase_pipe.js.map

@@ -1,47 +1,87 @@
-"use strict";
-var core_1 = require('@angular/core');
-var core_private_1 = require('../../../core_private');
-var lang_1 = require('../../facade/lang');
-var dom_adapter_1 = require('../dom_adapter');
-var dom_renderer_1 = require('../dom_renderer');
-var CORE_TOKENS = { 'ApplicationRef': core_1.ApplicationRef, 'NgZone': core_1.NgZone };
-var INSPECT_GLOBAL_NAME = 'ng.probe';
-var CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
 /**
- * Returns a {@link DebugElement} for the given native DOM element, or
- * null if the given native element does not have an Angular view associated
- * with it.
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-function inspectNativeElement(element) {
-    return core_1.getDebugNode(element);
+import * as core from '@angular/core';
+import { StringMapWrapper } from '../../facade/collection';
+import { DebugDomRootRenderer } from '../../private_import_core';
+import { getDOM } from '../dom_adapter';
+import { DomRootRenderer } from '../dom_renderer';
+var /** @type {?} */ CORE_TOKENS = {
+    'ApplicationRef': core.ApplicationRef,
+    'NgZone': core.NgZone,
+};
+var /** @type {?} */ INSPECT_GLOBAL_NAME = 'ng.probe';
+var /** @type {?} */ CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
+/**
+ *  Returns a {@link DebugElement} for the given native DOM element, or null if the given native element does not have an Angular view associated with it.
+ * @param {?} element
+ * @return {?}
+ */
+export function inspectNativeElement(element) {
+    return core.getDebugNode(element);
 }
-exports.inspectNativeElement = inspectNativeElement;
-function _createConditionalRootRenderer(rootRenderer) {
-    if (lang_1.assertionsEnabled()) {
-        return _createRootRenderer(rootRenderer);
+/**
+ * Deprecated. Use the one from '@angular/core'.
+ * @deprecated
+ */
+export var NgProbeToken = (function () {
+    /**
+     * @param {?} name
+     * @param {?} token
+     */
+    function NgProbeToken(name, token) {
+        this.name = name;
+        this.token = token;
     }
-    return rootRenderer;
+    NgProbeToken._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        NgProbeToken.prototype.name;
+        /** @type {?} */
+        NgProbeToken.prototype.token;
+    };
+    return NgProbeToken;
+}());
+/**
+ * @param {?} rootRenderer
+ * @param {?} extraTokens
+ * @param {?} coreTokens
+ * @return {?}
+ */
+export function _createConditionalRootRenderer(rootRenderer, extraTokens, coreTokens) {
+    return core.isDevMode() ?
+        _createRootRenderer(rootRenderer, (extraTokens || []).concat(coreTokens || [])) :
+        rootRenderer;
 }
-function _createRootRenderer(rootRenderer) {
-    dom_adapter_1.getDOM().setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
-    dom_adapter_1.getDOM().setGlobalVar(CORE_TOKENS_GLOBAL_NAME, CORE_TOKENS);
-    return new core_private_1.DebugDomRootRenderer(rootRenderer);
+/**
+ * @param {?} rootRenderer
+ * @param {?} extraTokens
+ * @return {?}
+ */
+function _createRootRenderer(rootRenderer, extraTokens) {
+    getDOM().setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+    getDOM().setGlobalVar(CORE_TOKENS_GLOBAL_NAME, StringMapWrapper.merge(CORE_TOKENS, _ngProbeTokensToMap(extraTokens || [])));
+    return new DebugDomRootRenderer(rootRenderer);
+}
+/**
+ * @param {?} tokens
+ * @return {?}
+ */
+function _ngProbeTokensToMap(tokens) {
+    return tokens.reduce(function (prev, t) { return (prev[t.name] = t.token, prev); }, {});
 }
 /**
  * Providers which support debugging Angular applications (e.g. via `ng.probe`).
  */
-exports.ELEMENT_PROBE_PROVIDERS = [
-    /*@ts2dart_Provider*/ {
-        provide: core_1.RootRenderer,
+export var /** @type {?} */ ELEMENT_PROBE_PROVIDERS = [{
+        provide: core.RootRenderer,
         useFactory: _createConditionalRootRenderer,
-        deps: [dom_renderer_1.DomRootRenderer]
-    }
-];
-exports.ELEMENT_PROBE_PROVIDERS_PROD_MODE = [
-    /*@ts2dart_Provider*/ {
-        provide: core_1.RootRenderer,
-        useFactory: _createRootRenderer,
-        deps: [dom_renderer_1.DomRootRenderer]
-    }
-];
+        deps: [
+            DomRootRenderer, [NgProbeToken, new core.Optional()],
+            [core.NgProbeToken, new core.Optional()]
+        ]
+    }];
 //# sourceMappingURL=ng_probe.js.map

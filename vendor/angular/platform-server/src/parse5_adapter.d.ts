@@ -1,15 +1,19 @@
-import { DomAdapter } from '../platform_browser_private';
-import { Type } from '../src/facade/lang';
+import { DomAdapter } from './private_import_platform-browser';
+/**
+ * A `DomAdapter` powered by the `parse5` NodeJS module.
+ *
+ * @security Tread carefully! Interacting with the DOM directly is dangerous and
+ * can introduce XSS risks.
+ */
 export declare class Parse5DomAdapter extends DomAdapter {
     static makeCurrent(): void;
     hasProperty(element: any, name: string): boolean;
     setProperty(el: any, name: string, value: any): void;
     getProperty(el: any, name: string): any;
-    logError(error: any): void;
-    log(error: any): void;
-    logGroup(error: any): void;
+    logError(error: string): void;
+    log(error: string): void;
+    logGroup(error: string): void;
     logGroupEnd(): void;
-    getXHR(): Type;
     attrToPropMap: {
         [key: string]: string;
     };
@@ -22,8 +26,8 @@ export declare class Parse5DomAdapter extends DomAdapter {
     dispatchEvent(el: any, evt: any): void;
     createMouseEvent(eventType: any): Event;
     createEvent(eventType: string): Event;
-    preventDefault(evt: any): void;
-    isPrevented(evt: any): boolean;
+    preventDefault(event: any): void;
+    isPrevented(event: any): boolean;
     getInnerHTML(el: any): string;
     getTemplateContent(el: any): Node;
     getOuterHTML(el: any): string;
@@ -69,10 +73,6 @@ export declare class Parse5DomAdapter extends DomAdapter {
     removeClass(element: any, className: string): void;
     hasClass(element: any, className: string): boolean;
     hasStyle(element: any, styleName: string, styleValue?: string): boolean;
-    /** @internal */
-    _readStyleAttribute(element: any): {};
-    /** @internal */
-    _writeStyleAttribute(element: any, styleMap: any): void;
     setStyle(element: any, styleName: string, styleValue: string): void;
     removeStyle(element: any, styleName: string): void;
     getStyle(element: any, styleName: string): string;
@@ -102,8 +102,6 @@ export declare class Parse5DomAdapter extends DomAdapter {
     adoptNode(node: any): any;
     getHref(el: any): string;
     resolveAndSetHref(el: any, baseUrl: string, href: string): void;
-    /** @internal */
-    _buildRules(parsedRules: any, css?: any): any[];
     supportsDOMEvents(): boolean;
     supportsNativeShadowDOM(): boolean;
     getGlobalEventTarget(target: string): any;
@@ -116,8 +114,7 @@ export declare class Parse5DomAdapter extends DomAdapter {
     getComputedStyle(el: any): any;
     setData(el: any, name: string, value: string): void;
     setGlobalVar(path: string, value: any): void;
-    requestAnimationFrame(callback: any): number;
-    cancelAnimationFrame(id: number): void;
+    supportsWebAnimation(): boolean;
     performanceNow(): number;
     getAnimationPrefix(): string;
     getTransitionEnd(): string;
@@ -126,4 +123,8 @@ export declare class Parse5DomAdapter extends DomAdapter {
     parse(templateHtml: string): void;
     invoke(el: Element, methodName: string, args: any[]): any;
     getEventKey(event: any): string;
+    supportsCookies(): boolean;
+    getCookie(name: string): string;
+    setCookie(name: string, value: string): void;
+    animate(element: any, keyframes: any[], options: any): any;
 }

@@ -1,18 +1,40 @@
-"use strict";
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var view_type_1 = require('./view_type');
-/* @ts2dart_const */
-var StaticNodeDebugInfo = (function () {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { isBlank, isPresent } from '../facade/lang';
+import { ViewType } from './view_type';
+export var StaticNodeDebugInfo = (function () {
+    /**
+     * @param {?} providerTokens
+     * @param {?} componentToken
+     * @param {?} refTokens
+     */
     function StaticNodeDebugInfo(providerTokens, componentToken, refTokens) {
         this.providerTokens = providerTokens;
         this.componentToken = componentToken;
         this.refTokens = refTokens;
     }
+    StaticNodeDebugInfo._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        StaticNodeDebugInfo.prototype.providerTokens;
+        /** @type {?} */
+        StaticNodeDebugInfo.prototype.componentToken;
+        /** @type {?} */
+        StaticNodeDebugInfo.prototype.refTokens;
+    };
     return StaticNodeDebugInfo;
 }());
-exports.StaticNodeDebugInfo = StaticNodeDebugInfo;
-var DebugContext = (function () {
+export var DebugContext = (function () {
+    /**
+     * @param {?} _view
+     * @param {?} _nodeIndex
+     * @param {?} _tplRow
+     * @param {?} _tplCol
+     */
     function DebugContext(_view, _nodeIndex, _tplRow, _tplCol) {
         this._view = _view;
         this._nodeIndex = _nodeIndex;
@@ -21,7 +43,7 @@ var DebugContext = (function () {
     }
     Object.defineProperty(DebugContext.prototype, "_staticNodeInfo", {
         get: function () {
-            return lang_1.isPresent(this._nodeIndex) ? this._view.staticNodeDebugInfos[this._nodeIndex] : null;
+            return isPresent(this._nodeIndex) ? this._view.staticNodeDebugInfos[this._nodeIndex] : null;
         },
         enumerable: true,
         configurable: true
@@ -33,8 +55,8 @@ var DebugContext = (function () {
     });
     Object.defineProperty(DebugContext.prototype, "component", {
         get: function () {
-            var staticNodeInfo = this._staticNodeInfo;
-            if (lang_1.isPresent(staticNodeInfo) && lang_1.isPresent(staticNodeInfo.componentToken)) {
+            var /** @type {?} */ staticNodeInfo = this._staticNodeInfo;
+            if (isPresent(staticNodeInfo) && isPresent(staticNodeInfo.componentToken)) {
                 return this.injector.get(staticNodeInfo.componentToken);
             }
             return null;
@@ -44,14 +66,11 @@ var DebugContext = (function () {
     });
     Object.defineProperty(DebugContext.prototype, "componentRenderElement", {
         get: function () {
-            var componentView = this._view;
-            while (lang_1.isPresent(componentView.declarationAppElement) &&
-                componentView.type !== view_type_1.ViewType.COMPONENT) {
-                componentView = componentView.declarationAppElement.parentView;
+            var /** @type {?} */ componentView = this._view;
+            while (isPresent(componentView.parentView) && componentView.type !== ViewType.COMPONENT) {
+                componentView = (componentView.parentView);
             }
-            return lang_1.isPresent(componentView.declarationAppElement) ?
-                componentView.declarationAppElement.nativeElement :
-                null;
+            return componentView.parentElement;
         },
         enumerable: true,
         configurable: true
@@ -63,7 +82,7 @@ var DebugContext = (function () {
     });
     Object.defineProperty(DebugContext.prototype, "renderNode", {
         get: function () {
-            if (lang_1.isPresent(this._nodeIndex) && lang_1.isPresent(this._view.allNodes)) {
+            if (isPresent(this._nodeIndex) && this._view.allNodes) {
                 return this._view.allNodes[this._nodeIndex];
             }
             else {
@@ -75,8 +94,8 @@ var DebugContext = (function () {
     });
     Object.defineProperty(DebugContext.prototype, "providerTokens", {
         get: function () {
-            var staticNodeInfo = this._staticNodeInfo;
-            return lang_1.isPresent(staticNodeInfo) ? staticNodeInfo.providerTokens : null;
+            var /** @type {?} */ staticNodeInfo = this._staticNodeInfo;
+            return isPresent(staticNodeInfo) ? staticNodeInfo.providerTokens : null;
         },
         enumerable: true,
         configurable: true
@@ -91,14 +110,15 @@ var DebugContext = (function () {
     Object.defineProperty(DebugContext.prototype, "references", {
         get: function () {
             var _this = this;
-            var varValues = {};
-            var staticNodeInfo = this._staticNodeInfo;
-            if (lang_1.isPresent(staticNodeInfo)) {
-                var refs = staticNodeInfo.refTokens;
-                collection_1.StringMapWrapper.forEach(refs, function (refToken, refName) {
-                    var varValue;
-                    if (lang_1.isBlank(refToken)) {
-                        varValue = lang_1.isPresent(_this._view.allNodes) ? _this._view.allNodes[_this._nodeIndex] : null;
+            var /** @type {?} */ varValues = {};
+            var /** @type {?} */ staticNodeInfo = this._staticNodeInfo;
+            if (isPresent(staticNodeInfo)) {
+                var /** @type {?} */ refs_1 = staticNodeInfo.refTokens;
+                Object.keys(refs_1).forEach(function (refName) {
+                    var /** @type {?} */ refToken = refs_1[refName];
+                    var /** @type {?} */ varValue;
+                    if (isBlank(refToken)) {
+                        varValue = _this._view.allNodes ? _this._view.allNodes[_this._nodeIndex] : null;
                     }
                     else {
                         varValue = _this._view.injectorGet(refToken, _this._nodeIndex, null);
@@ -111,7 +131,16 @@ var DebugContext = (function () {
         enumerable: true,
         configurable: true
     });
+    DebugContext._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        DebugContext.prototype._view;
+        /** @type {?} */
+        DebugContext.prototype._nodeIndex;
+        /** @type {?} */
+        DebugContext.prototype._tplRow;
+        /** @type {?} */
+        DebugContext.prototype._tplCol;
+    };
     return DebugContext;
 }());
-exports.DebugContext = DebugContext;
 //# sourceMappingURL=debug_context.js.map

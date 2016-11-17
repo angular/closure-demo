@@ -1,13 +1,17 @@
-import { SecurityContext } from '../../core_private';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { SchemaMetadata, SecurityContext } from '@angular/core';
 import { ElementSchemaRegistry } from './element_schema_registry';
 export declare class DomElementSchemaRegistry extends ElementSchemaRegistry {
-    schema: {
-        [element: string]: {
-            [property: string]: string;
-        };
-    };
+    private _schema;
     constructor();
-    hasProperty(tagName: string, propName: string): boolean;
+    hasProperty(tagName: string, propName: string, schemaMetas: SchemaMetadata[]): boolean;
+    hasElement(tagName: string, schemaMetas: SchemaMetadata[]): boolean;
     /**
      * securityContext returns the security context for the given property on the given DOM tag.
      *
@@ -18,6 +22,21 @@ export declare class DomElementSchemaRegistry extends ElementSchemaRegistry {
      * 'NONE' security context, i.e. that they are safe inert string values. Only specific well known
      * attack vectors are assigned their appropriate context.
      */
-    securityContext(tagName: string, propName: string): SecurityContext;
+    securityContext(tagName: string, propName: string, isAttribute: boolean): SecurityContext;
     getMappedPropName(propName: string): string;
+    getDefaultComponentElementName(): string;
+    validateProperty(name: string): {
+        error: boolean;
+        msg?: string;
+    };
+    validateAttribute(name: string): {
+        error: boolean;
+        msg?: string;
+    };
+    allKnownElementNames(): string[];
+    normalizeAnimationStyleProperty(propName: string): string;
+    normalizeAnimationStyleValue(camelCaseProp: string, userProvidedProp: string, val: string | number): {
+        error: string;
+        value: string;
+    };
 }

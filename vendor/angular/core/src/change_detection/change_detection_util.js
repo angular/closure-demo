@@ -1,24 +1,34 @@
-"use strict";
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var lang_2 = require('../../src/facade/lang');
-exports.looseIdentical = lang_2.looseIdentical;
-exports.uninitialized = new Object();
-function devModeEqual(a, b) {
-    if (collection_1.isListLikeIterable(a) && collection_1.isListLikeIterable(b)) {
-        return collection_1.areIterablesEqual(a, b, devModeEqual);
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { areIterablesEqual, isListLikeIterable } from '../facade/collection';
+import { isPrimitive, looseIdentical } from '../facade/lang';
+export { looseIdentical } from '../facade/lang';
+export var /** @type {?} */ UNINITIALIZED = {
+    toString: function () { return 'CD_INIT_VALUE'; }
+};
+/**
+ * @param {?} a
+ * @param {?} b
+ * @return {?}
+ */
+export function devModeEqual(a, b) {
+    if (isListLikeIterable(a) && isListLikeIterable(b)) {
+        return areIterablesEqual(a, b, devModeEqual);
     }
-    else if (!collection_1.isListLikeIterable(a) && !lang_1.isPrimitive(a) && !collection_1.isListLikeIterable(b) &&
-        !lang_1.isPrimitive(b)) {
+    else if (!isListLikeIterable(a) && !isPrimitive(a) && !isListLikeIterable(b) && !isPrimitive(b)) {
         return true;
     }
     else {
-        return lang_1.looseIdentical(a, b);
+        return looseIdentical(a, b);
     }
 }
-exports.devModeEqual = devModeEqual;
 /**
- * Indicates that the result of a {@link PipeMetadata} transformation has changed even though the
+ * Indicates that the result of a {@link Pipe} transformation has changed even though the
  * reference
  * has not changed.
  *
@@ -34,22 +44,37 @@ exports.devModeEqual = devModeEqual;
  *    return WrappedValue.wrap(this._latestValue); // this will force update
  *  }
  * ```
+ * @stable
  */
-var WrappedValue = (function () {
+export var WrappedValue = (function () {
+    /**
+     * @param {?} wrapped
+     */
     function WrappedValue(wrapped) {
         this.wrapped = wrapped;
     }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
     WrappedValue.wrap = function (value) { return new WrappedValue(value); };
+    WrappedValue._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        WrappedValue.prototype.wrapped;
+    };
     return WrappedValue;
 }());
-exports.WrappedValue = WrappedValue;
 /**
  * Helper class for unwrapping WrappedValue s
  */
-var ValueUnwrapper = (function () {
+export var ValueUnwrapper = (function () {
     function ValueUnwrapper() {
         this.hasWrappedValue = false;
     }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
     ValueUnwrapper.prototype.unwrap = function (value) {
         if (value instanceof WrappedValue) {
             this.hasWrappedValue = true;
@@ -57,23 +82,40 @@ var ValueUnwrapper = (function () {
         }
         return value;
     };
+    /**
+     * @return {?}
+     */
     ValueUnwrapper.prototype.reset = function () { this.hasWrappedValue = false; };
+    ValueUnwrapper._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ValueUnwrapper.prototype.hasWrappedValue;
+    };
     return ValueUnwrapper;
 }());
-exports.ValueUnwrapper = ValueUnwrapper;
 /**
  * Represents a basic change from a previous to a new value.
+ * @stable
  */
-var SimpleChange = (function () {
+export var SimpleChange = (function () {
+    /**
+     * @param {?} previousValue
+     * @param {?} currentValue
+     */
     function SimpleChange(previousValue, currentValue) {
         this.previousValue = previousValue;
         this.currentValue = currentValue;
     }
     /**
-     * Check whether the new value is the first value assigned.
+     *  Check whether the new value is the first value assigned.
+     * @return {?}
      */
-    SimpleChange.prototype.isFirstChange = function () { return this.previousValue === exports.uninitialized; };
+    SimpleChange.prototype.isFirstChange = function () { return this.previousValue === UNINITIALIZED; };
+    SimpleChange._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        SimpleChange.prototype.previousValue;
+        /** @type {?} */
+        SimpleChange.prototype.currentValue;
+    };
     return SimpleChange;
 }());
-exports.SimpleChange = SimpleChange;
 //# sourceMappingURL=change_detection_util.js.map

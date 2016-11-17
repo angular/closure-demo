@@ -1,86 +1,113 @@
-"use strict";
-var security_1 = require('../security');
-var lang_1 = require('../../src/facade/lang');
-var collection_1 = require('../../src/facade/collection');
-var exceptions_1 = require('../../src/facade/exceptions');
-var element_1 = require('./element');
-var exceptions_2 = require('./exceptions');
-var change_detection_1 = require('../change_detection/change_detection');
-var api_1 = require('../render/api');
-var application_tokens_1 = require('../application_tokens');
-var decorators_1 = require('../di/decorators');
-var change_detection_util_1 = require("../change_detection/change_detection_util");
-var ViewUtils = (function () {
-    function ViewUtils(_renderer, _appId, sanitizer) {
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { devModeEqual } from '../change_detection/change_detection';
+import { UNINITIALIZED } from '../change_detection/change_detection_util';
+import { Injectable } from '../di';
+import { isPresent, looseIdentical } from '../facade/lang';
+import { RenderComponentType, RootRenderer } from '../render/api';
+import { Sanitizer } from '../security';
+import { ExpressionChangedAfterItHasBeenCheckedError } from './errors';
+export var ViewUtils = (function () {
+    /**
+     * @param {?} _renderer
+     * @param {?} sanitizer
+     */
+    function ViewUtils(_renderer, sanitizer) {
         this._renderer = _renderer;
-        this._appId = _appId;
         this._nextCompTypeId = 0;
         this.sanitizer = sanitizer;
     }
     /**
-     * Used by the generated code
+     * @param {?} renderComponentType
+     * @return {?}
      */
-    ViewUtils.prototype.createRenderComponentType = function (templateUrl, slotCount, encapsulation, styles) {
-        return new api_1.RenderComponentType(this._appId + "-" + this._nextCompTypeId++, templateUrl, slotCount, encapsulation, styles);
-    };
-    /** @internal */
     ViewUtils.prototype.renderComponent = function (renderComponentType) {
         return this._renderer.renderComponent(renderComponentType);
     };
+    ViewUtils._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ViewUtils.decorators;
+        /** @nocollapse
+        @type {?} */
+        ViewUtils.ctorParameters;
+        /** @type {?} */
+        ViewUtils.prototype.sanitizer;
+        /** @type {?} */
+        ViewUtils.prototype._nextCompTypeId;
+        /** @type {?} */
+        ViewUtils.prototype._renderer;
+    };
     ViewUtils.decorators = [
-        { type: decorators_1.Injectable },
+        { type: Injectable },
     ];
-    /** @nocollapse */ ViewUtils.ctorParameters = [
-        { type: api_1.RootRenderer, },
-        { type: undefined, decorators: [{ type: decorators_1.Inject, args: [application_tokens_1.APP_ID,] },] },
-        { type: security_1.SanitizationService, },
+    /** @nocollapse */
+    ViewUtils.ctorParameters = [
+        { type: RootRenderer, },
+        { type: Sanitizer, },
     ];
     return ViewUtils;
 }());
-exports.ViewUtils = ViewUtils;
-function flattenNestedViewRenderNodes(nodes) {
-    return _flattenNestedViewRenderNodes(nodes, []);
+var /** @type {?} */ nextRenderComponentTypeId = 0;
+/**
+ * @param {?} templateUrl
+ * @param {?} slotCount
+ * @param {?} encapsulation
+ * @param {?} styles
+ * @param {?} animations
+ * @return {?}
+ */
+export function createRenderComponentType(templateUrl, slotCount, encapsulation, styles, animations) {
+    return new RenderComponentType("" + nextRenderComponentTypeId++, templateUrl, slotCount, encapsulation, styles, animations);
 }
-exports.flattenNestedViewRenderNodes = flattenNestedViewRenderNodes;
-function _flattenNestedViewRenderNodes(nodes, renderNodes) {
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        if (node instanceof element_1.AppElement) {
-            var appEl = node;
-            renderNodes.push(appEl.nativeElement);
-            if (lang_1.isPresent(appEl.nestedViews)) {
-                for (var k = 0; k < appEl.nestedViews.length; k++) {
-                    _flattenNestedViewRenderNodes(appEl.nestedViews[k].rootNodesOrAppElements, renderNodes);
-                }
-            }
-        }
-        else {
-            renderNodes.push(node);
-        }
-    }
-    return renderNodes;
+/**
+ * @param {?} e
+ * @param {?} array
+ * @return {?}
+ */
+export function addToArray(e, array) {
+    array.push(e);
 }
-var EMPTY_ARR = [];
-function ensureSlotCount(projectableNodes, expectedSlotCount) {
-    var res;
-    if (lang_1.isBlank(projectableNodes)) {
-        res = EMPTY_ARR;
+/**
+ * @param {?} valueCount
+ * @param {?} constAndInterp
+ * @return {?}
+ */
+export function interpolate(valueCount, constAndInterp) {
+    var /** @type {?} */ result = '';
+    for (var /** @type {?} */ i = 0; i < valueCount * 2; i = i + 2) {
+        result = result + constAndInterp[i] + _toStringWithNull(constAndInterp[i + 1]);
     }
-    else if (projectableNodes.length < expectedSlotCount) {
-        var givenSlotCount = projectableNodes.length;
-        res = collection_1.ListWrapper.createFixedSize(expectedSlotCount);
-        for (var i = 0; i < expectedSlotCount; i++) {
-            res[i] = (i < givenSlotCount) ? projectableNodes[i] : EMPTY_ARR;
-        }
-    }
-    else {
-        res = projectableNodes;
-    }
-    return res;
+    return result + constAndInterp[valueCount * 2];
 }
-exports.ensureSlotCount = ensureSlotCount;
-exports.MAX_INTERPOLATION_VALUES = 9;
-function interpolate(valueCount, c0, a1, c1, a2, c2, a3, c3, a4, c4, a5, c5, a6, c6, a7, c7, a8, c8, a9, c9) {
+/**
+ * @param {?} valueCount
+ * @param {?} c0
+ * @param {?} a1
+ * @param {?} c1
+ * @param {?=} a2
+ * @param {?=} c2
+ * @param {?=} a3
+ * @param {?=} c3
+ * @param {?=} a4
+ * @param {?=} c4
+ * @param {?=} a5
+ * @param {?=} c5
+ * @param {?=} a6
+ * @param {?=} c6
+ * @param {?=} a7
+ * @param {?=} c7
+ * @param {?=} a8
+ * @param {?=} c8
+ * @param {?=} a9
+ * @param {?=} c9
+ * @return {?}
+ */
+export function inlineInterpolate(valueCount, c0, a1, c1, a2, c2, a3, c3, a4, c4, a5, c5, a6, c6, a7, c7, a8, c8, a9, c9) {
     switch (valueCount) {
         case 1:
             return c0 + _toStringWithNull(a1) + c1;
@@ -97,8 +124,7 @@ function interpolate(valueCount, c0, a1, c1, a2, c2, a3, c3, a4, c4, a5, c5, a6,
                 c3 + _toStringWithNull(a4) + c4 + _toStringWithNull(a5) + c5;
         case 6:
             return c0 + _toStringWithNull(a1) + c1 + _toStringWithNull(a2) + c2 + _toStringWithNull(a3) +
-                c3 + _toStringWithNull(a4) + c4 + _toStringWithNull(a5) + c5 + _toStringWithNull(a6) +
-                c6;
+                c3 + _toStringWithNull(a4) + c4 + _toStringWithNull(a5) + c5 + _toStringWithNull(a6) + c6;
         case 7:
             return c0 + _toStringWithNull(a1) + c1 + _toStringWithNull(a2) + c2 + _toStringWithNull(a3) +
                 c3 + _toStringWithNull(a4) + c4 + _toStringWithNull(a5) + c5 + _toStringWithNull(a6) +
@@ -110,79 +136,70 @@ function interpolate(valueCount, c0, a1, c1, a2, c2, a3, c3, a4, c4, a5, c5, a6,
         case 9:
             return c0 + _toStringWithNull(a1) + c1 + _toStringWithNull(a2) + c2 + _toStringWithNull(a3) +
                 c3 + _toStringWithNull(a4) + c4 + _toStringWithNull(a5) + c5 + _toStringWithNull(a6) +
-                c6 + _toStringWithNull(a7) + c7 + _toStringWithNull(a8) + c8 + _toStringWithNull(a9) +
-                c9;
+                c6 + _toStringWithNull(a7) + c7 + _toStringWithNull(a8) + c8 + _toStringWithNull(a9) + c9;
         default:
-            throw new exceptions_1.BaseException("Does not support more than 9 expressions");
+            throw new Error("Does not support more than 9 expressions");
     }
 }
-exports.interpolate = interpolate;
+/**
+ * @param {?} v
+ * @return {?}
+ */
 function _toStringWithNull(v) {
     return v != null ? v.toString() : '';
 }
-function checkBinding(throwOnChange, oldValue, newValue) {
+/**
+ * @param {?} throwOnChange
+ * @param {?} oldValue
+ * @param {?} newValue
+ * @return {?}
+ */
+export function checkBinding(throwOnChange, oldValue, newValue) {
     if (throwOnChange) {
-        if (!change_detection_1.devModeEqual(oldValue, newValue)) {
-            throw new exceptions_2.ExpressionChangedAfterItHasBeenCheckedException(oldValue, newValue, null);
+        if (!devModeEqual(oldValue, newValue)) {
+            throw new ExpressionChangedAfterItHasBeenCheckedError(oldValue, newValue);
         }
         return false;
     }
     else {
-        return !lang_1.looseIdentical(oldValue, newValue);
+        return !looseIdentical(oldValue, newValue);
     }
 }
-exports.checkBinding = checkBinding;
-function arrayLooseIdentical(a, b) {
-    if (a.length != b.length)
-        return false;
-    for (var i = 0; i < a.length; ++i) {
-        if (!lang_1.looseIdentical(a[i], b[i]))
-            return false;
-    }
-    return true;
+/**
+ * @param {?} input
+ * @param {?} value
+ * @return {?}
+ */
+export function castByValue(input, value) {
+    return (input);
 }
-exports.arrayLooseIdentical = arrayLooseIdentical;
-function mapLooseIdentical(m1, m2) {
-    var k1 = collection_1.StringMapWrapper.keys(m1);
-    var k2 = collection_1.StringMapWrapper.keys(m2);
-    if (k1.length != k2.length) {
-        return false;
-    }
-    var key;
-    for (var i = 0; i < k1.length; i++) {
-        key = k1[i];
-        if (!lang_1.looseIdentical(m1[key], m2[key])) {
-            return false;
-        }
-    }
-    return true;
-}
-exports.mapLooseIdentical = mapLooseIdentical;
-function castByValue(input, value) {
-    return input;
-}
-exports.castByValue = castByValue;
-exports.EMPTY_ARRAY = [];
-exports.EMPTY_MAP = {};
-function pureProxy1(fn) {
-    var result;
-    var v0;
-    v0 = change_detection_util_1.uninitialized;
+export var /** @type {?} */ EMPTY_ARRAY = [];
+export var /** @type {?} */ EMPTY_MAP = {};
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy1(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0 = UNINITIALIZED;
     return function (p0) {
-        if (!lang_1.looseIdentical(v0, p0)) {
+        if (!looseIdentical(v0, p0)) {
             v0 = p0;
             result = fn(p0);
         }
         return result;
     };
 }
-exports.pureProxy1 = pureProxy1;
-function pureProxy2(fn) {
-    var result;
-    var v0, v1;
-    v0 = v1 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy2(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0 = UNINITIALIZED;
+    var /** @type {?} */ v1 = UNINITIALIZED;
     return function (p0, p1) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1)) {
             v0 = p0;
             v1 = p1;
             result = fn(p0, p1);
@@ -190,13 +207,17 @@ function pureProxy2(fn) {
         return result;
     };
 }
-exports.pureProxy2 = pureProxy2;
-function pureProxy3(fn) {
-    var result;
-    var v0, v1, v2;
-    v0 = v1 = v2 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy3(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0 = UNINITIALIZED;
+    var /** @type {?} */ v1 = UNINITIALIZED;
+    var /** @type {?} */ v2 = UNINITIALIZED;
     return function (p0, p1, p2) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -205,14 +226,17 @@ function pureProxy3(fn) {
         return result;
     };
 }
-exports.pureProxy3 = pureProxy3;
-function pureProxy4(fn) {
-    var result;
-    var v0, v1, v2, v3;
-    v0 = v1 = v2 = v3 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy4(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3;
+    v0 = v1 = v2 = v3 = UNINITIALIZED;
     return function (p0, p1, p2, p3) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -222,14 +246,17 @@ function pureProxy4(fn) {
         return result;
     };
 }
-exports.pureProxy4 = pureProxy4;
-function pureProxy5(fn) {
-    var result;
-    var v0, v1, v2, v3, v4;
-    v0 = v1 = v2 = v3 = v4 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy5(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4;
+    v0 = v1 = v2 = v3 = v4 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -240,14 +267,17 @@ function pureProxy5(fn) {
         return result;
     };
 }
-exports.pureProxy5 = pureProxy5;
-function pureProxy6(fn) {
-    var result;
-    var v0, v1, v2, v3, v4, v5;
-    v0 = v1 = v2 = v3 = v4 = v5 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy6(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4, /** @type {?} */ v5;
+    v0 = v1 = v2 = v3 = v4 = v5 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4, p5) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4) || !lang_1.looseIdentical(v5, p5)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4) || !looseIdentical(v5, p5)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -259,15 +289,18 @@ function pureProxy6(fn) {
         return result;
     };
 }
-exports.pureProxy6 = pureProxy6;
-function pureProxy7(fn) {
-    var result;
-    var v0, v1, v2, v3, v4, v5, v6;
-    v0 = v1 = v2 = v3 = v4 = v5 = v6 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy7(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4, /** @type {?} */ v5, /** @type {?} */ v6;
+    v0 = v1 = v2 = v3 = v4 = v5 = v6 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4, p5, p6) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4) || !lang_1.looseIdentical(v5, p5) ||
-            !lang_1.looseIdentical(v6, p6)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4) || !looseIdentical(v5, p5) ||
+            !looseIdentical(v6, p6)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -280,15 +313,18 @@ function pureProxy7(fn) {
         return result;
     };
 }
-exports.pureProxy7 = pureProxy7;
-function pureProxy8(fn) {
-    var result;
-    var v0, v1, v2, v3, v4, v5, v6, v7;
-    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy8(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4, /** @type {?} */ v5, /** @type {?} */ v6, /** @type {?} */ v7;
+    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4, p5, p6, p7) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4) || !lang_1.looseIdentical(v5, p5) ||
-            !lang_1.looseIdentical(v6, p6) || !lang_1.looseIdentical(v7, p7)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4) || !looseIdentical(v5, p5) ||
+            !looseIdentical(v6, p6) || !looseIdentical(v7, p7)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -302,15 +338,18 @@ function pureProxy8(fn) {
         return result;
     };
 }
-exports.pureProxy8 = pureProxy8;
-function pureProxy9(fn) {
-    var result;
-    var v0, v1, v2, v3, v4, v5, v6, v7, v8;
-    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = v8 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy9(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4, /** @type {?} */ v5, /** @type {?} */ v6, /** @type {?} */ v7, /** @type {?} */ v8;
+    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = v8 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4, p5, p6, p7, p8) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4) || !lang_1.looseIdentical(v5, p5) ||
-            !lang_1.looseIdentical(v6, p6) || !lang_1.looseIdentical(v7, p7) || !lang_1.looseIdentical(v8, p8)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4) || !looseIdentical(v5, p5) ||
+            !looseIdentical(v6, p6) || !looseIdentical(v7, p7) || !looseIdentical(v8, p8)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -325,16 +364,19 @@ function pureProxy9(fn) {
         return result;
     };
 }
-exports.pureProxy9 = pureProxy9;
-function pureProxy10(fn) {
-    var result;
-    var v0, v1, v2, v3, v4, v5, v6, v7, v8, v9;
-    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = v8 = v9 = change_detection_util_1.uninitialized;
+/**
+ * @param {?} fn
+ * @return {?}
+ */
+export function pureProxy10(fn) {
+    var /** @type {?} */ result;
+    var /** @type {?} */ v0, /** @type {?} */ v1, /** @type {?} */ v2, /** @type {?} */ v3, /** @type {?} */ v4, /** @type {?} */ v5, /** @type {?} */ v6, /** @type {?} */ v7, /** @type {?} */ v8, /** @type {?} */ v9;
+    v0 = v1 = v2 = v3 = v4 = v5 = v6 = v7 = v8 = v9 = UNINITIALIZED;
     return function (p0, p1, p2, p3, p4, p5, p6, p7, p8, p9) {
-        if (!lang_1.looseIdentical(v0, p0) || !lang_1.looseIdentical(v1, p1) || !lang_1.looseIdentical(v2, p2) ||
-            !lang_1.looseIdentical(v3, p3) || !lang_1.looseIdentical(v4, p4) || !lang_1.looseIdentical(v5, p5) ||
-            !lang_1.looseIdentical(v6, p6) || !lang_1.looseIdentical(v7, p7) || !lang_1.looseIdentical(v8, p8) ||
-            !lang_1.looseIdentical(v9, p9)) {
+        if (!looseIdentical(v0, p0) || !looseIdentical(v1, p1) || !looseIdentical(v2, p2) ||
+            !looseIdentical(v3, p3) || !looseIdentical(v4, p4) || !looseIdentical(v5, p5) ||
+            !looseIdentical(v6, p6) || !looseIdentical(v7, p7) || !looseIdentical(v8, p8) ||
+            !looseIdentical(v9, p9)) {
             v0 = p0;
             v1 = p1;
             v2 = p2;
@@ -350,5 +392,591 @@ function pureProxy10(fn) {
         return result;
     };
 }
-exports.pureProxy10 = pureProxy10;
+/**
+ * @param {?} renderer
+ * @param {?} el
+ * @param {?} changes
+ * @return {?}
+ */
+export function setBindingDebugInfoForChanges(renderer, el, changes) {
+    Object.keys(changes).forEach(function (propName) {
+        setBindingDebugInfo(renderer, el, propName, changes[propName].currentValue);
+    });
+}
+/**
+ * @param {?} renderer
+ * @param {?} el
+ * @param {?} propName
+ * @param {?} value
+ * @return {?}
+ */
+export function setBindingDebugInfo(renderer, el, propName, value) {
+    try {
+        renderer.setBindingDebugInfo(el, "ng-reflect-" + camelCaseToDashCase(propName), value ? value.toString() : null);
+    }
+    catch (e) {
+        renderer.setBindingDebugInfo(el, "ng-reflect-" + camelCaseToDashCase(propName), '[ERROR] Exception while trying to serialize the value');
+    }
+}
+var /** @type {?} */ CAMEL_CASE_REGEXP = /([A-Z])/g;
+/**
+ * @param {?} input
+ * @return {?}
+ */
+function camelCaseToDashCase(input) {
+    return input.replace(CAMEL_CASE_REGEXP, function () {
+        var m = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            m[_i - 0] = arguments[_i];
+        }
+        return '-' + m[1].toLowerCase();
+    });
+}
+/**
+ * @param {?} renderer
+ * @param {?} parentElement
+ * @param {?} name
+ * @param {?} attrs
+ * @param {?=} debugInfo
+ * @return {?}
+ */
+export function createRenderElement(renderer, parentElement, name, attrs, debugInfo) {
+    var /** @type {?} */ el = renderer.createElement(parentElement, name, debugInfo);
+    for (var /** @type {?} */ i = 0; i < attrs.length; i += 2) {
+        renderer.setElementAttribute(el, attrs.get(i), attrs.get(i + 1));
+    }
+    return el;
+}
+/**
+ * @param {?} renderer
+ * @param {?} elementName
+ * @param {?} attrs
+ * @param {?} rootSelectorOrNode
+ * @param {?=} debugInfo
+ * @return {?}
+ */
+export function selectOrCreateRenderHostElement(renderer, elementName, attrs, rootSelectorOrNode, debugInfo) {
+    var /** @type {?} */ hostElement;
+    if (isPresent(rootSelectorOrNode)) {
+        hostElement = renderer.selectRootElement(rootSelectorOrNode, debugInfo);
+        for (var /** @type {?} */ i = 0; i < attrs.length; i += 2) {
+            renderer.setElementAttribute(hostElement, attrs.get(i), attrs.get(i + 1));
+        }
+    }
+    else {
+        hostElement = createRenderElement(renderer, null, elementName, attrs, debugInfo);
+    }
+    return hostElement;
+}
+/**
+ * @param {?} view
+ * @param {?} element
+ * @param {?} eventNamesAndTargets
+ * @param {?} listener
+ * @return {?}
+ */
+export function subscribeToRenderElement(view, element, eventNamesAndTargets, listener) {
+    var /** @type {?} */ disposables = createEmptyInlineArray(eventNamesAndTargets.length / 2);
+    for (var /** @type {?} */ i = 0; i < eventNamesAndTargets.length; i += 2) {
+        var /** @type {?} */ eventName = eventNamesAndTargets.get(i);
+        var /** @type {?} */ eventTarget = eventNamesAndTargets.get(i + 1);
+        var /** @type {?} */ disposable = void 0;
+        if (eventTarget) {
+            disposable = view.renderer.listenGlobal(eventTarget, eventName, listener.bind(view, eventTarget + ":" + eventName));
+        }
+        else {
+            disposable = view.renderer.listen(element, eventName, listener.bind(view, eventName));
+        }
+        disposables.set(i / 2, disposable);
+    }
+    return disposeInlineArray.bind(null, disposables);
+}
+/**
+ * @param {?} disposables
+ * @return {?}
+ */
+function disposeInlineArray(disposables) {
+    for (var /** @type {?} */ i = 0; i < disposables.length; i++) {
+        disposables.get(i)();
+    }
+}
+/**
+ * @return {?}
+ */
+export function noop() { }
+/**
+ * @param {?} length
+ * @return {?}
+ */
+function createEmptyInlineArray(length) {
+    var /** @type {?} */ ctor;
+    if (length <= 2) {
+        ctor = InlineArray2;
+    }
+    else if (length <= 4) {
+        ctor = InlineArray4;
+    }
+    else if (length <= 8) {
+        ctor = InlineArray8;
+    }
+    else if (length <= 16) {
+        ctor = InlineArray16;
+    }
+    else {
+        ctor = InlineArrayDynamic;
+    }
+    return new ctor(length);
+}
+var InlineArray0 = (function () {
+    function InlineArray0() {
+        this.length = 0;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArray0.prototype.get = function (index) { return undefined; };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArray0.prototype.set = function (index, value) { };
+    InlineArray0._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArray0.prototype.length;
+    };
+    return InlineArray0;
+}());
+export var InlineArray2 = (function () {
+    /**
+     * @param {?} length
+     * @param {?=} _v0
+     * @param {?=} _v1
+     */
+    function InlineArray2(length, _v0, _v1) {
+        this.length = length;
+        this._v0 = _v0;
+        this._v1 = _v1;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArray2.prototype.get = function (index) {
+        switch (index) {
+            case 0:
+                return this._v0;
+            case 1:
+                return this._v1;
+            default:
+                return undefined;
+        }
+    };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArray2.prototype.set = function (index, value) {
+        switch (index) {
+            case 0:
+                this._v0 = value;
+                break;
+            case 1:
+                this._v1 = value;
+                break;
+        }
+    };
+    InlineArray2._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArray2.prototype.length;
+        /** @type {?} */
+        InlineArray2.prototype._v0;
+        /** @type {?} */
+        InlineArray2.prototype._v1;
+    };
+    return InlineArray2;
+}());
+export var InlineArray4 = (function () {
+    /**
+     * @param {?} length
+     * @param {?=} _v0
+     * @param {?=} _v1
+     * @param {?=} _v2
+     * @param {?=} _v3
+     */
+    function InlineArray4(length, _v0, _v1, _v2, _v3) {
+        this.length = length;
+        this._v0 = _v0;
+        this._v1 = _v1;
+        this._v2 = _v2;
+        this._v3 = _v3;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArray4.prototype.get = function (index) {
+        switch (index) {
+            case 0:
+                return this._v0;
+            case 1:
+                return this._v1;
+            case 2:
+                return this._v2;
+            case 3:
+                return this._v3;
+            default:
+                return undefined;
+        }
+    };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArray4.prototype.set = function (index, value) {
+        switch (index) {
+            case 0:
+                this._v0 = value;
+                break;
+            case 1:
+                this._v1 = value;
+                break;
+            case 2:
+                this._v2 = value;
+                break;
+            case 3:
+                this._v3 = value;
+                break;
+        }
+    };
+    InlineArray4._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArray4.prototype.length;
+        /** @type {?} */
+        InlineArray4.prototype._v0;
+        /** @type {?} */
+        InlineArray4.prototype._v1;
+        /** @type {?} */
+        InlineArray4.prototype._v2;
+        /** @type {?} */
+        InlineArray4.prototype._v3;
+    };
+    return InlineArray4;
+}());
+export var InlineArray8 = (function () {
+    /**
+     * @param {?} length
+     * @param {?=} _v0
+     * @param {?=} _v1
+     * @param {?=} _v2
+     * @param {?=} _v3
+     * @param {?=} _v4
+     * @param {?=} _v5
+     * @param {?=} _v6
+     * @param {?=} _v7
+     */
+    function InlineArray8(length, _v0, _v1, _v2, _v3, _v4, _v5, _v6, _v7) {
+        this.length = length;
+        this._v0 = _v0;
+        this._v1 = _v1;
+        this._v2 = _v2;
+        this._v3 = _v3;
+        this._v4 = _v4;
+        this._v5 = _v5;
+        this._v6 = _v6;
+        this._v7 = _v7;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArray8.prototype.get = function (index) {
+        switch (index) {
+            case 0:
+                return this._v0;
+            case 1:
+                return this._v1;
+            case 2:
+                return this._v2;
+            case 3:
+                return this._v3;
+            case 4:
+                return this._v4;
+            case 5:
+                return this._v5;
+            case 6:
+                return this._v6;
+            case 7:
+                return this._v7;
+            default:
+                return undefined;
+        }
+    };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArray8.prototype.set = function (index, value) {
+        switch (index) {
+            case 0:
+                this._v0 = value;
+                break;
+            case 1:
+                this._v1 = value;
+                break;
+            case 2:
+                this._v2 = value;
+                break;
+            case 3:
+                this._v3 = value;
+                break;
+            case 4:
+                this._v4 = value;
+                break;
+            case 5:
+                this._v5 = value;
+                break;
+            case 6:
+                this._v6 = value;
+                break;
+            case 7:
+                this._v7 = value;
+                break;
+        }
+    };
+    InlineArray8._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArray8.prototype.length;
+        /** @type {?} */
+        InlineArray8.prototype._v0;
+        /** @type {?} */
+        InlineArray8.prototype._v1;
+        /** @type {?} */
+        InlineArray8.prototype._v2;
+        /** @type {?} */
+        InlineArray8.prototype._v3;
+        /** @type {?} */
+        InlineArray8.prototype._v4;
+        /** @type {?} */
+        InlineArray8.prototype._v5;
+        /** @type {?} */
+        InlineArray8.prototype._v6;
+        /** @type {?} */
+        InlineArray8.prototype._v7;
+    };
+    return InlineArray8;
+}());
+export var InlineArray16 = (function () {
+    /**
+     * @param {?} length
+     * @param {?=} _v0
+     * @param {?=} _v1
+     * @param {?=} _v2
+     * @param {?=} _v3
+     * @param {?=} _v4
+     * @param {?=} _v5
+     * @param {?=} _v6
+     * @param {?=} _v7
+     * @param {?=} _v8
+     * @param {?=} _v9
+     * @param {?=} _v10
+     * @param {?=} _v11
+     * @param {?=} _v12
+     * @param {?=} _v13
+     * @param {?=} _v14
+     * @param {?=} _v15
+     */
+    function InlineArray16(length, _v0, _v1, _v2, _v3, _v4, _v5, _v6, _v7, _v8, _v9, _v10, _v11, _v12, _v13, _v14, _v15) {
+        this.length = length;
+        this._v0 = _v0;
+        this._v1 = _v1;
+        this._v2 = _v2;
+        this._v3 = _v3;
+        this._v4 = _v4;
+        this._v5 = _v5;
+        this._v6 = _v6;
+        this._v7 = _v7;
+        this._v8 = _v8;
+        this._v9 = _v9;
+        this._v10 = _v10;
+        this._v11 = _v11;
+        this._v12 = _v12;
+        this._v13 = _v13;
+        this._v14 = _v14;
+        this._v15 = _v15;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArray16.prototype.get = function (index) {
+        switch (index) {
+            case 0:
+                return this._v0;
+            case 1:
+                return this._v1;
+            case 2:
+                return this._v2;
+            case 3:
+                return this._v3;
+            case 4:
+                return this._v4;
+            case 5:
+                return this._v5;
+            case 6:
+                return this._v6;
+            case 7:
+                return this._v7;
+            case 8:
+                return this._v8;
+            case 9:
+                return this._v9;
+            case 10:
+                return this._v10;
+            case 11:
+                return this._v11;
+            case 12:
+                return this._v12;
+            case 13:
+                return this._v13;
+            case 14:
+                return this._v14;
+            case 15:
+                return this._v15;
+            default:
+                return undefined;
+        }
+    };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArray16.prototype.set = function (index, value) {
+        switch (index) {
+            case 0:
+                this._v0 = value;
+                break;
+            case 1:
+                this._v1 = value;
+                break;
+            case 2:
+                this._v2 = value;
+                break;
+            case 3:
+                this._v3 = value;
+                break;
+            case 4:
+                this._v4 = value;
+                break;
+            case 5:
+                this._v5 = value;
+                break;
+            case 6:
+                this._v6 = value;
+                break;
+            case 7:
+                this._v7 = value;
+                break;
+            case 8:
+                this._v8 = value;
+                break;
+            case 9:
+                this._v9 = value;
+                break;
+            case 10:
+                this._v10 = value;
+                break;
+            case 11:
+                this._v11 = value;
+                break;
+            case 12:
+                this._v12 = value;
+                break;
+            case 13:
+                this._v13 = value;
+                break;
+            case 14:
+                this._v14 = value;
+                break;
+            case 15:
+                this._v15 = value;
+                break;
+        }
+    };
+    InlineArray16._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArray16.prototype.length;
+        /** @type {?} */
+        InlineArray16.prototype._v0;
+        /** @type {?} */
+        InlineArray16.prototype._v1;
+        /** @type {?} */
+        InlineArray16.prototype._v2;
+        /** @type {?} */
+        InlineArray16.prototype._v3;
+        /** @type {?} */
+        InlineArray16.prototype._v4;
+        /** @type {?} */
+        InlineArray16.prototype._v5;
+        /** @type {?} */
+        InlineArray16.prototype._v6;
+        /** @type {?} */
+        InlineArray16.prototype._v7;
+        /** @type {?} */
+        InlineArray16.prototype._v8;
+        /** @type {?} */
+        InlineArray16.prototype._v9;
+        /** @type {?} */
+        InlineArray16.prototype._v10;
+        /** @type {?} */
+        InlineArray16.prototype._v11;
+        /** @type {?} */
+        InlineArray16.prototype._v12;
+        /** @type {?} */
+        InlineArray16.prototype._v13;
+        /** @type {?} */
+        InlineArray16.prototype._v14;
+        /** @type {?} */
+        InlineArray16.prototype._v15;
+    };
+    return InlineArray16;
+}());
+export var InlineArrayDynamic = (function () {
+    /**
+     * @param {?} length
+     * @param {...?} values
+     */
+    function InlineArrayDynamic(length) {
+        var values = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            values[_i - 1] = arguments[_i];
+        }
+        this.length = length;
+        this._values = values;
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    InlineArrayDynamic.prototype.get = function (index) { return this._values[index]; };
+    /**
+     * @param {?} index
+     * @param {?} value
+     * @return {?}
+     */
+    InlineArrayDynamic.prototype.set = function (index, value) { this._values[index] = value; };
+    InlineArrayDynamic._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        InlineArrayDynamic.prototype._values;
+        /** @type {?} */
+        InlineArrayDynamic.prototype.length;
+    };
+    return InlineArrayDynamic;
+}());
+export var /** @type {?} */ EMPTY_INLINE_ARRAY = new InlineArray0();
 //# sourceMappingURL=view_utils.js.map

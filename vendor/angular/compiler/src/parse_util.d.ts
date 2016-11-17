@@ -14,14 +14,15 @@ export declare class ParseSourceFile {
 export declare class ParseSourceSpan {
     start: ParseLocation;
     end: ParseLocation;
-    constructor(start: ParseLocation, end: ParseLocation);
+    details: string;
+    constructor(start: ParseLocation, end: ParseLocation, details?: string);
     toString(): string;
 }
 export declare enum ParseErrorLevel {
     WARNING = 0,
     FATAL = 1,
 }
-export declare abstract class ParseError {
+export declare class ParseError {
     span: ParseSourceSpan;
     msg: string;
     level: ParseErrorLevel;

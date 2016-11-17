@@ -1,17 +1,22 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var core_1 = require('@angular/core');
-var core_private_1 = require('../../core_private');
-exports.SecurityContext = core_private_1.SecurityContext;
-var html_sanitizer_1 = require('./html_sanitizer');
-var url_sanitizer_1 = require('./url_sanitizer');
-var style_sanitizer_1 = require('./style_sanitizer');
+import { Injectable, SecurityContext } from '@angular/core';
+import { sanitizeHtml } from './html_sanitizer';
+import { sanitizeStyle } from './style_sanitizer';
+import { sanitizeUrl } from './url_sanitizer';
+export { SecurityContext };
 /**
- * DomSanitizationService helps preventing Cross Site Scripting Security bugs (XSS) by sanitizing
+ * DomSanitizer helps preventing Cross Site Scripting Security bugs (XSS) by sanitizing
  * values to be safe to use in the different DOM contexts.
  *
  * For example, when binding a URL in an `<a [href]="someValue">` hyperlink, `someValue` will be
@@ -33,77 +38,186 @@ var style_sanitizer_1 = require('./style_sanitizer');
  * It is not required (and not recommended) to bypass security if the value is safe, e.g. a URL that
  * does not start with a suspicious protocol, or an HTML snippet that does not contain dangerous
  * code. The sanitizer leaves safe values intact.
+ *
+ * @security Calling any of the `bypassSecurityTrust...` APIs disables Angular's built-in
+ * sanitization for the value passed in. Carefully check and audit all values and code paths going
+ * into this call. Make sure any user data is appropriately escaped for this security context.
+ * For more detail, see the [Security Guide](http://g.co/ng/security).
+ *
+ * @stable
  */
-var DomSanitizationService = (function () {
-    function DomSanitizationService() {
+export var DomSanitizer = (function () {
+    function DomSanitizer() {
     }
-    return DomSanitizationService;
+    /**
+     *  Sanitizes a value for use in the given SecurityContext. * If value is trusted for the context, this method will unwrap the contained safe value and use it directly. Otherwise, value will be sanitized to be safe in the given context, for example by replacing URLs that have an unsafe protocol part (such as `javascript:`). The implementation is responsible to make sure that the value can definitely be safely used in the given context.
+     * @abstract
+     * @param {?} context
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.sanitize = function (context, value) { };
+    /**
+     *  Bypass security and trust the given value to be safe HTML. Only use this when the bound HTML is unsafe (e.g. contains `<script>` tags) and the code should be executed. The sanitizer will leave safe HTML intact, so in most situations this method should not be used. * **WARNING:** calling this method with untrusted user data exposes your application to XSS security risks!
+     * @abstract
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.bypassSecurityTrustHtml = function (value) { };
+    /**
+     *  Bypass security and trust the given value to be safe style value (CSS). * **WARNING:** calling this method with untrusted user data exposes your application to XSS security risks!
+     * @abstract
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.bypassSecurityTrustStyle = function (value) { };
+    /**
+     *  Bypass security and trust the given value to be safe JavaScript. * **WARNING:** calling this method with untrusted user data exposes your application to XSS security risks!
+     * @abstract
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.bypassSecurityTrustScript = function (value) { };
+    /**
+     *  Bypass security and trust the given value to be a safe style URL, i.e. a value that can be used in hyperlinks or `<img src>`. * **WARNING:** calling this method with untrusted user data exposes your application to XSS security risks!
+     * @abstract
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.bypassSecurityTrustUrl = function (value) { };
+    /**
+     *  Bypass security and trust the given value to be a safe resource URL, i.e. a location that may be used to load executable code from, like `<script src>`, or `<iframe src>`. * **WARNING:** calling this method with untrusted user data exposes your application to XSS security risks!
+     * @abstract
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizer.prototype.bypassSecurityTrustResourceUrl = function (value) { };
+    return DomSanitizer;
 }());
-exports.DomSanitizationService = DomSanitizationService;
-var DomSanitizationServiceImpl = (function (_super) {
-    __extends(DomSanitizationServiceImpl, _super);
-    function DomSanitizationServiceImpl() {
+export var DomSanitizerImpl = (function (_super) {
+    __extends(DomSanitizerImpl, _super);
+    function DomSanitizerImpl() {
         _super.apply(this, arguments);
     }
-    DomSanitizationServiceImpl.prototype.sanitize = function (ctx, value) {
+    /**
+     * @param {?} ctx
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.sanitize = function (ctx, value) {
         if (value == null)
             return null;
         switch (ctx) {
-            case core_private_1.SecurityContext.NONE:
+            case SecurityContext.NONE:
                 return value;
-            case core_private_1.SecurityContext.HTML:
+            case SecurityContext.HTML:
                 if (value instanceof SafeHtmlImpl)
                     return value.changingThisBreaksApplicationSecurity;
                 this.checkNotSafeValue(value, 'HTML');
-                return html_sanitizer_1.sanitizeHtml(String(value));
-            case core_private_1.SecurityContext.STYLE:
+                return sanitizeHtml(String(value));
+            case SecurityContext.STYLE:
                 if (value instanceof SafeStyleImpl)
                     return value.changingThisBreaksApplicationSecurity;
                 this.checkNotSafeValue(value, 'Style');
-                return style_sanitizer_1.sanitizeStyle(value);
-            case core_private_1.SecurityContext.SCRIPT:
+                return sanitizeStyle(value);
+            case SecurityContext.SCRIPT:
                 if (value instanceof SafeScriptImpl)
                     return value.changingThisBreaksApplicationSecurity;
                 this.checkNotSafeValue(value, 'Script');
                 throw new Error('unsafe value used in a script context');
-            case core_private_1.SecurityContext.URL:
-                if (value instanceof SafeUrlImpl)
+            case SecurityContext.URL:
+                if (value instanceof SafeResourceUrlImpl || value instanceof SafeUrlImpl) {
+                    // Allow resource URLs in URL contexts, they are strictly more trusted.
                     return value.changingThisBreaksApplicationSecurity;
+                }
                 this.checkNotSafeValue(value, 'URL');
-                return url_sanitizer_1.sanitizeUrl(String(value));
-            case core_private_1.SecurityContext.RESOURCE_URL:
+                return sanitizeUrl(String(value));
+            case SecurityContext.RESOURCE_URL:
                 if (value instanceof SafeResourceUrlImpl) {
                     return value.changingThisBreaksApplicationSecurity;
                 }
                 this.checkNotSafeValue(value, 'ResourceURL');
-                throw new Error('unsafe value used in a resource URL context');
+                throw new Error('unsafe value used in a resource URL context (see http://g.co/ng/security#xss)');
             default:
-                throw new Error("Unexpected SecurityContext " + ctx);
+                throw new Error("Unexpected SecurityContext " + ctx + " (see http://g.co/ng/security#xss)");
         }
     };
-    DomSanitizationServiceImpl.prototype.checkNotSafeValue = function (value, expectedType) {
+    /**
+     * @param {?} value
+     * @param {?} expectedType
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.checkNotSafeValue = function (value, expectedType) {
         if (value instanceof SafeValueImpl) {
-            throw new Error('Required a safe ' + expectedType + ', got a ' + value.getTypeName());
+            throw new Error(("Required a safe " + expectedType + ", got a " + value.getTypeName() + " ") +
+                "(see http://g.co/ng/security#xss)");
         }
     };
-    DomSanitizationServiceImpl.prototype.bypassSecurityTrustHtml = function (value) { return new SafeHtmlImpl(value); };
-    DomSanitizationServiceImpl.prototype.bypassSecurityTrustStyle = function (value) { return new SafeStyleImpl(value); };
-    DomSanitizationServiceImpl.prototype.bypassSecurityTrustScript = function (value) { return new SafeScriptImpl(value); };
-    DomSanitizationServiceImpl.prototype.bypassSecurityTrustUrl = function (value) { return new SafeUrlImpl(value); };
-    DomSanitizationServiceImpl.prototype.bypassSecurityTrustResourceUrl = function (value) {
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.bypassSecurityTrustHtml = function (value) { return new SafeHtmlImpl(value); };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.bypassSecurityTrustStyle = function (value) { return new SafeStyleImpl(value); };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.bypassSecurityTrustScript = function (value) { return new SafeScriptImpl(value); };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.bypassSecurityTrustUrl = function (value) { return new SafeUrlImpl(value); };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    DomSanitizerImpl.prototype.bypassSecurityTrustResourceUrl = function (value) {
         return new SafeResourceUrlImpl(value);
     };
-    DomSanitizationServiceImpl.decorators = [
-        { type: core_1.Injectable },
+    DomSanitizerImpl._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        DomSanitizerImpl.decorators;
+        /** @nocollapse
+        @type {?} */
+        DomSanitizerImpl.ctorParameters;
+    };
+    DomSanitizerImpl.decorators = [
+        { type: Injectable },
     ];
-    return DomSanitizationServiceImpl;
-}(DomSanitizationService));
-exports.DomSanitizationServiceImpl = DomSanitizationServiceImpl;
+    /** @nocollapse */
+    DomSanitizerImpl.ctorParameters = [];
+    return DomSanitizerImpl;
+}(DomSanitizer));
 var SafeValueImpl = (function () {
+    /**
+     * @param {?} changingThisBreaksApplicationSecurity
+     */
     function SafeValueImpl(changingThisBreaksApplicationSecurity) {
         this.changingThisBreaksApplicationSecurity = changingThisBreaksApplicationSecurity;
         // empty
     }
+    /**
+     * @abstract
+     * @return {?}
+     */
+    SafeValueImpl.prototype.getTypeName = function () { };
+    /**
+     * @return {?}
+     */
+    SafeValueImpl.prototype.toString = function () {
+        return ("SafeValue must use [property]=binding: " + this.changingThisBreaksApplicationSecurity) +
+            " (see http://g.co/ng/security#xss)";
+    };
+    SafeValueImpl._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        SafeValueImpl.prototype.changingThisBreaksApplicationSecurity;
+    };
     return SafeValueImpl;
 }());
 var SafeHtmlImpl = (function (_super) {
@@ -111,6 +225,9 @@ var SafeHtmlImpl = (function (_super) {
     function SafeHtmlImpl() {
         _super.apply(this, arguments);
     }
+    /**
+     * @return {?}
+     */
     SafeHtmlImpl.prototype.getTypeName = function () { return 'HTML'; };
     return SafeHtmlImpl;
 }(SafeValueImpl));
@@ -119,6 +236,9 @@ var SafeStyleImpl = (function (_super) {
     function SafeStyleImpl() {
         _super.apply(this, arguments);
     }
+    /**
+     * @return {?}
+     */
     SafeStyleImpl.prototype.getTypeName = function () { return 'Style'; };
     return SafeStyleImpl;
 }(SafeValueImpl));
@@ -127,6 +247,9 @@ var SafeScriptImpl = (function (_super) {
     function SafeScriptImpl() {
         _super.apply(this, arguments);
     }
+    /**
+     * @return {?}
+     */
     SafeScriptImpl.prototype.getTypeName = function () { return 'Script'; };
     return SafeScriptImpl;
 }(SafeValueImpl));
@@ -135,6 +258,9 @@ var SafeUrlImpl = (function (_super) {
     function SafeUrlImpl() {
         _super.apply(this, arguments);
     }
+    /**
+     * @return {?}
+     */
     SafeUrlImpl.prototype.getTypeName = function () { return 'URL'; };
     return SafeUrlImpl;
 }(SafeValueImpl));
@@ -143,6 +269,9 @@ var SafeResourceUrlImpl = (function (_super) {
     function SafeResourceUrlImpl() {
         _super.apply(this, arguments);
     }
+    /**
+     * @return {?}
+     */
     SafeResourceUrlImpl.prototype.getTypeName = function () { return 'ResourceURL'; };
     return SafeResourceUrlImpl;
 }(SafeValueImpl));

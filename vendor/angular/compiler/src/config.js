@@ -1,72 +1,124 @@
-"use strict";
-var lang_1 = require('../src/facade/lang');
-var exceptions_1 = require('../src/facade/exceptions');
-var identifiers_1 = require('./identifiers');
-var CompilerConfig = (function () {
-    function CompilerConfig(genDebugInfo, logBindingUpdate, useJit, renderTypes) {
-        if (renderTypes === void 0) { renderTypes = null; }
-        this.genDebugInfo = genDebugInfo;
-        this.logBindingUpdate = logBindingUpdate;
-        this.useJit = useJit;
-        if (lang_1.isBlank(renderTypes)) {
-            renderTypes = new DefaultRenderTypes();
-        }
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ViewEncapsulation, isDevMode } from '@angular/core';
+import { Identifiers, resolveIdentifier } from './identifiers';
+/**
+ * @return {?}
+ */
+function unimplemented() {
+    throw new Error('unimplemented');
+}
+export var CompilerConfig = (function () {
+    /**
+     * @param {?=} __0
+     */
+    function CompilerConfig(_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.renderTypes, renderTypes = _c === void 0 ? new DefaultRenderTypes() : _c, _d = _b.defaultEncapsulation, defaultEncapsulation = _d === void 0 ? ViewEncapsulation.Emulated : _d, genDebugInfo = _b.genDebugInfo, logBindingUpdate = _b.logBindingUpdate, _e = _b.useJit, useJit = _e === void 0 ? true : _e;
         this.renderTypes = renderTypes;
+        this.defaultEncapsulation = defaultEncapsulation;
+        this._genDebugInfo = genDebugInfo;
+        this._logBindingUpdate = logBindingUpdate;
+        this.useJit = useJit;
     }
+    Object.defineProperty(CompilerConfig.prototype, "genDebugInfo", {
+        get: function () {
+            return this._genDebugInfo === void 0 ? isDevMode() : this._genDebugInfo;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompilerConfig.prototype, "logBindingUpdate", {
+        get: function () {
+            return this._logBindingUpdate === void 0 ? isDevMode() : this._logBindingUpdate;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CompilerConfig._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        CompilerConfig.prototype.renderTypes;
+        /** @type {?} */
+        CompilerConfig.prototype.defaultEncapsulation;
+        /** @type {?} */
+        CompilerConfig.prototype._genDebugInfo;
+        /** @type {?} */
+        CompilerConfig.prototype._logBindingUpdate;
+        /** @type {?} */
+        CompilerConfig.prototype.useJit;
+    };
     return CompilerConfig;
 }());
-exports.CompilerConfig = CompilerConfig;
 /**
  * Types used for the renderer.
  * Can be replaced to specialize the generated output to a specific renderer
  * to help tree shaking.
  */
-var RenderTypes = (function () {
+export var RenderTypes = (function () {
     function RenderTypes() {
     }
     Object.defineProperty(RenderTypes.prototype, "renderer", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(RenderTypes.prototype, "renderText", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(RenderTypes.prototype, "renderElement", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(RenderTypes.prototype, "renderComment", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(RenderTypes.prototype, "renderNode", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(RenderTypes.prototype, "renderEvent", {
-        get: function () { return exceptions_1.unimplemented(); },
+        get: function () { return unimplemented(); },
         enumerable: true,
         configurable: true
     });
     return RenderTypes;
 }());
-exports.RenderTypes = RenderTypes;
-var DefaultRenderTypes = (function () {
+export var DefaultRenderTypes = (function () {
     function DefaultRenderTypes() {
-        this.renderer = identifiers_1.Identifiers.Renderer;
         this.renderText = null;
         this.renderElement = null;
         this.renderComment = null;
         this.renderNode = null;
         this.renderEvent = null;
     }
+    Object.defineProperty(DefaultRenderTypes.prototype, "renderer", {
+        get: function () { return resolveIdentifier(Identifiers.Renderer); },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    DefaultRenderTypes._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        DefaultRenderTypes.prototype.renderText;
+        /** @type {?} */
+        DefaultRenderTypes.prototype.renderElement;
+        /** @type {?} */
+        DefaultRenderTypes.prototype.renderComment;
+        /** @type {?} */
+        DefaultRenderTypes.prototype.renderNode;
+        /** @type {?} */
+        DefaultRenderTypes.prototype.renderEvent;
+    };
     return DefaultRenderTypes;
 }());
-exports.DefaultRenderTypes = DefaultRenderTypes;
 //# sourceMappingURL=config.js.map

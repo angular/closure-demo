@@ -1,4 +1,10 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * This class should not be used directly by an application developer. Instead, use
  * {@link Location}.
@@ -22,26 +28,70 @@
  * {@link Location} / {@link LocationStrategy} and DOM apis flow through the `PlatformLocation`
  * class
  * they are all platform independent.
+ *
+ * @stable
  */
-var PlatformLocation = (function () {
+export var PlatformLocation = (function () {
     function PlatformLocation() {
     }
+    /**
+     * @abstract
+     * @return {?}
+     */
+    PlatformLocation.prototype.getBaseHrefFromDOM = function () { };
+    /**
+     * @abstract
+     * @param {?} fn
+     * @return {?}
+     */
+    PlatformLocation.prototype.onPopState = function (fn) { };
+    /**
+     * @abstract
+     * @param {?} fn
+     * @return {?}
+     */
+    PlatformLocation.prototype.onHashChange = function (fn) { };
     Object.defineProperty(PlatformLocation.prototype, "pathname", {
-        /* abstract */ get: function () { return null; },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(PlatformLocation.prototype, "search", {
-        /* abstract */ get: function () { return null; },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(PlatformLocation.prototype, "hash", {
-        /* abstract */ get: function () { return null; },
+        get: function () { return null; },
         enumerable: true,
         configurable: true
     });
+    /**
+     * @abstract
+     * @param {?} state
+     * @param {?} title
+     * @param {?} url
+     * @return {?}
+     */
+    PlatformLocation.prototype.replaceState = function (state, title, url) { };
+    /**
+     * @abstract
+     * @param {?} state
+     * @param {?} title
+     * @param {?} url
+     * @return {?}
+     */
+    PlatformLocation.prototype.pushState = function (state, title, url) { };
+    /**
+     * @abstract
+     * @return {?}
+     */
+    PlatformLocation.prototype.forward = function () { };
+    /**
+     * @abstract
+     * @return {?}
+     */
+    PlatformLocation.prototype.back = function () { };
     return PlatformLocation;
 }());
-exports.PlatformLocation = PlatformLocation;
 //# sourceMappingURL=platform_location.js.map

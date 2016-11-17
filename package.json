@@ -6,19 +6,20 @@
   "dependencies": {
     "@angular/common": "file:vendor/angular/common",
     "@angular/compiler": "file:vendor/angular/compiler",
-    "@angular/compiler-cli": "file:vendor/angular/compiler_cli",
+    "@angular/compiler-cli": "file:vendor/angular/compiler-cli",
     "@angular/core": "file:vendor/angular/core",
     "@angular/platform-browser": "file:vendor/angular/platform-browser",
     "@angular/platform-server": "file:vendor/angular/platform-server",
-    "google-closure-compiler": "^20160315.2.0",
-    "rxjs": "^5.0.0-beta.6",
-    "rxjs-es": "file:vendor/RxJS",
-    "typescript": "^1.9.0-dev.20160502",
-    "zone.js": "^0.6.12"
+    "@angular/tsc-wrapped": "file:vendor/angular/tsc-wrapped",
+    "google-closure-compiler": "^20161024.3.0",
+    "rxjs": "^5.0.0-rc",
+    "rxjs-es": "^5.0.0-beta.12",
+    "tsickle": "^0.2.0",
+    "typescript": "^2",
+    "zone.js": "^0.6"
   },
   "devDependencies": {},
   "scripts": {
-    "postinstall": "cp vendor/closure/compiler.jar node_modules/google-closure-compiler && cp vendor/tsickle/* node_modules/tsickle/build/src",
     "build": "ngc && ./build_closure.sh"
   },
   "author": "Alex Eagle <alexeagle@google.com> (https://angularjs.org/)",

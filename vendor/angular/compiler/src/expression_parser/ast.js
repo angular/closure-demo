@@ -1,21 +1,84 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var collection_1 = require('../../src/facade/collection');
-var AST = (function () {
-    function AST() {
+import { isBlank } from '../facade/lang';
+export var ParserError = (function () {
+    /**
+     * @param {?} message
+     * @param {?} input
+     * @param {?} errLocation
+     * @param {?=} ctxLocation
+     */
+    function ParserError(message, input, errLocation, ctxLocation) {
+        this.input = input;
+        this.errLocation = errLocation;
+        this.ctxLocation = ctxLocation;
+        this.message = "Parser Error: " + message + " " + errLocation + " [" + input + "] in " + ctxLocation;
     }
+    ParserError._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ParserError.prototype.message;
+        /** @type {?} */
+        ParserError.prototype.input;
+        /** @type {?} */
+        ParserError.prototype.errLocation;
+        /** @type {?} */
+        ParserError.prototype.ctxLocation;
+    };
+    return ParserError;
+}());
+export var ParseSpan = (function () {
+    /**
+     * @param {?} start
+     * @param {?} end
+     */
+    function ParseSpan(start, end) {
+        this.start = start;
+        this.end = end;
+    }
+    ParseSpan._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ParseSpan.prototype.start;
+        /** @type {?} */
+        ParseSpan.prototype.end;
+    };
+    return ParseSpan;
+}());
+export var AST = (function () {
+    /**
+     * @param {?} span
+     */
+    function AST(span) {
+        this.span = span;
+    }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     AST.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return null;
     };
-    AST.prototype.toString = function () { return "AST"; };
+    /**
+     * @return {?}
+     */
+    AST.prototype.toString = function () { return 'AST'; };
+    AST._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        AST.prototype.span;
+    };
     return AST;
 }());
-exports.AST = AST;
 /**
  * Represents a quoted expression of the form:
  *
@@ -29,459 +92,994 @@ exports.AST = AST;
  * expression language. The `uninterpretedExpression` part of the quote is
  * therefore not interpreted by the Angular's own expression parser.
  */
-var Quote = (function (_super) {
+export var Quote = (function (_super) {
     __extends(Quote, _super);
-    function Quote(prefix, uninterpretedExpression, location) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} prefix
+     * @param {?} uninterpretedExpression
+     * @param {?} location
+     */
+    function Quote(span, prefix, uninterpretedExpression, location) {
+        _super.call(this, span);
         this.prefix = prefix;
         this.uninterpretedExpression = uninterpretedExpression;
         this.location = location;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     Quote.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitQuote(this, context);
     };
-    Quote.prototype.toString = function () { return "Quote"; };
+    /**
+     * @return {?}
+     */
+    Quote.prototype.toString = function () { return 'Quote'; };
+    Quote._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        Quote.prototype.prefix;
+        /** @type {?} */
+        Quote.prototype.uninterpretedExpression;
+        /** @type {?} */
+        Quote.prototype.location;
+    };
     return Quote;
 }(AST));
-exports.Quote = Quote;
-var EmptyExpr = (function (_super) {
+export var EmptyExpr = (function (_super) {
     __extends(EmptyExpr, _super);
     function EmptyExpr() {
         _super.apply(this, arguments);
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     EmptyExpr.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         // do nothing
     };
     return EmptyExpr;
 }(AST));
-exports.EmptyExpr = EmptyExpr;
-var ImplicitReceiver = (function (_super) {
+export var ImplicitReceiver = (function (_super) {
     __extends(ImplicitReceiver, _super);
     function ImplicitReceiver() {
         _super.apply(this, arguments);
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     ImplicitReceiver.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitImplicitReceiver(this, context);
     };
     return ImplicitReceiver;
 }(AST));
-exports.ImplicitReceiver = ImplicitReceiver;
 /**
  * Multiple expressions separated by a semicolon.
  */
-var Chain = (function (_super) {
+export var Chain = (function (_super) {
     __extends(Chain, _super);
-    function Chain(expressions) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} expressions
+     */
+    function Chain(span, expressions) {
+        _super.call(this, span);
         this.expressions = expressions;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     Chain.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitChain(this, context);
     };
+    Chain._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        Chain.prototype.expressions;
+    };
     return Chain;
 }(AST));
-exports.Chain = Chain;
-var Conditional = (function (_super) {
+export var Conditional = (function (_super) {
     __extends(Conditional, _super);
-    function Conditional(condition, trueExp, falseExp) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} condition
+     * @param {?} trueExp
+     * @param {?} falseExp
+     */
+    function Conditional(span, condition, trueExp, falseExp) {
+        _super.call(this, span);
         this.condition = condition;
         this.trueExp = trueExp;
         this.falseExp = falseExp;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     Conditional.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitConditional(this, context);
     };
+    Conditional._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        Conditional.prototype.condition;
+        /** @type {?} */
+        Conditional.prototype.trueExp;
+        /** @type {?} */
+        Conditional.prototype.falseExp;
+    };
     return Conditional;
 }(AST));
-exports.Conditional = Conditional;
-var PropertyRead = (function (_super) {
+export var PropertyRead = (function (_super) {
     __extends(PropertyRead, _super);
-    function PropertyRead(receiver, name) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} receiver
+     * @param {?} name
+     */
+    function PropertyRead(span, receiver, name) {
+        _super.call(this, span);
         this.receiver = receiver;
         this.name = name;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     PropertyRead.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitPropertyRead(this, context);
     };
+    PropertyRead._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        PropertyRead.prototype.receiver;
+        /** @type {?} */
+        PropertyRead.prototype.name;
+    };
     return PropertyRead;
 }(AST));
-exports.PropertyRead = PropertyRead;
-var PropertyWrite = (function (_super) {
+export var PropertyWrite = (function (_super) {
     __extends(PropertyWrite, _super);
-    function PropertyWrite(receiver, name, value) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} receiver
+     * @param {?} name
+     * @param {?} value
+     */
+    function PropertyWrite(span, receiver, name, value) {
+        _super.call(this, span);
         this.receiver = receiver;
         this.name = name;
         this.value = value;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     PropertyWrite.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitPropertyWrite(this, context);
     };
+    PropertyWrite._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        PropertyWrite.prototype.receiver;
+        /** @type {?} */
+        PropertyWrite.prototype.name;
+        /** @type {?} */
+        PropertyWrite.prototype.value;
+    };
     return PropertyWrite;
 }(AST));
-exports.PropertyWrite = PropertyWrite;
-var SafePropertyRead = (function (_super) {
+export var SafePropertyRead = (function (_super) {
     __extends(SafePropertyRead, _super);
-    function SafePropertyRead(receiver, name) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} receiver
+     * @param {?} name
+     */
+    function SafePropertyRead(span, receiver, name) {
+        _super.call(this, span);
         this.receiver = receiver;
         this.name = name;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     SafePropertyRead.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitSafePropertyRead(this, context);
     };
+    SafePropertyRead._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        SafePropertyRead.prototype.receiver;
+        /** @type {?} */
+        SafePropertyRead.prototype.name;
+    };
     return SafePropertyRead;
 }(AST));
-exports.SafePropertyRead = SafePropertyRead;
-var KeyedRead = (function (_super) {
+export var KeyedRead = (function (_super) {
     __extends(KeyedRead, _super);
-    function KeyedRead(obj, key) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} obj
+     * @param {?} key
+     */
+    function KeyedRead(span, obj, key) {
+        _super.call(this, span);
         this.obj = obj;
         this.key = key;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     KeyedRead.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitKeyedRead(this, context);
     };
+    KeyedRead._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        KeyedRead.prototype.obj;
+        /** @type {?} */
+        KeyedRead.prototype.key;
+    };
     return KeyedRead;
 }(AST));
-exports.KeyedRead = KeyedRead;
-var KeyedWrite = (function (_super) {
+export var KeyedWrite = (function (_super) {
     __extends(KeyedWrite, _super);
-    function KeyedWrite(obj, key, value) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} obj
+     * @param {?} key
+     * @param {?} value
+     */
+    function KeyedWrite(span, obj, key, value) {
+        _super.call(this, span);
         this.obj = obj;
         this.key = key;
         this.value = value;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     KeyedWrite.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitKeyedWrite(this, context);
     };
+    KeyedWrite._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        KeyedWrite.prototype.obj;
+        /** @type {?} */
+        KeyedWrite.prototype.key;
+        /** @type {?} */
+        KeyedWrite.prototype.value;
+    };
     return KeyedWrite;
 }(AST));
-exports.KeyedWrite = KeyedWrite;
-var BindingPipe = (function (_super) {
+export var BindingPipe = (function (_super) {
     __extends(BindingPipe, _super);
-    function BindingPipe(exp, name, args) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} exp
+     * @param {?} name
+     * @param {?} args
+     */
+    function BindingPipe(span, exp, name, args) {
+        _super.call(this, span);
         this.exp = exp;
         this.name = name;
         this.args = args;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     BindingPipe.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitPipe(this, context);
     };
+    BindingPipe._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        BindingPipe.prototype.exp;
+        /** @type {?} */
+        BindingPipe.prototype.name;
+        /** @type {?} */
+        BindingPipe.prototype.args;
+    };
     return BindingPipe;
 }(AST));
-exports.BindingPipe = BindingPipe;
-var LiteralPrimitive = (function (_super) {
+export var LiteralPrimitive = (function (_super) {
     __extends(LiteralPrimitive, _super);
-    function LiteralPrimitive(value) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} value
+     */
+    function LiteralPrimitive(span, value) {
+        _super.call(this, span);
         this.value = value;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     LiteralPrimitive.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitLiteralPrimitive(this, context);
     };
+    LiteralPrimitive._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        LiteralPrimitive.prototype.value;
+    };
     return LiteralPrimitive;
 }(AST));
-exports.LiteralPrimitive = LiteralPrimitive;
-var LiteralArray = (function (_super) {
+export var LiteralArray = (function (_super) {
     __extends(LiteralArray, _super);
-    function LiteralArray(expressions) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} expressions
+     */
+    function LiteralArray(span, expressions) {
+        _super.call(this, span);
         this.expressions = expressions;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     LiteralArray.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitLiteralArray(this, context);
     };
+    LiteralArray._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        LiteralArray.prototype.expressions;
+    };
     return LiteralArray;
 }(AST));
-exports.LiteralArray = LiteralArray;
-var LiteralMap = (function (_super) {
+export var LiteralMap = (function (_super) {
     __extends(LiteralMap, _super);
-    function LiteralMap(keys, values) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} keys
+     * @param {?} values
+     */
+    function LiteralMap(span, keys, values) {
+        _super.call(this, span);
         this.keys = keys;
         this.values = values;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     LiteralMap.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitLiteralMap(this, context);
     };
+    LiteralMap._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        LiteralMap.prototype.keys;
+        /** @type {?} */
+        LiteralMap.prototype.values;
+    };
     return LiteralMap;
 }(AST));
-exports.LiteralMap = LiteralMap;
-var Interpolation = (function (_super) {
+export var Interpolation = (function (_super) {
     __extends(Interpolation, _super);
-    function Interpolation(strings, expressions) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} strings
+     * @param {?} expressions
+     */
+    function Interpolation(span, strings, expressions) {
+        _super.call(this, span);
         this.strings = strings;
         this.expressions = expressions;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     Interpolation.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitInterpolation(this, context);
     };
+    Interpolation._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        Interpolation.prototype.strings;
+        /** @type {?} */
+        Interpolation.prototype.expressions;
+    };
     return Interpolation;
 }(AST));
-exports.Interpolation = Interpolation;
-var Binary = (function (_super) {
+export var Binary = (function (_super) {
     __extends(Binary, _super);
-    function Binary(operation, left, right) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} operation
+     * @param {?} left
+     * @param {?} right
+     */
+    function Binary(span, operation, left, right) {
+        _super.call(this, span);
         this.operation = operation;
         this.left = left;
         this.right = right;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     Binary.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitBinary(this, context);
     };
+    Binary._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        Binary.prototype.operation;
+        /** @type {?} */
+        Binary.prototype.left;
+        /** @type {?} */
+        Binary.prototype.right;
+    };
     return Binary;
 }(AST));
-exports.Binary = Binary;
-var PrefixNot = (function (_super) {
+export var PrefixNot = (function (_super) {
     __extends(PrefixNot, _super);
-    function PrefixNot(expression) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} expression
+     */
+    function PrefixNot(span, expression) {
+        _super.call(this, span);
         this.expression = expression;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     PrefixNot.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitPrefixNot(this, context);
     };
+    PrefixNot._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        PrefixNot.prototype.expression;
+    };
     return PrefixNot;
 }(AST));
-exports.PrefixNot = PrefixNot;
-var MethodCall = (function (_super) {
+export var MethodCall = (function (_super) {
     __extends(MethodCall, _super);
-    function MethodCall(receiver, name, args) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} receiver
+     * @param {?} name
+     * @param {?} args
+     */
+    function MethodCall(span, receiver, name, args) {
+        _super.call(this, span);
         this.receiver = receiver;
         this.name = name;
         this.args = args;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     MethodCall.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitMethodCall(this, context);
     };
+    MethodCall._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        MethodCall.prototype.receiver;
+        /** @type {?} */
+        MethodCall.prototype.name;
+        /** @type {?} */
+        MethodCall.prototype.args;
+    };
     return MethodCall;
 }(AST));
-exports.MethodCall = MethodCall;
-var SafeMethodCall = (function (_super) {
+export var SafeMethodCall = (function (_super) {
     __extends(SafeMethodCall, _super);
-    function SafeMethodCall(receiver, name, args) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} receiver
+     * @param {?} name
+     * @param {?} args
+     */
+    function SafeMethodCall(span, receiver, name, args) {
+        _super.call(this, span);
         this.receiver = receiver;
         this.name = name;
         this.args = args;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     SafeMethodCall.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitSafeMethodCall(this, context);
     };
+    SafeMethodCall._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        SafeMethodCall.prototype.receiver;
+        /** @type {?} */
+        SafeMethodCall.prototype.name;
+        /** @type {?} */
+        SafeMethodCall.prototype.args;
+    };
     return SafeMethodCall;
 }(AST));
-exports.SafeMethodCall = SafeMethodCall;
-var FunctionCall = (function (_super) {
+export var FunctionCall = (function (_super) {
     __extends(FunctionCall, _super);
-    function FunctionCall(target, args) {
-        _super.call(this);
+    /**
+     * @param {?} span
+     * @param {?} target
+     * @param {?} args
+     */
+    function FunctionCall(span, target, args) {
+        _super.call(this, span);
         this.target = target;
         this.args = args;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     FunctionCall.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return visitor.visitFunctionCall(this, context);
     };
+    FunctionCall._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        FunctionCall.prototype.target;
+        /** @type {?} */
+        FunctionCall.prototype.args;
+    };
     return FunctionCall;
 }(AST));
-exports.FunctionCall = FunctionCall;
-var ASTWithSource = (function (_super) {
+export var ASTWithSource = (function (_super) {
     __extends(ASTWithSource, _super);
-    function ASTWithSource(ast, source, location) {
-        _super.call(this);
+    /**
+     * @param {?} ast
+     * @param {?} source
+     * @param {?} location
+     * @param {?} errors
+     */
+    function ASTWithSource(ast, source, location, errors) {
+        _super.call(this, new ParseSpan(0, isBlank(source) ? 0 : source.length));
         this.ast = ast;
         this.source = source;
         this.location = location;
+        this.errors = errors;
     }
+    /**
+     * @param {?} visitor
+     * @param {?=} context
+     * @return {?}
+     */
     ASTWithSource.prototype.visit = function (visitor, context) {
         if (context === void 0) { context = null; }
         return this.ast.visit(visitor, context);
     };
+    /**
+     * @return {?}
+     */
     ASTWithSource.prototype.toString = function () { return this.source + " in " + this.location; };
+    ASTWithSource._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        ASTWithSource.prototype.ast;
+        /** @type {?} */
+        ASTWithSource.prototype.source;
+        /** @type {?} */
+        ASTWithSource.prototype.location;
+        /** @type {?} */
+        ASTWithSource.prototype.errors;
+    };
     return ASTWithSource;
 }(AST));
-exports.ASTWithSource = ASTWithSource;
-var TemplateBinding = (function () {
-    function TemplateBinding(key, keyIsVar, name, expression) {
+export var TemplateBinding = (function () {
+    /**
+     * @param {?} span
+     * @param {?} key
+     * @param {?} keyIsVar
+     * @param {?} name
+     * @param {?} expression
+     */
+    function TemplateBinding(span, key, keyIsVar, name, expression) {
+        this.span = span;
         this.key = key;
         this.keyIsVar = keyIsVar;
         this.name = name;
         this.expression = expression;
     }
+    TemplateBinding._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        TemplateBinding.prototype.span;
+        /** @type {?} */
+        TemplateBinding.prototype.key;
+        /** @type {?} */
+        TemplateBinding.prototype.keyIsVar;
+        /** @type {?} */
+        TemplateBinding.prototype.name;
+        /** @type {?} */
+        TemplateBinding.prototype.expression;
+    };
     return TemplateBinding;
 }());
-exports.TemplateBinding = TemplateBinding;
-var RecursiveAstVisitor = (function () {
+export var RecursiveAstVisitor = (function () {
     function RecursiveAstVisitor() {
     }
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitBinary = function (ast, context) {
         ast.left.visit(this);
         ast.right.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitChain = function (ast, context) { return this.visitAll(ast.expressions, context); };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitConditional = function (ast, context) {
         ast.condition.visit(this);
         ast.trueExp.visit(this);
         ast.falseExp.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitPipe = function (ast, context) {
         ast.exp.visit(this);
         this.visitAll(ast.args, context);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitFunctionCall = function (ast, context) {
         ast.target.visit(this);
         this.visitAll(ast.args, context);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitImplicitReceiver = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitInterpolation = function (ast, context) {
         return this.visitAll(ast.expressions, context);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitKeyedRead = function (ast, context) {
         ast.obj.visit(this);
         ast.key.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitKeyedWrite = function (ast, context) {
         ast.obj.visit(this);
         ast.key.visit(this);
         ast.value.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitLiteralArray = function (ast, context) {
         return this.visitAll(ast.expressions, context);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitLiteralMap = function (ast, context) { return this.visitAll(ast.values, context); };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitLiteralPrimitive = function (ast, context) { return null; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitMethodCall = function (ast, context) {
         ast.receiver.visit(this);
         return this.visitAll(ast.args, context);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitPrefixNot = function (ast, context) {
         ast.expression.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitPropertyRead = function (ast, context) {
         ast.receiver.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitPropertyWrite = function (ast, context) {
         ast.receiver.visit(this);
         ast.value.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitSafePropertyRead = function (ast, context) {
         ast.receiver.visit(this);
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitSafeMethodCall = function (ast, context) {
         ast.receiver.visit(this);
         return this.visitAll(ast.args, context);
     };
+    /**
+     * @param {?} asts
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitAll = function (asts, context) {
         var _this = this;
         asts.forEach(function (ast) { return ast.visit(_this, context); });
         return null;
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     RecursiveAstVisitor.prototype.visitQuote = function (ast, context) { return null; };
     return RecursiveAstVisitor;
 }());
-exports.RecursiveAstVisitor = RecursiveAstVisitor;
-var AstTransformer = (function () {
+export var AstTransformer = (function () {
     function AstTransformer() {
     }
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitImplicitReceiver = function (ast, context) { return ast; };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitInterpolation = function (ast, context) {
-        return new Interpolation(ast.strings, this.visitAll(ast.expressions));
+        return new Interpolation(ast.span, ast.strings, this.visitAll(ast.expressions));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitLiteralPrimitive = function (ast, context) {
-        return new LiteralPrimitive(ast.value);
+        return new LiteralPrimitive(ast.span, ast.value);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitPropertyRead = function (ast, context) {
-        return new PropertyRead(ast.receiver.visit(this), ast.name);
+        return new PropertyRead(ast.span, ast.receiver.visit(this), ast.name);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitPropertyWrite = function (ast, context) {
-        return new PropertyWrite(ast.receiver.visit(this), ast.name, ast.value);
+        return new PropertyWrite(ast.span, ast.receiver.visit(this), ast.name, ast.value);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitSafePropertyRead = function (ast, context) {
-        return new SafePropertyRead(ast.receiver.visit(this), ast.name);
+        return new SafePropertyRead(ast.span, ast.receiver.visit(this), ast.name);
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitMethodCall = function (ast, context) {
-        return new MethodCall(ast.receiver.visit(this), ast.name, this.visitAll(ast.args));
+        return new MethodCall(ast.span, ast.receiver.visit(this), ast.name, this.visitAll(ast.args));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitSafeMethodCall = function (ast, context) {
-        return new SafeMethodCall(ast.receiver.visit(this), ast.name, this.visitAll(ast.args));
+        return new SafeMethodCall(ast.span, ast.receiver.visit(this), ast.name, this.visitAll(ast.args));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitFunctionCall = function (ast, context) {
-        return new FunctionCall(ast.target.visit(this), this.visitAll(ast.args));
+        return new FunctionCall(ast.span, ast.target.visit(this), this.visitAll(ast.args));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitLiteralArray = function (ast, context) {
-        return new LiteralArray(this.visitAll(ast.expressions));
+        return new LiteralArray(ast.span, this.visitAll(ast.expressions));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitLiteralMap = function (ast, context) {
-        return new LiteralMap(ast.keys, this.visitAll(ast.values));
+        return new LiteralMap(ast.span, ast.keys, this.visitAll(ast.values));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitBinary = function (ast, context) {
-        return new Binary(ast.operation, ast.left.visit(this), ast.right.visit(this));
+        return new Binary(ast.span, ast.operation, ast.left.visit(this), ast.right.visit(this));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitPrefixNot = function (ast, context) {
-        return new PrefixNot(ast.expression.visit(this));
+        return new PrefixNot(ast.span, ast.expression.visit(this));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitConditional = function (ast, context) {
-        return new Conditional(ast.condition.visit(this), ast.trueExp.visit(this), ast.falseExp.visit(this));
+        return new Conditional(ast.span, ast.condition.visit(this), ast.trueExp.visit(this), ast.falseExp.visit(this));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitPipe = function (ast, context) {
-        return new BindingPipe(ast.exp.visit(this), ast.name, this.visitAll(ast.args));
+        return new BindingPipe(ast.span, ast.exp.visit(this), ast.name, this.visitAll(ast.args));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitKeyedRead = function (ast, context) {
-        return new KeyedRead(ast.obj.visit(this), ast.key.visit(this));
+        return new KeyedRead(ast.span, ast.obj.visit(this), ast.key.visit(this));
     };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitKeyedWrite = function (ast, context) {
-        return new KeyedWrite(ast.obj.visit(this), ast.key.visit(this), ast.value.visit(this));
+        return new KeyedWrite(ast.span, ast.obj.visit(this), ast.key.visit(this), ast.value.visit(this));
     };
+    /**
+     * @param {?} asts
+     * @return {?}
+     */
     AstTransformer.prototype.visitAll = function (asts) {
-        var res = collection_1.ListWrapper.createFixedSize(asts.length);
-        for (var i = 0; i < asts.length; ++i) {
+        var /** @type {?} */ res = new Array(asts.length);
+        for (var /** @type {?} */ i = 0; i < asts.length; ++i) {
             res[i] = asts[i].visit(this);
         }
         return res;
     };
-    AstTransformer.prototype.visitChain = function (ast, context) { return new Chain(this.visitAll(ast.expressions)); };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
+    AstTransformer.prototype.visitChain = function (ast, context) {
+        return new Chain(ast.span, this.visitAll(ast.expressions));
+    };
+    /**
+     * @param {?} ast
+     * @param {?} context
+     * @return {?}
+     */
     AstTransformer.prototype.visitQuote = function (ast, context) {
-        return new Quote(ast.prefix, ast.uninterpretedExpression, ast.location);
+        return new Quote(ast.span, ast.prefix, ast.uninterpretedExpression, ast.location);
     };
     return AstTransformer;
 }());
-exports.AstTransformer = AstTransformer;
 //# sourceMappingURL=ast.js.map

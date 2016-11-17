@@ -1,5 +1,12 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { OpaqueToken } from '@angular/core';
-import { UrlChangeListener } from './platform_location';
+import { LocationChangeListener } from './platform_location';
 /**
  * `LocationStrategy` is responsible for representing and reading route state
  * from the browser's URL. Angular provides two strategies:
@@ -15,15 +22,17 @@ import { UrlChangeListener } from './platform_location';
  * `http://example.com/foo` as an equivalent URL.
  *
  * See these two classes for more.
+ *
+ * @stable
  */
 export declare abstract class LocationStrategy {
-    abstract path(): string;
+    abstract path(includeHash?: boolean): string;
     abstract prepareExternalUrl(internal: string): string;
     abstract pushState(state: any, title: string, url: string, queryParams: string): void;
     abstract replaceState(state: any, title: string, url: string, queryParams: string): void;
     abstract forward(): void;
     abstract back(): void;
-    abstract onPopState(fn: UrlChangeListener): void;
+    abstract onPopState(fn: LocationChangeListener): void;
     abstract getBaseHref(): string;
 }
 /**
@@ -36,23 +45,16 @@ export declare abstract class LocationStrategy {
  *
  * ### Example
  *
- * ```
- * import {Component} from '@angular/core';
- * import {ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteConfig} from '@angular/router';
+ * ```typescript
+ * import {Component, NgModule} from '@angular/core';
  * import {APP_BASE_HREF} from '@angular/common';
  *
- * @Component({directives: [ROUTER_DIRECTIVES]})
- * @RouteConfig([
- *  {...},
- * ])
- * class AppCmp {
- *   // ...
- * }
- *
- * bootstrap(AppCmp, [
- *   ROUTER_PROVIDERS,
- *   provide(APP_BASE_HREF, {useValue: '/my/app'})
- * ]);
+ * @NgModule({
+ *   providers: [{provide: APP_BASE_HREF, useValue: '/my/app'}]
+ * })
+ * class AppModule {}
  * ```
+ *
+ * @stable
  */
 export declare const APP_BASE_HREF: OpaqueToken;

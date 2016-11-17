@@ -1,69 +1,190 @@
-"use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-var core_1 = require('@angular/core');
-var lang_1 = require('../src/facade/lang');
-__export(require('./template_ast'));
-var template_parser_1 = require('./template_parser');
-exports.TEMPLATE_TRANSFORMS = template_parser_1.TEMPLATE_TRANSFORMS;
-var config_1 = require('./config');
-exports.CompilerConfig = config_1.CompilerConfig;
-exports.RenderTypes = config_1.RenderTypes;
-__export(require('./compile_metadata'));
-__export(require('./offline_compiler'));
-var runtime_compiler_1 = require('./runtime_compiler');
-exports.RuntimeCompiler = runtime_compiler_1.RuntimeCompiler;
-__export(require('./url_resolver'));
-__export(require('./xhr'));
-var view_resolver_1 = require('./view_resolver');
-exports.ViewResolver = view_resolver_1.ViewResolver;
-var directive_resolver_1 = require('./directive_resolver');
-exports.DirectiveResolver = directive_resolver_1.DirectiveResolver;
-var pipe_resolver_1 = require('./pipe_resolver');
-exports.PipeResolver = pipe_resolver_1.PipeResolver;
-var template_parser_2 = require('./template_parser');
-var html_parser_1 = require('./html_parser');
-var directive_normalizer_1 = require('./directive_normalizer');
-var metadata_resolver_1 = require('./metadata_resolver');
-var style_compiler_1 = require('./style_compiler');
-var view_compiler_1 = require('./view_compiler/view_compiler');
-var config_2 = require('./config');
-var runtime_compiler_2 = require('./runtime_compiler');
-var element_schema_registry_1 = require('./schema/element_schema_registry');
-var dom_element_schema_registry_1 = require('./schema/dom_element_schema_registry');
-var url_resolver_2 = require('./url_resolver');
-var parser_1 = require('./expression_parser/parser');
-var lexer_1 = require('./expression_parser/lexer');
-var view_resolver_2 = require('./view_resolver');
-var directive_resolver_2 = require('./directive_resolver');
-var pipe_resolver_2 = require('./pipe_resolver');
-function _createCompilerConfig() {
-    return new config_2.CompilerConfig(lang_1.assertionsEnabled(), false, true);
-}
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { COMPILER_OPTIONS, Compiler, CompilerFactory, Inject, Injectable, Optional, PLATFORM_INITIALIZER, ReflectiveInjector, TRANSLATIONS, TRANSLATIONS_FORMAT, ViewEncapsulation, createPlatformFactory, isDevMode, platformCore } from '@angular/core';
+import { AnimationParser } from './animation/animation_parser';
+import { CompilerConfig } from './config';
+import { DirectiveNormalizer } from './directive_normalizer';
+import { DirectiveResolver } from './directive_resolver';
+import { DirectiveWrapperCompiler } from './directive_wrapper_compiler';
+import { Lexer } from './expression_parser/lexer';
+import { Parser } from './expression_parser/parser';
+import * as i18n from './i18n/index';
+import { CompileMetadataResolver } from './metadata_resolver';
+import { HtmlParser } from './ml_parser/html_parser';
+import { NgModuleCompiler } from './ng_module_compiler';
+import { NgModuleResolver } from './ng_module_resolver';
+import { PipeResolver } from './pipe_resolver';
+import { Console, ReflectionCapabilities, Reflector, ReflectorReader, reflector } from './private_import_core';
+import { ResourceLoader } from './resource_loader';
+import { RuntimeCompiler } from './runtime_compiler';
+import { DomElementSchemaRegistry } from './schema/dom_element_schema_registry';
+import { ElementSchemaRegistry } from './schema/element_schema_registry';
+import { StyleCompiler } from './style_compiler';
+import { TemplateParser } from './template_parser/template_parser';
+import { DEFAULT_PACKAGE_URL_PROVIDER, UrlResolver } from './url_resolver';
+import { ViewCompiler } from './view_compiler/view_compiler';
+var /** @type {?} */ _NO_RESOURCE_LOADER = {
+    /**
+     * @param {?} url
+     * @return {?}
+     */
+    get: function (url) {
+        throw new Error("No ResourceLoader implementation has been provided. Can't read the url \"" + url + "\"");
+    }
+};
 /**
  * A set of providers that provide `RuntimeCompiler` and its dependencies to use for
  * template compilation.
  */
-exports.COMPILER_PROVIDERS = 
-/*@ts2dart_const*/ [
-    lexer_1.Lexer,
-    parser_1.Parser,
-    html_parser_1.HtmlParser,
-    template_parser_2.TemplateParser,
-    directive_normalizer_1.DirectiveNormalizer,
-    metadata_resolver_1.CompileMetadataResolver,
-    url_resolver_2.DEFAULT_PACKAGE_URL_PROVIDER,
-    style_compiler_1.StyleCompiler,
-    view_compiler_1.ViewCompiler,
-    /*@ts2dart_Provider*/ { provide: config_2.CompilerConfig, useFactory: _createCompilerConfig, deps: [] },
-    runtime_compiler_2.RuntimeCompiler,
-    /*@ts2dart_Provider*/ { provide: core_1.ComponentResolver, useExisting: runtime_compiler_2.RuntimeCompiler },
-    dom_element_schema_registry_1.DomElementSchemaRegistry,
-    /*@ts2dart_Provider*/ { provide: element_schema_registry_1.ElementSchemaRegistry, useExisting: dom_element_schema_registry_1.DomElementSchemaRegistry },
-    url_resolver_2.UrlResolver,
-    view_resolver_2.ViewResolver,
-    directive_resolver_2.DirectiveResolver,
-    pipe_resolver_2.PipeResolver
+export var /** @type {?} */ COMPILER_PROVIDERS = [
+    { provide: Reflector, useValue: reflector },
+    { provide: ReflectorReader, useExisting: Reflector },
+    { provide: ResourceLoader, useValue: _NO_RESOURCE_LOADER },
+    Console,
+    Lexer,
+    Parser,
+    HtmlParser,
+    {
+        provide: i18n.I18NHtmlParser,
+        useFactory: function (parser, translations, format) {
+            return new i18n.I18NHtmlParser(parser, translations, format);
+        },
+        deps: [
+            HtmlParser,
+            [new Optional(), new Inject(TRANSLATIONS)],
+            [new Optional(), new Inject(TRANSLATIONS_FORMAT)],
+        ]
+    },
+    TemplateParser,
+    DirectiveNormalizer,
+    CompileMetadataResolver,
+    DEFAULT_PACKAGE_URL_PROVIDER,
+    StyleCompiler,
+    ViewCompiler,
+    NgModuleCompiler,
+    DirectiveWrapperCompiler,
+    { provide: CompilerConfig, useValue: new CompilerConfig() },
+    RuntimeCompiler,
+    { provide: Compiler, useExisting: RuntimeCompiler },
+    DomElementSchemaRegistry,
+    { provide: ElementSchemaRegistry, useExisting: DomElementSchemaRegistry },
+    UrlResolver,
+    DirectiveResolver,
+    PipeResolver,
+    NgModuleResolver,
+    AnimationParser
 ];
+export var RuntimeCompilerFactory = (function () {
+    /**
+     * @param {?} defaultOptions
+     */
+    function RuntimeCompilerFactory(defaultOptions) {
+        this._defaultOptions = [{
+                useDebug: isDevMode(),
+                useJit: true,
+                defaultEncapsulation: ViewEncapsulation.Emulated
+            }].concat(defaultOptions);
+    }
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    RuntimeCompilerFactory.prototype.createCompiler = function (options) {
+        if (options === void 0) { options = []; }
+        var /** @type {?} */ mergedOptions = _mergeOptions(this._defaultOptions.concat(options));
+        var /** @type {?} */ injector = ReflectiveInjector.resolveAndCreate([
+            COMPILER_PROVIDERS, {
+                provide: CompilerConfig,
+                useFactory: function () {
+                    return new CompilerConfig({
+                        // let explicit values from the compiler options overwrite options
+                        // from the app providers. E.g. important for the testing platform.
+                        genDebugInfo: mergedOptions.useDebug,
+                        // let explicit values from the compiler options overwrite options
+                        // from the app providers
+                        useJit: mergedOptions.useJit,
+                        // let explicit values from the compiler options overwrite options
+                        // from the app providers
+                        defaultEncapsulation: mergedOptions.defaultEncapsulation,
+                        logBindingUpdate: mergedOptions.useDebug
+                    });
+                },
+                deps: []
+            },
+            mergedOptions.providers
+        ]);
+        return injector.get(Compiler);
+    };
+    RuntimeCompilerFactory._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        RuntimeCompilerFactory.decorators;
+        /** @nocollapse
+        @type {?} */
+        RuntimeCompilerFactory.ctorParameters;
+        /** @type {?} */
+        RuntimeCompilerFactory.prototype._defaultOptions;
+    };
+    RuntimeCompilerFactory.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    RuntimeCompilerFactory.ctorParameters = [
+        { type: Array, decorators: [{ type: Inject, args: [COMPILER_OPTIONS,] },] },
+    ];
+    return RuntimeCompilerFactory;
+}());
+/**
+ * @return {?}
+ */
+function _initReflector() {
+    reflector.reflectionCapabilities = new ReflectionCapabilities();
+}
+/**
+ * A platform that included corePlatform and the compiler.
+ *
+ * @experimental
+ */
+export var /** @type {?} */ platformCoreDynamic = createPlatformFactory(platformCore, 'coreDynamic', [
+    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
+    { provide: CompilerFactory, useClass: RuntimeCompilerFactory },
+    { provide: PLATFORM_INITIALIZER, useValue: _initReflector, multi: true },
+]);
+/**
+ * @param {?} optionsArr
+ * @return {?}
+ */
+function _mergeOptions(optionsArr) {
+    return {
+        useDebug: _lastDefined(optionsArr.map(function (options) { return options.useDebug; })),
+        useJit: _lastDefined(optionsArr.map(function (options) { return options.useJit; })),
+        defaultEncapsulation: _lastDefined(optionsArr.map(function (options) { return options.defaultEncapsulation; })),
+        providers: _mergeArrays(optionsArr.map(function (options) { return options.providers; }))
+    };
+}
+/**
+ * @param {?} args
+ * @return {?}
+ */
+function _lastDefined(args) {
+    for (var /** @type {?} */ i = args.length - 1; i >= 0; i--) {
+        if (args[i] !== undefined) {
+            return args[i];
+        }
+    }
+    return undefined;
+}
+/**
+ * @param {?} parts
+ * @return {?}
+ */
+function _mergeArrays(parts) {
+    var /** @type {?} */ result = [];
+    parts.forEach(function (part) { return part && result.push.apply(result, part); });
+    return result;
+}
 //# sourceMappingURL=compiler.js.map

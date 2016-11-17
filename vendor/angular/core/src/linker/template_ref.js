@@ -1,11 +1,16 @@
-"use strict";
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var lang_1 = require('../facade/lang');
-var EMPTY_CONTEXT = new Object();
+import { ElementRef } from './element_ref';
 /**
  * Represents an Embedded Template that can be used to instantiate Embedded Views.
  *
@@ -17,8 +22,9 @@ var EMPTY_CONTEXT = new Object();
  * To instantiate Embedded Views based on a Template, use
  * {@link ViewContainerRef#createEmbeddedView}, which will create the View and attach it to the
  * View Container.
+ * @stable
  */
-var TemplateRef = (function () {
+export var TemplateRef = (function () {
     function TemplateRef() {
     }
     Object.defineProperty(TemplateRef.prototype, "elementRef", {
@@ -38,30 +44,49 @@ var TemplateRef = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @abstract
+     * @param {?} context
+     * @return {?}
+     */
+    TemplateRef.prototype.createEmbeddedView = function (context) { };
     return TemplateRef;
 }());
-exports.TemplateRef = TemplateRef;
-var TemplateRef_ = (function (_super) {
+export var TemplateRef_ = (function (_super) {
     __extends(TemplateRef_, _super);
-    function TemplateRef_(_appElement, _viewFactory) {
+    /**
+     * @param {?} _parentView
+     * @param {?} _nodeIndex
+     * @param {?} _nativeElement
+     */
+    function TemplateRef_(_parentView, _nodeIndex, _nativeElement) {
         _super.call(this);
-        this._appElement = _appElement;
-        this._viewFactory = _viewFactory;
+        this._parentView = _parentView;
+        this._nodeIndex = _nodeIndex;
+        this._nativeElement = _nativeElement;
     }
+    /**
+     * @param {?} context
+     * @return {?}
+     */
     TemplateRef_.prototype.createEmbeddedView = function (context) {
-        var view = this._viewFactory(this._appElement.parentView.viewUtils, this._appElement.parentInjector, this._appElement);
-        if (lang_1.isBlank(context)) {
-            context = EMPTY_CONTEXT;
-        }
-        view.create(context, null, null);
+        var /** @type {?} */ view = this._parentView.createEmbeddedViewInternal(this._nodeIndex);
+        view.create(context || ({}));
         return view.ref;
     };
     Object.defineProperty(TemplateRef_.prototype, "elementRef", {
-        get: function () { return this._appElement.elementRef; },
+        get: function () { return new ElementRef(this._nativeElement); },
         enumerable: true,
         configurable: true
     });
+    TemplateRef_._tsickle_typeAnnotationsHelper = function () {
+        /** @type {?} */
+        TemplateRef_.prototype._parentView;
+        /** @type {?} */
+        TemplateRef_.prototype._nodeIndex;
+        /** @type {?} */
+        TemplateRef_.prototype._nativeElement;
+    };
     return TemplateRef_;
 }(TemplateRef));
-exports.TemplateRef_ = TemplateRef_;
 //# sourceMappingURL=template_ref.js.map

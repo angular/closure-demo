@@ -1,4 +1,11 @@
-import { DoCheck, ChangeDetectorRef, IterableDiffers, ViewContainerRef, TemplateRef, TrackByFn } from '@angular/core';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { ChangeDetectorRef, DoCheck, IterableDiffers, OnChanges, SimpleChanges, TemplateRef, TrackByFn, ViewContainerRef } from '@angular/core';
 export declare class NgForRow {
     $implicit: any;
     index: number;
@@ -49,34 +56,42 @@ export declare class NgForRow {
  * elements were deleted and all new elements inserted). This is an expensive operation and should
  * be avoided if possible.
  *
+ * To customize the default tracking algorithm, `NgFor` supports `trackBy` option.
+ * `trackBy` takes a function which has two arguments: `index` and `item`.
+ * If `trackBy` is given, Angular tracks changes by the return value of the function.
+ *
  * ### Syntax
  *
- * - `<li *ngFor="let item of items; let i = index">...</li>`
- * - `<li template="ngFor let item of items; let i = index">...</li>`
- * - `<template ngFor let-item [ngForOf]="items" let-i="index"><li>...</li></template>`
+ * - `<li *ngFor="let item of items; let i = index; trackBy: trackByFn">...</li>`
+ * - `<li template="ngFor let item of items; let i = index; trackBy: trackByFn">...</li>`
+ *
+ * With `<template>` element:
+ *
+ * ```
+ * <template ngFor let-item [ngForOf]="items" let-i="index" [ngForTrackBy]="trackByFn">
+ *   <li>...</li>
+ * </template>
+ * ```
  *
  * ### Example
  *
  * See a [live demo](http://plnkr.co/edit/KVuXxDp0qinGDyo307QW?p=preview) for a more detailed
  * example.
+ *
+ * @stable
  */
-export declare class NgFor implements DoCheck {
+export declare class NgFor implements DoCheck, OnChanges {
     private _viewContainer;
-    private _templateRef;
-    private _iterableDiffers;
+    private _template;
+    private _differs;
     private _cdr;
-    /** @internal */
-    _ngForOf: any;
-    /** @internal */
-    _ngForTrackBy: TrackByFn;
-    private _differ;
-    constructor(_viewContainer: ViewContainerRef, _templateRef: TemplateRef<NgForRow>, _iterableDiffers: IterableDiffers, _cdr: ChangeDetectorRef);
     ngForOf: any;
-    ngForTemplate: TemplateRef<NgForRow>;
     ngForTrackBy: TrackByFn;
+    private _differ;
+    constructor(_viewContainer: ViewContainerRef, _template: TemplateRef<NgForRow>, _differs: IterableDiffers, _cdr: ChangeDetectorRef);
+    ngForTemplate: TemplateRef<NgForRow>;
+    ngOnChanges(changes: SimpleChanges): void;
     ngDoCheck(): void;
     private _applyChanges(changes);
     private _perViewChange(view, record);
-    private _bulkRemove(tuples);
-    private _bulkInsert(tuples);
 }
