@@ -3,9 +3,10 @@ OPTS=(
   "--language_out=ES5"
   "--compilation_level=ADVANCED_OPTIMIZATIONS"
   "--js_output_file=dist/bundle.js"
-  "--entry_point=built\$bootstrap"
+  "--entry_point=./built/bootstrap"
   "--variable_renaming_report=dist/variable_renaming_report"
   "--property_renaming_report=dist/property_renaming_report"
+  "--js_module_root=node_modules"
   "built/*.js"
   "vendor/zone_externs.js"
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js
