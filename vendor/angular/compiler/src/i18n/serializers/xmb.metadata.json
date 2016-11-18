@@ -1,1 +1,0 @@
-{"__symbolic":"module","version":1,"metadata":{"digest":{"__symbolic":"function","parameters":["message"],"value":{"__symbolic":"call","expression":{"__symbolic":"reference","module":"../digest","name":"decimalDigest"},"arguments":[{"__symbolic":"reference","name":"message"}]}}}}

@@ -3,22 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "@angular/common": "file:vendor/angular/common",
-    "@angular/compiler": "file:vendor/angular/compiler",
-    "@angular/compiler-cli": "file:vendor/angular/compiler-cli",
-    "@angular/core": "file:vendor/angular/core",
-    "@angular/platform-browser": "file:vendor/angular/platform-browser",
-    "@angular/platform-server": "file:vendor/angular/platform-server",
-    "@angular/tsc-wrapped": "file:vendor/angular/tsc-wrapped",
+  "devDependencies": {
+    "@angular/common": "angular/common-builds",
+    "@angular/compiler": "angular/compiler-builds",
+    "@angular/compiler-cli": "angular/compiler-cli-builds",
+    "@angular/core": "angular/core-builds",
+    "@angular/platform-browser": "angular/platform-browser-builds",
+    "@angular/platform-server": "angular/platform-server-builds",
+    "@angular/tsc-wrapped": "angular/tsc-wrapped-builds",
     "google-closure-compiler": "^20161024.3.0",
     "rxjs": "^5.0.0-rc",
-    "rxjs-es": "^5.0.0-beta.12",
+    "rxjs-es": "^5.0.0-rc",
+    "splittable": "^1.0.12",
     "tsickle": "^0.2.0",
     "typescript": "^2",
     "zone.js": "^0.6"
   },
-  "devDependencies": {},
   "scripts": {
     "build": "ngc && ./build_closure.sh"
   },
