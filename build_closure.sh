@@ -11,7 +11,7 @@ OPTS=(
   "vendor/zone_externs.js"
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js
   $(find node_modules/@angular/{core,common,compiler,platform-browser}/src -name *.js)
-  $(find vendor/rxjs -name *.js)
+  $(find node_modules/rxjs -name *.js)
 )
 set -ex
 java -jar node_modules/google-closure-compiler/compiler.jar $(echo ${OPTS[*]})
