@@ -1,23 +1,21 @@
 {
   "name": "compiler_cli_user",
   "version": "1.0.0",
-  "description": "",
+  "description": "Demonstrate Angular app bundled and optimized by Google Closure Compiler",
   "main": "index.js",
   "devDependencies": {
-    "@angular/common": "angular/common-builds",
-    "@angular/compiler": "angular/compiler-builds",
-    "@angular/compiler-cli": "angular/compiler-cli-builds",
-    "@angular/core": "angular/core-builds",
-    "@angular/platform-browser": "angular/platform-browser-builds",
-    "@angular/platform-server": "angular/platform-server-builds",
-    "@angular/tsc-wrapped": "angular/tsc-wrapped-builds",
+    "@angular/common": "alexeagle/common-builds",
+    "@angular/compiler": "alexeagle/compiler-builds",
+    "@angular/compiler-cli": "alexeagle/compiler-cli-builds",
+    "@angular/core": "alexeagle/core-builds",
+    "@angular/platform-browser": "alexeagle/platform-browser-builds",
+    "@angular/platform-server": "alexeagle/platform-server-builds",
+    "@angular/tsc-wrapped": "alexeagle/tsc-wrapped-builds",
     "google-closure-compiler": "^20161024.3.0",
-    "rxjs": "^5.0.0-rc",
-    "rxjs-es": "^5.0.0-rc",
-    "splittable": "^1.0.12",
-    "tsickle": "^0.2.0",
-    "typescript": "^2",
-    "zone.js": "^0.6"
+    "rxjs": "5.0.0-rc.4",
+    "tsickle": "^0.2.3",
+    "typescript": "~2.0",
+    "zone.js": "~0.7"
   },
   "scripts": {
     "build": "ngc && ./build_closure.sh"
