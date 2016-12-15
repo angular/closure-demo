@@ -10,6 +10,11 @@ https://github.com/alexeagle/angular/tree/closure
 
 See package.json for how this is used in the demo.
 
+Requires Node 6.x since the `ngc` tool (and its deps) are now shipped as ES6 as well.
+
+Requires building rxjs from https://github.com/alexeagle/rxjs/tree/closure2
+using `npm run compile_dist_es6_for_closure`
+
 ## TODO
 - Make a closure-compatible ES6 distro of rxjs
 - Get the build to succeed
