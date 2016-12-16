@@ -10,10 +10,7 @@ OPTS=(
   "--js_module_root=node_modules"
   "--js_module_root=vendor"
   node_modules/zone.js/dist/zone.js
-  "node_modules/zone.js/dist/browser/*.js"
-  "node_modules/zone.js/dist/common/*.js"
   $(find vendor/rxjs -name *.js)
-  # " -name *.js | grep -v .min.js)
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js
   $(find node_modules/@angular/{core,common,compiler,platform-browser}/src -name *.js)
   "built/*.js"
