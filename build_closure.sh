@@ -4,6 +4,7 @@ OPTS=(
   "--compilation_level=ADVANCED_OPTIMIZATIONS"
   "--js_output_file=dist/bundle.js"
   "--entry_point=./built/bootstrap"
+  "--create_source_map=%outname%.map"
   "--variable_renaming_report=dist/variable_renaming_report"
   "--property_renaming_report=dist/property_renaming_report"
   # List of path prefixes to be removed from ES6 & CommonJS modules.
