@@ -26,6 +26,12 @@ $ npm run build
 $ python -m SimpleHTTPServer
 ```
 
+## Where does the size come from?
+
+``` shell
+$ npm run explore
+```
+
 # Notes
 
 This requires an ES6 distro of Angular.
