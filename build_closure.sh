@@ -6,12 +6,17 @@ OPTS=(
   "--entry_point=./built/bootstrap"
   "--variable_renaming_report=dist/variable_renaming_report"
   "--property_renaming_report=dist/property_renaming_report"
+  # List of path prefixes to be removed from ES6 & CommonJS modules.
   "--js_module_root=node_modules"
-  "built/*.js"
-  $(find node_modules/zone.js/dist -name *.js)
+  "--js_module_root=vendor"
+  node_modules/zone.js/dist/zone.js
+  "node_modules/zone.js/dist/browser/*.js"
+  "node_modules/zone.js/dist/common/*.js"
+  $(find vendor/rxjs -name *.js)
+  # " -name *.js | grep -v .min.js)
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js
   $(find node_modules/@angular/{core,common,compiler,platform-browser}/src -name *.js)
-  $(find node_modules/rxjs -name *.js)
+  "built/*.js"
 )
 set -ex
 java -jar node_modules/google-closure-compiler/compiler.jar $(echo ${OPTS[*]})
@@ -19,4 +24,4 @@ gzip --keep -f dist/bundle.js
 # requires brotli
 # on Mac: brew install brotli
 bro --force --quality 10 --input dist/bundle.js --output dist/bundle.js.brotli
-ls -alH dist
+ls -alH dist/bundle*

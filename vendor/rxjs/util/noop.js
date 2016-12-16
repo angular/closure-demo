@@ -1,0 +1,4 @@
+/**
+ * @return {?}
+ */
+export function noop() { }
