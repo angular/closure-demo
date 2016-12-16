@@ -1,8 +1,6 @@
 This repo is a proof-of-concept for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
-See https://github.com/angular/angular/issues/8550#issuecomment-218908407
-
 This example app builds a *single* `.js` file for an Angular 2 application.
 No other scripts are needed (eg. zone.js)
 
@@ -13,10 +11,20 @@ The current size is:
 -rw-r--r--   1 alexeagle  eng   40244 Dec 16 10:05 bundle.js.gz
 ```
 
+At NgConf'16 we announced a 21.6k bundle, but this did not include zone.js.
+The `angular2-polyfills.min.js` file from that era was 28k, so the total JS
+payload for an Angular app was about 50k.
+So as of December 2016 we have a 32% reduction in total payload.
+
+See https://github.com/angular/angular/issues/8550 for more context.
+
 # Try it
-`npm install`
-`npm run build`
-`python -m SimpleHTTPServer`
+
+``` shell
+$ npm install
+$ npm run build
+$ python -m SimpleHTTPServer
+```
 
 # Notes
 
