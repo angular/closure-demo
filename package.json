@@ -11,6 +11,7 @@
     "@angular/platform-browser": "alexeagle/platform-browser-builds",
     "@angular/platform-server": "alexeagle/platform-server-builds",
     "@angular/tsc-wrapped": "alexeagle/tsc-wrapped-builds",
+    "@types/node": "^7.0.0",
     "google-closure-compiler": "^20161201.0.0",
     "rxjs": "5.0.0-rc.4",
     "source-map-explorer": "^1.3.3",
