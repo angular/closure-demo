@@ -6,15 +6,18 @@ No other scripts are needed (eg. zone.js)
 
 The current size is:
 ```
--rw-r--r--  1 jan  staff  113073 Dec 18 18:47 dist/bundle.js
--rw-r--r--  1 jan  staff   30521 Dec 18 18:47 dist/bundle.js.brotli
--rw-r--r--  1 jan  staff   34428 Dec 18 18:47 dist/bundle.js.gz
+++ ls -alH dist/bundle.js dist/bundle.js.brotli dist/bundle.js.gz dist/bundle.js.map
+-rw-r--r--  1 alexeagle  eng   77541 Jan 17 12:19 dist/bundle.js
+-rw-r--r--  1 alexeagle  eng   21379 Jan 17 12:19 dist/bundle.js.brotli
+-rw-r--r--  1 alexeagle  eng   24512 Jan 17 12:19 dist/bundle.js.gz
+-rw-r--r--  1 alexeagle  eng  214850 Jan 17 12:19 dist/bundle.js.map
+++ ls -alH node_modules/zone.js/dist/zone.min.js
+-rw-r--r--  1 alexeagle  eng  24490 Jan 12 18:12 node_modules/zone.js/dist/zone.min.js
 ```
 
 At NgConf'16 we announced a 21.6k bundle, but this did not include zone.js.
 The `angular2-polyfills.min.js` file from that era was 28k, so the total JS
 payload for an Angular app was about 50k.
-So as of December 2016 we have a 32% reduction in total payload.
 
 See https://github.com/angular/angular/issues/8550 for more context.
 

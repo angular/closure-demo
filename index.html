@@ -5,6 +5,12 @@
 </head>
 <body>
   <basic></basic>
+  <!-- Include zone.js as a prollyfill rather than inside the bundle.
+       Allows us to use --dependency_mode=STRICT in closure compiler.
+       Otherwise the zone.js file is not imported anywhere and gets dropped.
+       See build_closure.sh
+  -->
+  <script src="node_modules/zone.js/dist/zone.min.js"></script>
   <script src="dist/bundle.js"></script>
 </body>
 </html>
