@@ -37,10 +37,12 @@ OPTS=(
 
 set -ex
 java -jar node_modules/google-closure-compiler/compiler.jar $(echo ${OPTS[*]})
-gzip --keep -f dist/bundle.js
-# requires brotli
-# on Mac: brew install brotli
-bro --force --quality 10 --input dist/bundle.js --output dist/bundle.js.brotli
-ls -alH dist/bundle*
-# Also give the size of zone.js since users have to load it
-ls -alH node_modules/zone.js/dist/zone.min.js
+
+# measure the sizes of scripts the user will need to load
+for script in dist/bundle.js node_modules/zone.js/dist/zone.min.js; do
+  gzip --keep -f $script
+  # requires brotli
+  # on Mac: brew install brotli
+  bro --force --quality 10 --input $script --output $script.brotli
+  ls -alH ${script}*
+done

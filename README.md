@@ -1,23 +1,19 @@
 This repo is a proof-of-concept for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
-This example app builds a *single* `.js` file for an Angular 2 application.
-No other scripts are needed (eg. zone.js)
+**The current compressed JS size for an Angular Hello World app is 28kb.**
 
-The current size is:
 ```
 ++ ls -alH dist/bundle.js dist/bundle.js.brotli dist/bundle.js.gz dist/bundle.js.map
--rw-r--r--  1 alexeagle  eng   77541 Jan 17 12:19 dist/bundle.js
--rw-r--r--  1 alexeagle  eng   21379 Jan 17 12:19 dist/bundle.js.brotli
--rw-r--r--  1 alexeagle  eng   24512 Jan 17 12:19 dist/bundle.js.gz
--rw-r--r--  1 alexeagle  eng  214850 Jan 17 12:19 dist/bundle.js.map
-++ ls -alH node_modules/zone.js/dist/zone.min.js
+-rw-r--r--  1 alexeagle  eng   77541 Jan 17 14:19 dist/bundle.js
+-rw-r--r--  1 alexeagle  eng   21379 Jan 17 14:19 dist/bundle.js.brotli
+-rw-r--r--  1 alexeagle  eng   24512 Jan 17 14:19 dist/bundle.js.gz
+-rw-r--r--  1 alexeagle  eng  214850 Jan 17 14:19 dist/bundle.js.map
+++ ls -alH node_modules/zone.js/dist/zone.min.js node_modules/zone.js/dist/zone.min.js.brotli node_modules/zone.js/dist/zone.min.js.gz
 -rw-r--r--  1 alexeagle  eng  24490 Jan 12 18:12 node_modules/zone.js/dist/zone.min.js
+-rw-------  1 alexeagle  eng   7270 Jan 17 14:19 node_modules/zone.js/dist/zone.min.js.brotli
+-rw-r--r--  1 alexeagle  eng   8114 Jan 12 18:12 node_modules/zone.js/dist/zone.min.js.gz
 ```
-
-At NgConf'16 we announced a 21.6k bundle, but this did not include zone.js.
-The `angular2-polyfills.min.js` file from that era was 28k, so the total JS
-payload for an Angular app was about 50k.
 
 See https://github.com/angular/angular/issues/8550 for more context.
 
