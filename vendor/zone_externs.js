@@ -212,7 +212,7 @@ ZoneSpec.prototype.onCancelTask = function
 ZoneSpec.prototype.onHasTask = function
       (delegate, current, target, hasTaskState) {};
 
-ZoneDelegate = function() {};
+var ZoneDelegate = function() {};
 ZoneDelegate.prototype.zone;
 ZoneDelegate.prototype.fork = function(targetZone, zoneSpec) {};
 ZoneDelegate.prototype.intercept = function(targetZone, callback, source) {};

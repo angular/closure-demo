@@ -15,7 +15,7 @@ vendor/rxjs/Observable.js
 vendor/rxjs/util/ObjectUnsubscribedError.js
 vendor/rxjs/SubjectSubscription.js
 vendor/rxjs/Subject.js
-node_modules/@angular/core/src/di/opaque_token.js
+node_modules/@angular/core/src/di/injection_token.js
 node_modules/@angular/core/src/facade/lang.js
 node_modules/@angular/core/src/util/decorators.js
 node_modules/@angular/core/src/metadata/di.js

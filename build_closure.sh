@@ -6,6 +6,7 @@ OPTS=(
   "--create_source_map=%outname%.map"
   "--variable_renaming_report=dist/variable_renaming_report"
   "--property_renaming_report=dist/property_renaming_report"
+  "--warning_level=QUIET"
 
   # Don't include ES6 polyfills
   "--rewrite_polyfills=false"
@@ -15,7 +16,8 @@ OPTS=(
   "--js_module_root=vendor"
 
   # Uncomment for easier debugging
-  # "--formatting=PRETTY_PRINT"
+  #"--formatting=PRETTY_PRINT"
+  #"--debug"
 
   # Include zone.js as externs rather than the source code.
   # Allows us to use --dependency_mode=STRICT below.
