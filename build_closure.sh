@@ -42,7 +42,9 @@ JVM_ARGS=""
 #JVM_ARGS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
 
 set -ex
-java $JVM_ARGS -jar node_modules/google-closure-compiler/compiler.jar $(echo ${OPTS[*]})
+closureFlags=$(mktemp)
+echo ${OPTS[*]} > $closureFlags
+java $JVM_ARGS -jar node_modules/google-closure-compiler/compiler.jar --flagfile $closureFlags
 
 # measure the sizes of scripts the user will need to load
 for script in dist/bundle.js node_modules/zone.js/dist/zone.min.js; do
