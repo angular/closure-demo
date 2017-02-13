@@ -13,7 +13,7 @@ OPTS=(
 
   # List of path prefixes to be removed from ES6 & CommonJS modules.
   "--js_module_root=node_modules"
-  "--js_module_root=vendor"
+  "--js_module_root=vendor/built"
 
   # Uncomment for easier debugging
   #"--formatting=PRETTY_PRINT"
@@ -26,7 +26,7 @@ OPTS=(
   #node_modules/zone.js/dist/zone.js
   "vendor/zone_externs.js"
 
-  $(find vendor/rxjs -name *.js)
+  $(find vendor/built/rxjs -name *.js)
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js
   $(find node_modules/@angular/{core,common,compiler,platform-browser}/src -name *.js)
   "built/*.js"
