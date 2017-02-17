@@ -1,0 +1,9 @@
+{
+  "extends": "./rxjs/tsconfig",
+
+  "compilerOptions": {
+    "outDir": "built/rxjs",
+    "target": "es5",
+    "module": "es2015"
+  }
+}
