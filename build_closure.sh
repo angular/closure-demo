@@ -25,6 +25,7 @@ OPTS=(
   # See index.html
   #node_modules/zone.js/dist/zone.js
   "vendor/zone_externs.js"
+  "vendor/angular_testability_externs.js"
 
   $(find vendor/built/rxjs -name *.js)
   node_modules/@angular/{core,common,compiler,platform-browser}/index.js

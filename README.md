@@ -33,16 +33,24 @@ $ npm run explore
 
 # Notes
 
-This requires an ES6 distro of Angular.
-I have published my own personal snapshot, which is built from this branch:
-https://github.com/alexeagle/angular/tree/closure
-
-See package.json for how this is used in the demo.
+This requires an ES6 distro of Angular. These snapshots are published on green Angular
+builds, see the locations in `package.json` where these come from.
 
 Requires Node 6.x since the `ngc` tool (and its deps) are now shipped as ES6 as well.
 
-Requires building rxjs from https://github.com/alexeagle/rxjs/tree/closure2
-using `npm run compile_dist_es6_for_closure`. Copy this into the `vendor` directory.
+## RxJS distros
+Angular depends on RxJS and the size of the bundle depends on how well we can tree-shake Rx operators.
+
+The above measurement uses an ES6 build of RxJS. See `vendor/tsconfig.rxjs-es6.json` in this
+repo. However, RxJS has no such public distro.
+
+Another option is to build RxJS as ES5+esm. See `vendor/tsconfig.rxjs-es5+esm.json` in this
+repo, and change the `postinstall` line in package.json to switch.
+
+Yet another option is to build with ES6 and `@angular/tsc-wrapped` which does some extra
+closure output using the tsickle package.
+
+The application size seems about the same regardless of which option is used.
 
 ## TODO
 - Get an official Angular distro with ES6, don't use my branch.
