@@ -10,7 +10,7 @@
   version "0.0.0-PLACEHOLDER"
   resolved "https://codeload.github.com/angular/compiler-cli-builds/tar.gz/3844006561c686cf87ec58b3143a6bfe4d10b00a"
   dependencies:
-    "@angular/tsc-wrapped" "4.0.0-beta.5"
+    "@angular/tsc-wrapped" "4.0.0-beta.6"
     minimist "^1.2.0"
     reflect-metadata "^0.1.2"
 
@@ -434,9 +434,9 @@ tsickle@^0.2, tsickle@^0.2.3:
     source-map "^0.5.6"
     source-map-support "^0.4.2"
 
-typescript@~2.0:
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.0.10.tgz#ccdd4ed86fd5550a407101a0814012e1b3fac3dd"
+typescript@~2.1:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.1.6.tgz#40c7e6e9e5da7961b7718b55505f9cac9487a607"
 
 underscore@^1.8.3:
   version "1.8.3"
