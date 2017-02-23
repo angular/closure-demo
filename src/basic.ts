@@ -1,5 +1,5 @@
 
-import {Component, Injectable} from '@angular/core/index';
+import {Component, Injectable} from '@angular/core';
 
 @Component({
   selector: 'basic',

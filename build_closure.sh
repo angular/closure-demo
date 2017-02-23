@@ -12,8 +12,11 @@ OPTS=(
   "--rewrite_polyfills=false"
 
   # List of path prefixes to be removed from ES6 & CommonJS modules.
-  "--js_module_root=node_modules"
   "--js_module_root=vendor/built"
+  "--js_module_root=node_modules/@angular/core"
+  "--js_module_root=node_modules/@angular/common"
+  "--js_module_root=node_modules/@angular/compiler"
+  "--js_module_root=node_modules/@angular/platform-browser"
 
   # Uncomment for easier debugging
   #"--formatting=PRETTY_PRINT"
@@ -28,8 +31,10 @@ OPTS=(
   "vendor/angular_testability_externs.js"
 
   $(find vendor/built/rxjs -name *.js)
-  node_modules/@angular/{core,common,compiler,platform-browser}/index.js
-  $(find node_modules/@angular/{core,common,compiler,platform-browser}/src -name *.js)
+  node_modules/@angular/core/@angular/core.js
+  node_modules/@angular/common/@angular/common.js
+  node_modules/@angular/compiler/@angular/compiler.js
+  node_modules/@angular/platform-browser/@angular/platform-browser.js
   "built/*.js"
 
   # Trim files not imported (transitively) from bootstrap.js
