@@ -20,8 +20,8 @@ See https://github.com/angular/angular/issues/8550 for more context.
 # Try it
 
 ``` shell
-$ npm install
-$ npm run build
+$ yarn install
+$ yarn run build
 $ python -m SimpleHTTPServer
 ```
 
@@ -53,7 +53,7 @@ closure output using the tsickle package.
 The application size seems about the same regardless of which option is used.
 
 ## TODO
-- Get an official Angular distro with ES6, don't use my branch.
 - Need rxjs to produce a closure-compatible ES6 distro, don't use my branch.
+  See https://github.com/ReactiveX/rxjs/issues/2335
 - Remove the hack of needing node_modules/rxjs for nodejs and vendor/rxjs for browser
 - Extend the demo to use a 3rd party component, like @angular/material
