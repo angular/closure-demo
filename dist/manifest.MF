@@ -31,10 +31,10 @@ vendor/built/rxjs/observable/ConnectableObservable.js
 vendor/built/rxjs/operator/multicast.js
 vendor/built/rxjs/operator/share.js
 node_modules/@angular/core/@angular/core.js
-node_modules/@angular/common/@angular/common.js
-node_modules/@angular/platform-browser/@angular/platform-browser.js
 built/Basic.js
 built/Basic.ngfactory.js
+node_modules/@angular/common/@angular/common.js
+node_modules/@angular/platform-browser/@angular/platform-browser.js
 built/app.module.js
 built/app.module.ngfactory.js
 built/bootstrap.js

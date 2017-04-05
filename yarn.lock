@@ -2,40 +2,40 @@
 # yarn lockfile v1
 
 
-"@angular/common@angular/common-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/common-builds/tar.gz/763eed3636a703b7401dce5094b9868b65c3bb5d"
+"@angular/common@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-4.0.1.tgz#df488eada842b2d841ded750712292b18387b5b0"
 
-"@angular/compiler-cli@angular/compiler-cli-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/compiler-cli-builds/tar.gz/6db7e3e244d1d2ef959df1b3c42c4bea2f52c3eb"
+"@angular/compiler-cli@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-4.0.1.tgz#90c60d491c12e1da901a0aeb3990470aa96e9bfa"
   dependencies:
-    "@angular/tsc-wrapped" "4.0.0-beta.8"
+    "@angular/tsc-wrapped" "4.0.1"
     minimist "^1.2.0"
     reflect-metadata "^0.1.2"
 
-"@angular/compiler@angular/compiler-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/compiler-builds/tar.gz/ee63edce0da0fd33c880ed4546bb83971a95db98"
+"@angular/compiler@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-4.0.1.tgz#15721edb148167a2d83b6f9324817e658eac8280"
 
-"@angular/core@angular/core-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/core-builds/tar.gz/106557f64eb92303b8543d12c7e929087141f3fd"
+"@angular/core@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-4.0.1.tgz#0b110a001012076ea696460ccd922707bcdf51ba"
 
-"@angular/platform-browser@angular/platform-browser-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/platform-browser-builds/tar.gz/107294d5b715b360f8c1e7566dc0ce860c17e8ee"
+"@angular/platform-browser@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-4.0.1.tgz#4b9efbeb2fbb900de188743b988802d3aa2b33ff"
 
-"@angular/platform-server@angular/platform-server-builds":
-  version "4.0.0-beta.8-3c9a46c"
-  resolved "https://codeload.github.com/angular/platform-server-builds/tar.gz/c2f9e4348ed00f1a7c0993342e594cf842e44037"
+"@angular/platform-server@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-4.0.1.tgz#3d5fc98255c0f60c6f9079eb8d6cc0c8def31d06"
   dependencies:
     parse5 "^3.0.1"
     xhr2 "^0.1.4"
 
-"@angular/tsc-wrapped@4.0.0-beta.8", "@angular/tsc-wrapped@angular/tsc-wrapped-builds":
-  version "4.0.0-beta.8"
-  resolved "https://codeload.github.com/angular/tsc-wrapped-builds/tar.gz/5b570994c38f6c1387cbf0f4a1ebfc7e53a00529"
+"@angular/tsc-wrapped@4.0.1", "@angular/tsc-wrapped@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@angular/tsc-wrapped/-/tsc-wrapped-4.0.1.tgz#5323cc99263b097bceeb8e423270b5f58ffb2186"
   dependencies:
     tsickle "^0.21.0"
 
@@ -137,9 +137,9 @@ get-stdin@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-4.0.1.tgz#b968c6b0a04384324902e8bf1a5df32579a450fe"
 
-google-closure-compiler@^20170124.0.0:
-  version "20170124.0.0"
-  resolved "https://registry.yarnpkg.com/google-closure-compiler/-/google-closure-compiler-20170124.0.0.tgz#7a0e855b9c30d91191c3b0f3f1b4dec8e6d5bce5"
+google-closure-compiler@20170218.0.0:
+  version "20170218.0.0"
+  resolved "https://registry.yarnpkg.com/google-closure-compiler/-/google-closure-compiler-20170218.0.0.tgz#059c7f91cf1cb2c1a66b4c95f745f5efd0fb4ba4"
   dependencies:
     chalk "^1.0.0"
     vinyl "^1.2.0"
