@@ -340,9 +340,15 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
 
-rxjs@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.0.3.tgz#fc8bdf464ebf938812748e4196788f392fef9754"
+"rxjs-src@https://github.com/ReactiveX/rxjs/tarball/5.3.0":
+  version "5.3.0"
+  resolved "https://github.com/ReactiveX/rxjs/tarball/5.3.0#cf69753bc9a958b018c8b12af3ae3cdc4a64face"
+  dependencies:
+    symbol-observable "^1.0.1"
+
+rxjs@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.3.0.tgz#d88ccbdd46af290cbdb97d5d8055e52453fabe2d"
   dependencies:
     symbol-observable "^1.0.1"
 

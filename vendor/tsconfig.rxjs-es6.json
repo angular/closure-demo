@@ -1,7 +1,10 @@
 {
-  "extends": "./rxjs/tsconfig",
+  // Note: if you install with NPM, the package goes to a different directory.
+  // Just use yarn ;)
+  "extends": "../node_modules/rxjs-src/tsconfig",
 
   "compilerOptions": {
-    "outDir": "built/rxjs"
+    "outDir": "built/rxjs",
+    "module": "es2015"
   }
 }
