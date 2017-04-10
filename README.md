@@ -23,7 +23,7 @@ $ python -m SimpleHTTPServer
 ## Where does the size come from?
 
 ``` shell
-$ npm run explore
+$ yarn run explore
 ```
 
 # Notes
