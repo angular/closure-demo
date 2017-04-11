@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {Basic} from './Basic';
+import {Basic} from './basic';
 
 @NgModule({
   declarations: [Basic],

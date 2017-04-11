@@ -10,7 +10,7 @@
         "noImplicitAny": true,
         "sourceMap": false,
         "experimentalDecorators": true,
-        "outDir": "built",
+        "outDir": "../built",
         "declaration": true
     },
     "exclude": [
