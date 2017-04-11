@@ -1,2 +1,0 @@
-/** @externs */
-var moment;

@@ -20,7 +20,7 @@ See https://github.com/angular/angular/issues/8550 for more context.
 ``` shell
 $ yarn install
 $ yarn run build
-$ python -m SimpleHTTPServer
+$ yarn run serve
 ```
 
 ## Where does the size come from?
@@ -51,11 +51,6 @@ The application size seems about the same regardless of which option is used; ES
 
 ## TODO
 - Remove the dependency on locally-installed Java: https://github.com/google/closure-compiler/issues/2412
-- Determine whether rxjs needs to be distributed in ES2015 to make the bundle smaller.
-- Need rxjs to produce a closure-compatible distro. See https://github.com/ReactiveX/rxjs/issues/2335
-- Distribute zone_externs.js with zone https://github.com/angular/zone.js/issues/727
-- Distribute testability_externs.js with Angular https://github.com/angular/angular/issues/11119
 - Allow comments in the closure.conf file https://github.com/google/closure-compiler/issues/2413
 - Solve closure bug with rxjs files w/o exports https://github.com/google/closure-compiler/issues/2247
-- Remove the hack of needing node_modules/rxjs for nodejs and vendor/rxjs for browser
 - Extend the demo to use a 3rd party component, like @angular/material
