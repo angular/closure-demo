@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/ng
+    docker:
+      # Built from ./Dockerfile
+      - image: alexeagle/ngcontainer
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: angularclosure-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+      - run: yarn
+      - run: yarn run build
+      - run: xvfb-run -a yarn test
+
+      - save_cache:
+          key: angularclosure-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - "node_modules"
