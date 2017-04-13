@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/alexeagle/closure-compiler-angular-bundling/tree/master.svg?style=shield)](https://circleci.com/gh/alexeagle/closure-compiler-angular-bundling/tree/master)
+
+
 This repo is the demo/seed for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
