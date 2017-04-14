@@ -22,6 +22,9 @@
     "typescript": "~2.1",
     "zone.js": "^0.8.4"
   },
+  "dependencies": {
+    "moment": "2.13.0"
+  },
   "scripts": {
     "build_rxjs_es5esm": "tsc -p vendor/tsconfig.rxjs-es5+esm.json",
     "build_rxjs_es6": "tsc -p vendor/tsconfig.rxjs-es6.json",
