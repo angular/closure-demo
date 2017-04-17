@@ -8,5 +8,7 @@ import {Component, Injectable} from '@angular/core';
 @Injectable()
 export class Basic {
   ctxProp: string;
-  constructor() { this.ctxProp = 'Hello world!'; }
+  constructor() {
+    this.ctxProp = 'Hello world!';
+  }
 }
