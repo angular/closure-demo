@@ -33,6 +33,8 @@ $ yarn run explore
 
 Requires Node >= 6.x since the `ngc` tool (and its deps) are now shipped as ES6 as well.
 
+Requires Java installed to run the Closure Compiler. We recommend installing http://zulu.org/download-dev/.
+
 ## RxJS distros
 Angular depends on RxJS and the size of the bundle depends on how well we can tree-shake Rx operators.
 
@@ -51,10 +53,9 @@ The application size seems about the same regardless of which option is used; ES
 - Remove the dependency on locally-installed Java: https://github.com/google/closure-compiler/issues/2412
 - Determine whether rxjs needs to be distributed in ES2015 to make the bundle smaller.
 - Need rxjs to produce a closure-compatible distro. See https://github.com/ReactiveX/rxjs/issues/2335
-- Distribute zone_externs.js with zone https://github.com/angular/zone.js/issues/727 
+- Distribute zone_externs.js with zone https://github.com/angular/zone.js/issues/727
 - Distribute testability_externs.js with Angular https://github.com/angular/angular/issues/11119
 - Allow comments in the closure.conf file https://github.com/google/closure-compiler/issues/2413
 - Solve closure bug with rxjs files w/o exports https://github.com/google/closure-compiler/issues/2247
-- Closure fails on paths with `+` character, which is idiomatic Angular style https://github.com/google/closure-compiler/issues/2414
 - Remove the hack of needing node_modules/rxjs for nodejs and vendor/rxjs for browser
 - Extend the demo to use a 3rd party component, like @angular/material
