@@ -12,6 +12,7 @@ jobs:
           key: angularclosure-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
       - run: yarn
+      - run: yarn run format:enforce
       - run: yarn run build
       - run: xvfb-run -a yarn test
 
