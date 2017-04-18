@@ -1,5 +1,5 @@
-import { browser, element, by } from 'protractor';
 import * as moment from 'moment';
+import {browser, by, element} from 'protractor';
 
 describe('E2E Tests', function() {
   it('should display: Hello world!', function() {
