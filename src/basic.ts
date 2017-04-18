@@ -2,8 +2,8 @@
 import 'moment';
 
 import {Component, Injectable} from '@angular/core';
-
-declare var moment: any;
+import * as moment_type from 'moment';
+declare var moment: typeof moment_type;
 
 @Component({
   selector: 'basic',
