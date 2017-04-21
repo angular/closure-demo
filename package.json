@@ -20,7 +20,7 @@
     "source-map-explorer": "^1.3.3",
     "tsickle": "^0.2.3",
     "typescript": "~2.1",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.6"
   },
   "dependencies": {
     "moment": "2.13.0"
