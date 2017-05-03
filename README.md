@@ -35,20 +35,6 @@ Requires Node >= 6.x since the `ngc` tool (and its deps) are now shipped as ES6 
 
 Requires Java installed to run the Closure Compiler. We recommend installing http://zulu.org/download-dev/.
 
-## RxJS distros
-Angular depends on RxJS and the size of the bundle depends on how well we can tree-shake Rx operators.
-
-The above measurement uses an ES6 build of RxJS. See `vendor/tsconfig.rxjs-es6.json` in this
-repo. However, RxJS has no such public distro.
-
-Another option is to build RxJS as ES5+esm. See `vendor/tsconfig.rxjs-es5+esm.json` in this
-repo, and change the `postinstall` line in package.json to switch.
-
-Yet another option is to build with ES6 and `@angular/tsc-wrapped` which does some extra
-closure output using the tsickle package. This is unneeded because RxJS is already closure-compatible.
-
-The application size seems about the same regardless of which option is used; ES6 is about 1% smaller.
-
 ## TODO
 - Remove the dependency on locally-installed Java: https://github.com/google/closure-compiler/issues/2412
 - Allow comments in the closure.conf file https://github.com/google/closure-compiler/issues/2413
