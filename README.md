@@ -1,6 +1,3 @@
-[![CircleCI](https://circleci.com/gh/alexeagle/closure-compiler-angular-bundling/tree/master.svg?style=shield)](https://circleci.com/gh/alexeagle/closure-compiler-angular-bundling/tree/master)
-
-
 This repo is the demo/seed for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
@@ -34,9 +31,3 @@ $ yarn run explore
 Requires Node >= 6.x since the `ngc` tool (and its deps) are now shipped as ES6 as well.
 
 Requires Java installed to run the Closure Compiler. We recommend installing http://zulu.org/download-dev/.
-
-## TODO
-- Remove the dependency on locally-installed Java: https://github.com/google/closure-compiler/issues/2412
-- Allow comments in the closure.conf file https://github.com/google/closure-compiler/issues/2413
-- Solve closure bug with rxjs files w/o exports https://github.com/google/closure-compiler/issues/2247
-- Extend the demo to use a 3rd party component, like @angular/material
