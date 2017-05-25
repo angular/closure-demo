@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/angular/closure-demo.svg?style=svg)](https://circleci.com/gh/angular/closure-demo)
+
 This repo is the demo/seed for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
