@@ -14,11 +14,19 @@ See https://github.com/angular/angular/issues/8550 for more context.
 
 # Try it
 
+First, install [brotli], which is a more modern compression algorithm than gzip.
+It gives a 13% smaller JS file, no work required!
+The commands below use it, but you don't have to.
+
+On Mac, `brew install brotli`.
+
 ``` shell
 $ yarn install
 $ yarn run build
 $ yarn run serve
 ```
+
+[brotli]: https://github.com/google/brotli
 
 ## Where does the size come from?
 
