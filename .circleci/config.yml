@@ -3,7 +3,6 @@ jobs:
   build:
     working_directory: ~/ng
     docker:
-      # Built from ./Dockerfile
       - image: alexeagle/ngcontainer
     steps:
       - checkout
