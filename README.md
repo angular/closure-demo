@@ -3,13 +3,11 @@
 This repo is the demo/seed for bunding an Angular application with Google Closure Compiler.
 It contains a minimal Hello World application with a single component.
 
-**The compressed JS size for an Angular 4.1.3 Hello World app is 36kb.**
+**The compressed JS size for an Angular 4.1.3 Hello World app is 38kb.**
 
 ```
--rw-r--r--  1 alexeagle  eng  30065 May  26 13:01 dist/bundle.js.brotli
--rw-r--r--  1 alexeagle  eng  33882 May  26 13:01 dist/bundle.js.gz
--rw-------  1 alexeagle  eng  9515 May  26 13:01 node_modules/zone.js/dist/zone.min.js.brotli
--rw-r--r--  1 alexeagle  eng  10383 May 19 22:29 node_modules/zone.js/dist/zone.min.js.gz
+38812 16 Aug 22:54 dist/bundle.js.brotli
+43614 16 Aug 22:54 dist/bundle.js.gz
 ```
 
 See https://github.com/angular/angular/issues/8550 for more context.
