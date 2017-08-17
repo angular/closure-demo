@@ -13,7 +13,7 @@ export function startServer(): void {
     res.sendFile(folder + '/index.html');
   });
 
-  app.use('/', express.static(folder, { index: false }));
+  app.use('/', express.static(folder, {index: false}));
 
   app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`);
