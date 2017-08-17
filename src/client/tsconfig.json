@@ -1,7 +1,8 @@
 {
     "angularCompilerOptions": {
         "annotationsAs": "static fields",
-        "annotateForClosureCompiler": true
+        "annotateForClosureCompiler": true,
+        "genDir": "ngfactory"
     },
     "compilerOptions": {
         "module": "es2015",
@@ -10,13 +11,7 @@
         "noImplicitAny": true,
         "sourceMap": false,
         "experimentalDecorators": true,
-        "outDir": "../built",
+        "outDir": "../../built",
         "declaration": true
-    },
-    "exclude": [
-        "vendor",
-        "node_modules",
-        "built",
-        "dist"
-    ]
+    }
 }
