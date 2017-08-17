@@ -3,7 +3,7 @@ import {resolve} from 'path';
 
 export function startServer(): void {
   const app = express();
-  const port = 8000;
+  const port = 8080;
 
   const folder = resolve(__dirname, '../../dist');
 
