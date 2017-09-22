@@ -1,6 +1,4 @@
 node_modules
 built
-**/*.ngfactory.ts
-**/*.ngsummary.json
 npm-debug.log
 dist
