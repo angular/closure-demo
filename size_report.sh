@@ -1,9 +1,13 @@
-# Distributions of brotli disagree on the name of the command
+#!/usr/bin/env bash
+
+# Distributions of brotli disagree on the args
 run_brotli() {
-    if hash brotli 2>/dev/null; then
-        brotli "$@"
+    input=$1
+    unamestr=$(uname)
+    if [[ "$unamestr" == 'Linux' ]]; then
+        brotli --input ${input} --quality 10 --output $input.brotli --force
     else
-        bro "$@"
+        brotli $input --quality=10 --output=$input.brotli --force
     fi
 }
 
@@ -15,6 +19,6 @@ for script in dist/bundle.js node_modules/zone.js/dist/zone.min.js; do
   mv $script.bak $script
   # requires brotli
   # on Mac: brew install brotli
-  run_brotli --force --quality 10 --input $script --output $script.brotli
+  run_brotli $script
   ls -alH ${script}.gz ${script}.brotli
 done
