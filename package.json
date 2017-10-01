@@ -11,7 +11,7 @@
     "@types/jasmine": "^2.5.47",
     "clang-format": "^1.0.55",
     "concurrently": "3.4.0",
-    "google-closure-compiler": "git+https://github.com/gregmagolan/closure-compiler.git#20170919.angular.dist",
+    "google-closure-compiler": "git+https://github.com/gregmagolan/closure-compiler.git#20170930-HEAD+PR2641+patches.angular.dist",
     "lite-server": "2.3.0",
     "protractor": "^5.1.2",
     "rxjs": "^5.4.3",

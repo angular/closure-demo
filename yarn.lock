@@ -938,9 +938,9 @@ globby@^5.0.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-"google-closure-compiler@git+https://github.com/gregmagolan/closure-compiler.git#20170919.angular.dist":
+"google-closure-compiler@git+https://github.com/gregmagolan/closure-compiler.git#20170930-HEAD+PR2641+patches.angular.dist":
   version "20170910.0.0"
-  resolved "git+https://github.com/gregmagolan/closure-compiler.git#baa48b3f168f0d28c5c013a198018d120cfe4fe7"
+  resolved "git+https://github.com/gregmagolan/closure-compiler.git#1ec1a09895a42176a96abd2b42a98d6205c4bd06"
   dependencies:
     chalk "^1.0.0"
     vinyl "^2.0.1"
