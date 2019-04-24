@@ -7,4 +7,5 @@ import {Basic} from './basic';
   bootstrap: [Basic],
   imports: [BrowserModule],
 })
-export class AppModule {}
+export class AppModule {
+}
