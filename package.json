@@ -3,25 +3,27 @@
   "version": "1.0.0",
   "description": "Demonstrate Angular app bundled and optimized by Google Closure Compiler",
   "dependencies": {
-    "@angular/animations": "^6.0.0",
-    "@angular/common": "^6.0.0",
-    "@angular/compiler": "^6.0.0",
-    "@angular/compiler-cli": "^6.0.0",
-    "@angular/core": "^6.0.0",
-    "@angular/platform-browser": "^6.0.0",
-    "@angular/platform-server": "^6.0.0",
-    "google-closure-compiler": "20180319.0.0",
-    "rxjs": "^6.0.0",
-    "typescript": "~2.7.2",
+    "@angular/animations": "7.2.13",
+    "@angular/common": "7.2.13",
+    "@angular/compiler": "7.2.13",
+    "@angular/compiler-cli": "7.2.13",
+    "@angular/core": "7.2.13",
+    "@angular/platform-browser": "7.2.13",
+    "@angular/platform-server": "7.2.13",
+    "google-closure-compiler": "20180716.0.0",
+    "rxjs": "^6.4.0",
+    "typescript": "3.1.1",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@types/jasmine": "2.5.41",
+    "@types/node": "^10.9.4",
     "clang-format": "^1.0.55",
     "concurrently": "3.4.0",
     "lite-server": "2.2.2",
     "protractor": "^5.1.2",
-    "source-map-explorer": "^1.5.0"
+    "source-map-explorer": "^1.5.0",
+    "tsickle": "^0.34.3"
   },
   "scripts": {
     "postinstall": "webdriver-manager update --gecko false --standalone false $CHROMEDRIVER_VERSION_ARG",
