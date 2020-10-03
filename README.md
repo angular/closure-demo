@@ -12,6 +12,13 @@ It contains a minimal Hello World application with a single component.
 -rw-r--r-- 14156 Feb  4 10:42 node_modules/zone.js/dist/zone.min.js.gz
 ```
 
+To solve the issue-Cannot read property 'split' of undefined
+Try these:
+Split str into an array of individual words
+Create a variable to track the greatest word length
+Iterate through the array of words and compare the length of each word to the variable mentioned above
+If the length of the current word is greater than the one stored in the variable, replace that value with the current word length.
+
 See https://github.com/angular/angular/issues/8550 for more context.
 
 # Try it
